@@ -18,18 +18,17 @@ const fetchData = async () => {
   if (data.socials) {
     data.socials = data.socials.map(social => ({
       ...social,
-      logos: `${baseUrl}images/socials/${social.logos.split('/').pop()}` // Assuming logos are like "images/socials/linkedin.webp"
+      logos: social.logos ? `${baseUrl}images/socials/${social.logos.split('/').pop()}` : social.logos // Add check
     }));
   }
 
-  // Config (for avatar_url) - assuming config has a key-value structure
+  // Config (for avatar_url)
   if (data.config) {
     const configMap = new Map(data.config.map(item => [item.key, item.value]));
     if (configMap.has('avatar_url')) {
-      configMap.set('avatar_url', `${baseUrl}images/${configMap.get('avatar_url').split('/').pop()}`);
+      const avatarUrl = configMap.get('avatar_url');
+      configMap.set('avatar_url', avatarUrl ? `${baseUrl}images/${avatarUrl.split('/').pop()}` : avatarUrl); // Add check
     }
-    // Convert back to array if needed, or access directly from map later
-    // For now, let's assume config is used as a map
     data.config = Array.from(configMap.entries()).map(([key, value]) => ({ key, value }));
   }
 
@@ -39,7 +38,7 @@ const fetchData = async () => {
     if (data[type]) {
       data[type] = data[type].map(project => ({
         ...project,
-        image: `${baseUrl}images/${project.image.split('/').pop()}` // Assuming images are like "images/project.webp"
+        image: project.image ? `${baseUrl}images/${project.image.split('/').pop()}` : project.image // Add check
       }));
     }
   }
@@ -48,7 +47,7 @@ const fetchData = async () => {
   if (data.skills) {
     data.skills = data.skills.map(skill => ({
       ...skill,
-      logo: `${baseUrl}images/logos/${skill.logo.split('/').pop()}` // Assuming logos are like "images/logos/react.svg"
+      logo: skill.logo ? `${baseUrl}images/logos/${skill.logo.split('/').pop()}` : skill.logo // Add check
     }));
   }
 
