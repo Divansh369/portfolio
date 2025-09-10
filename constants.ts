@@ -6,7 +6,7 @@ const fetchData = async () => {
   const data: { [key: string]: any[] } = {};
 
   for (const file of files) {
-    const response = await fetch(`/data/${file}.csv`);
+    const response = await fetch(`${import.meta.env.BASE_URL}data/${file}.csv`);
     const csv = await response.text();
     data[file] = Papa.parse(csv, { header: true, skipEmptyLines: true }).data;
   }
