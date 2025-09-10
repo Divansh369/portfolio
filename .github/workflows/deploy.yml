@@ -35,6 +35,10 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: List deployed images
+        run: ls -laR dist/images/
+        # This step will show what's actually in the dist/images folder before deployment
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

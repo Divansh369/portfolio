@@ -32,13 +32,21 @@ const fetchData = async () => {
     data.config = Array.from(configMap.entries()).map(([key, value]) => ({ key, value }));
   }
 
+  // Experience (for logos)
+  if (data.experience) {
+    data.experience = data.experience.map(job => ({
+      ...job,
+      logo: (job.logo && job.logo.includes('/')) ? `${baseUrl}images/${job.logo.split('/').pop()}` : job.logo // Add check and process
+    }));
+  }
+
   // Projects and Real-World Projects
   const projectTypes = ['projects', 'real-world_projects'];
   for (const type of projectTypes) {
     if (data[type]) {
       data[type] = data[type].map(project => ({
         ...project,
-        image: project.image ? `${baseUrl}images/${project.image.split('/').pop()}` : project.image // Add check
+        logo: project.logo ? `${baseUrl}images/${project.logo.split('/').pop()}` : project.logo // Corrected to use project.logo
       }));
     }
   }
@@ -47,7 +55,7 @@ const fetchData = async () => {
   if (data.skills) {
     data.skills = data.skills.map(skill => ({
       ...skill,
-      logo: skill.logo ? `${baseUrl}images/logos/${skill.logo.split('/').pop()}` : skill.logo // Add check
+      logo: (skill.logo && skill.logo.includes('/')) ? `${baseUrl}images/logos/${skill.logo.split('/').pop()}` : skill.logo // Add check and process
     }));
   }
 
