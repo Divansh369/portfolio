@@ -9,6 +9,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # This is often needed for actions that push to the repo
+      pages: write    # Needed for deploying to GitHub Pages
+      id-token: write # Needed for OIDC, which gh-pages action might use
 
     steps:
       - name: Checkout 
