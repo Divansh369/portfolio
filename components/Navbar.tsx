@@ -5,6 +5,7 @@ import { Theme } from '../types';
 const navLinks = [
   { name: 'About', href: '#about' },
   { name: 'Projects', href: '#projects' },
+  { name: 'Homelab', href: '#homelab' },
   { name: 'Experience', href: '#experience' },
   { name: 'Education', href: '#education' },
   { name: 'Skills', href: '#skills' },
@@ -31,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({ themes, currentTheme, setTheme }) => {
   };
 
   return (
-    <nav className="fixed top-0 z-40 w-full backdrop-blur-md bg-[var(--color-bg)]/70 border-b border-[var(--color-secondary)]">
+    <nav className="fixed top-0 z-40 w-full backdrop-blur-lg bg-background/70 border-b border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
         <div className="relative flex items-center justify-start sm:justify-between h-16">
           <div className="flex-1 min-w-0 pr-36 sm:pr-0">
@@ -41,7 +42,7 @@ const Navbar: React.FC<NavbarProps> = ({ themes, currentTheme, setTheme }) => {
                   key={link.name}
                   href={link.href}
                   onClick={handleLinkClick}
-                  className="text-[var(--color-text)] hover:text-[var(--color-primary)] px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap"
+                  className="text-text-base hover:text-accent-400 px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap"
                 >
                   {link.name}
                 </a>

@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ScrollToTopButton: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Show button when page is scrolled down
   const toggleVisibility = () => {
-    if (window.pageYOffset > 300) { // Show after scrolling 300px
+    if (window.pageYOffset > 300) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
     }
   };
 
-  // Scroll to top smoothly
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -22,25 +21,28 @@ const ScrollToTopButton: React.FC = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', toggleVisibility);
-    return () => {
-      window.removeEventListener('scroll', toggleVisibility);
-    };
+    return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <AnimatePresence>
       {isVisible && (
-        <button
+        <motion.button
           onClick={scrollToTop}
-          className="bg-[var(--color-primary)] text-[var(--color-bg)] p-3 rounded-full shadow-lg hover:bg-[var(--color-accent-600)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-75 transition-all duration-300 transform hover:scale-110"
+          className="fixed bottom-6 right-6 z-50 bg-accent-500/80 text-white p-3 rounded-full shadow-lg backdrop-blur-sm border border-accent-500/50 hover:bg-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:ring-opacity-75"
           aria-label="Scroll to top"
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 20 }}
+          whileHover={{ scale: 1.1, rotate: -15 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
           </svg>
-        </button>
+        </motion.button>
       )}
-    </div>
+    </AnimatePresence>
   );
 };
 

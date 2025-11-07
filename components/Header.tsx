@@ -1,7 +1,5 @@
 import React from 'react';
-// FIX: Import Variants type from framer-motion to correctly type animation variants.
 import { motion, Variants } from 'framer-motion';
-import AnimatedShapes from './AnimatedShapes';
 
 interface Social {
   name: string;
@@ -21,7 +19,7 @@ const headerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.2,
     },
   },
 };
@@ -32,8 +30,9 @@ const itemVariants: Variants = {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.5,
-      ease: 'easeOut',
+      duration: 0.6,
+      // FIX: Replaced the invalid cubic-bezier array with a valid string.
+      ease: "easeOut",
     },
   },
 };
@@ -41,7 +40,7 @@ const itemVariants: Variants = {
 const Header: React.FC<HeaderProps> = ({ name, title, socials, avatarUrl }) => {
   return (
     <motion.header
-      className="py-12 text-center relative z-10 overflow-hidden"
+      className="py-20 text-center relative z-10"
       variants={headerVariants}
       initial="hidden"
       animate="visible"
@@ -49,36 +48,36 @@ const Header: React.FC<HeaderProps> = ({ name, title, socials, avatarUrl }) => {
       <motion.img
         src={avatarUrl}
         alt={name}
-        className="rounded-full w-40 h-40 md:w-48 md:h-48 object-cover mx-auto border-4 border-[var(--color-border)] shadow-lg hero-avatar-glow"
+        className="rounded-full w-40 h-40 md:w-48 md:h-48 object-cover mx-auto border-4 border-border shadow-lg animate-pulse-glow-hero"
         variants={itemVariants}
       />
       <motion.h1
-        className="text-5xl md:text-6xl font-extrabold mt-6 mb-2 text-[var(--color-text)] leading-tight"
+        className="text-5xl md:text-6xl font-extrabold mt-6 mb-2 text-text-base leading-tight"
         variants={itemVariants}
       >
         {name}
       </motion.h1>
       <motion.p
-        className="text-xl md:text-2xl text-[var(--color-primary)] font-semibold mb-8"
+        className="text-xl md:text-2xl text-accent-400 font-semibold mb-8"
         variants={itemVariants}
       >
         {title}
       </motion.p>
       <motion.div className="flex justify-center space-x-6 mb-8" variants={itemVariants}>
         {socials.map((social) => (
-          <a
+          <motion.a
             key={social.name}
             href={social.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-300"
+            className="text-text-muted hover:text-accent-400 transition-transform duration-300"
             aria-label={social.name}
+            whileHover={{ scale: 1.2, y: -4 }}
           >
             <img src={social.logos} alt={social.name} className="w-8 h-8" />
-          </a>
+          </motion.a>
         ))}
       </motion.div>
-      <AnimatedShapes />
     </motion.header>
   );
 };

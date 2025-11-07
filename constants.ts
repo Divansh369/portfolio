@@ -2,13 +2,38 @@ import Papa from "papaparse";
 import { Data } from "./types";
 
 const fetchData = async () => {
-  const files = ["about", "certificates", "config", "contact", "education", "experience", "projects", "real-world_projects", "skills", "socials", "themes"];
+  const files = [
+    "about",
+    "certificates",
+    "config",
+    "contact",
+    "education",
+    "experience",
+    "projects",
+    "real-world_projects",
+    "skills",
+    "socials",
+    "themes",
+    "homelab",
+    "vms",
+    "platforms"
+  ];
   const data: { [key: string]: any[] } = {};
 
   for (const file of files) {
-    const response = await fetch(`${import.meta.env.BASE_URL}data/${file}.csv`);
-    const csv = await response.text();
-    data[file] = Papa.parse(csv, { header: true, skipEmptyLines: true }).data;
+    try {
+      const response = await fetch(`${import.meta.env.BASE_URL}data/${file}.csv`);
+      if (!response.ok) {
+        console.warn(`Could not fetch ${file}.csv, skipping.`);
+        data[file] = [];
+        continue;
+      }
+      const csv = await response.text();
+      data[file] = Papa.parse(csv, { header: true, skipEmptyLines: true }).data;
+    } catch (error) {
+      console.error(`Error processing ${file}.csv:`, error);
+      data[file] = [];
+    }
   }
 
   // Process image paths
@@ -18,7 +43,7 @@ const fetchData = async () => {
   if (data.socials) {
     data.socials = data.socials.map(social => ({
       ...social,
-      logos: social.logos ? `${baseUrl}images/socials/${social.logos.split('/').pop()}` : social.logos // Add check
+      logos: social.logos ? `${baseUrl}images/socials/${social.logos.split('/').pop()}` : social.logos
     }));
   }
 
@@ -27,7 +52,7 @@ const fetchData = async () => {
     const configMap = new Map(data.config.map(item => [item.key, item.value]));
     if (configMap.has('avatar_url')) {
       const avatarUrl = configMap.get('avatar_url');
-      configMap.set('avatar_url', avatarUrl ? `${baseUrl}images/${avatarUrl.split('/').pop()}` : avatarUrl); // Add check
+      configMap.set('avatar_url', avatarUrl ? `${baseUrl}images/${avatarUrl.split('/').pop()}` : avatarUrl);
     }
     data.config = Array.from(configMap.entries()).map(([key, value]) => ({ key, value }));
   }
@@ -36,7 +61,7 @@ const fetchData = async () => {
   if (data.experience) {
     data.experience = data.experience.map(job => ({
       ...job,
-      logo: (job.logo && job.logo.includes('/')) ? `${baseUrl}images/${job.logo.split('/').pop()}` : job.logo // Add check and process
+      logo: (job.logo && job.logo.includes('/')) ? `${baseUrl}images/${job.logo.split('/').pop()}` : job.logo
     }));
   }
 
@@ -46,19 +71,21 @@ const fetchData = async () => {
     if (data[type]) {
       data[type] = data[type].map(project => ({
         ...project,
-        logo: project.logo ? `${baseUrl}images/${project.logo.split('/').pop()}` : project.logo // Corrected to use project.logo
+        logo: project.logo ? `${baseUrl}images/${project.logo.split('/').pop()}` : project.logo
       }));
     }
   }
 
-  // Skills (for logos)
-  if (data.skills) {
-    data.skills = data.skills.map(skill => ({
-      ...skill,
-      logo: (skill.logo && skill.logo.includes('/')) ? `${baseUrl}images/logos/${skill.logo.split('/').pop()}` : skill.logo // Add check and process
-    }));
+  // Skills and Platforms (for logos)
+  const iconSections = ['skills', 'platforms'];
+  for (const section of iconSections) {
+    if (data[section]) {
+      data[section] = data[section].map(item => ({
+        ...item,
+        logo: (item.logo && item.logo.includes('/')) ? `${baseUrl}images/logos/${item.logo.split('/').pop()}` : item.logo
+      }));
+    }
   }
-
 
   return data as unknown as Data;
 };

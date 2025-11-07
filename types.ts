@@ -10,6 +10,9 @@ export interface Data {
   skills: Skill[];
   socials: Social[];
   themes: Theme[];
+  homelab: HomelabDevice[];
+  vms: VM[];
+  platforms: Platform[];
 }
 
 export interface Theme {
@@ -88,4 +91,25 @@ export interface Social {
   "Platform Name": string;
   "Profile URL": string;
   "Platform Logo": string;
+}
+
+export interface HomelabDevice {
+  hostname: string;
+  type: 'PVE Node' | 'PBS' | 'Personal Laptop';
+  cpu: string;
+  ram: string;
+  gpu: string;
+  storage: string;
+  url?: string;
+  notes?: string;
+}
+
+export interface VM {
+    os: string;
+    description: string;
+}
+
+export interface Platform {
+    name: string;
+    logo: string;
 }
