@@ -1,0 +1,6 @@
+hostname,type,cpu,ram,gpu,storage,url,notes
+ASUS ROG STRIX G15,Personal Laptop,AMD Ryzen 9 5900HX,24 GB DDR4-3200,NVIDIA GeForce RTX 3050 Ti,1 TB NVMe SSD + 1 TB SSD,"",My primary machine for development and AI workloads; not part of the 24/7 cluster.
+vivo,PVE Node,AMD Ryzen 3 3200U,20 GB,Radeon Vega Integrated,512 GB NVMe,https://proxmox.diivvansh.com,Main Proxmox node hosting critical services.
+lenovo,PVE Node,Intel i3-7020U,12 GB,Integrated,256 GB SSD + 256 GB SATA,https://proxmox.fiorejoy.com,Secondary node for load distribution.
+hp,PVE Node,Intel i3-1005G1,8 GB,Iris Plus Graphics G1,1 TB SATA,https://proxmox.avignatattva.com,Tertiary node for testing and development VMs.
+hp-pavillion,PBS,Intel i5-7200U,8 GB,Integrated,2 TB SATA,https://pbs.diivvansh.com,Dedicated Proxmox Backup Server for cluster-wide backups.

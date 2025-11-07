@@ -1,0 +1,9 @@
+name,logo
+Docker,docker
+Kubernetes (K3s),k3s
+Rancher,rancher
+Talos OS,/images/logos/talos.svg
+CasaOS,/images/logos/casaos.svg
+Easypanel,/images/logos/easypanel.svg
+Coolify,/images/logos/coolify.svg
+Home Assistant,homeassistant
