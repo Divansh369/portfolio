@@ -1,0 +1,5 @@
+name,backgroundColor,textColor,primaryColor,secondaryColor
+"Default","#1a1a1a","#ffffff","#865DFF","#282828"
+"Light","#F5F5F5","#1a1a1a","#865DFF","#E0E0E0"
+"Cyberpunk","#0d0221","#00f0ff","#f0f0f0","#241b52"
+"Synthwave","#262161","#ffffff","#ff8f00","#4a3f99"

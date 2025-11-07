@@ -1,0 +1,37 @@
+skill,logo,Skill Category
+Apache,/images/logos/apache.svg,Technology
+Python,/images/logos/python.svg,Technology
+SQL,/images/logos/sql_postgresql.svg,Technology
+Microsoft Power BI,/images/logos/powerbi.webp,Technology
+C++,/images/logos/cpp.webp,Technology
+JAVA,/images/logos/java.webp,Technology
+HTML,/images/logos/html5.svg,Technology
+CSS,/images/logos/css.webp,Technology
+Javascript,/images/logos/javascript.svg,Technology
+React,/images/logos/react.svg,Technology
+Node.js,/images/logos/nodejs.svg,Technology
+Linux ,/images/logos/linux.svg,Technology
+Shellscript, /images/logos/shell-bash.svg,Technology
+Docker,/images/logos/docker.svg,Technology
+Git ,/images/logos/git.svg,Technology
+TensorFlow , /images/logos/tensorflow.svg,Technology
+PyTorch ,/images/logos/pytorch.svg,Technology
+Scikit-learn,/images/logos/scikit-learn.svg,Technology
+Pandas , /images/logos/pandas.svg,Technology
+NumPy, /images/logos/numpy.svg,Technology
+Raspberry Pi,/images/logos/raspberry-pi.svg,Technology
+Microsoft Office,/images/logos/ms.webp,Technology
+Analytical Thinking,,Soft Skill
+Stratgeic Planning,,Soft Skill
+Critical Thinking,,Soft Skill
+Self Motivation,,Soft Skill
+Creativity & Innovation,,Soft Skill
+Adaptability,,Soft Skill
+Time Management,,Soft Skill
+Collaboration ,,Soft Skill
+Communication Skills,,Soft Skill
+Attention to Detail,,Soft Skill
+Learning Agility,,Soft Skill
+Decision Making,,Soft Skill
+Problem Solving,,Soft Skill
+Project Management,,Soft Skill
