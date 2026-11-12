@@ -1,102 +1,212 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
+@theme {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --color-canvas: #040711;
+  --color-surface: rgba(13, 18, 30, 0.54);
+  --color-surface-elevated: rgba(20, 28, 46, 0.68);
+  --color-border-hairline: rgba(255, 255, 255, 0.10);
+  --color-border-strong: rgba(56, 189, 248, 0.32);
+  --color-accent: #2563eb;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-canvas);
+  color: #e4e4e7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display Font Utility */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Frosted Glassmorphism Surface System */
+.glass-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(18, 26, 44, 0.62) 0%,
+    rgba(8, 12, 23, 0.50) 58%,
+    rgba(12, 19, 34, 0.56) 100%
+  );
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(56, 189, 248, 0.06),
+    0 24px 56px -28px rgba(0, 0, 0, 0.84);
+}
+
+.glass-panel-chamfer {
+  background: linear-gradient(
+    145deg,
+    rgba(19, 28, 48, 0.66) 0%,
+    rgba(8, 12, 24, 0.54) 60%,
+    rgba(13, 21, 38, 0.60) 100%
+  );
+  backdrop-filter: blur(22px) saturate(155%);
+  -webkit-backdrop-filter: blur(22px) saturate(155%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 26px 60px -28px rgba(0, 0, 0, 0.88);
+}
+
+.glass-panel-hover:hover {
+  border-color: rgba(56, 189, 248, 0.36);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(56, 189, 248, 0.12),
+    0 28px 64px -26px rgba(14, 165, 233, 0.24),
+    0 24px 56px -28px rgba(0, 0, 0, 0.85);
+}
+
+.glass-panel-subtle {
+  background: rgba(15, 23, 42, 0.46);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.11);
+}
+
+.glass-nav {
+  background: rgba(4, 7, 17, 0.72);
+  backdrop-filter: blur(24px) saturate(165%);
+  -webkit-backdrop-filter: blur(24px) saturate(165%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 40px -24px rgba(0, 0, 0, 0.88);
+}
+
+/* Smooth dashed connector crawl adapted from precision telemetry rails */
+@keyframes connector-crawl-right {
+  from {
+    background-position-x: 0px;
+  }
+  to {
+    background-position-x: 16px;
+  }
+}
+
+.connector-dash-active {
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(34, 211, 238, 0.55) 0 8px,
+    transparent 8px 16px
+  );
+  animation: connector-crawl-right 2.4s linear infinite;
+}
+
+.connector-dash-idle {
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(148, 163, 184, 0.28) 0 8px,
+    transparent 8px 16px
+  );
+  animation: connector-crawl-right 4.8s linear infinite;
+}
+
+/* Legacy fallback class kept in sync with glass panel */
+.surface-card {
+  background: linear-gradient(
+    145deg,
+    rgba(17, 24, 39, 0.58) 0%,
+    rgba(9, 13, 24, 0.46) 100%
+  );
+  backdrop-filter: blur(20px) saturate(145%);
+  -webkit-backdrop-filter: blur(20px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 20px 50px -28px rgba(0, 0, 0, 0.8);
+  transition:
+    border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.surface-card-interactive:hover {
+  border-color: rgba(56, 189, 248, 0.32);
+  transform: translateY(-2px);
+}
+
+/* Tabular figures for metrics, specs & dates */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accessible focus outlines */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 2px;
+}
+
+/* Clean minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #040711;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.22);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.42);
+}
+
+@media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ATS Resume Print Optimization */
+@media print {
   body {
-    @apply font-sans bg-background text-text-base transition-colors duration-500;
+    background: #ffffff !important;
+    color: #111827 !important;
   }
 
-  /* Default & Blue (Cyberpunk) Theme */
-  :root, [data-theme="blue"] {
-    --color-bg: #010409;
-    --color-card: rgba(13, 17, 23, 0.6); /* Added alpha for glass effect */
-    --color-border: rgba(48, 54, 61, 0.6);
-    --color-text-base: #c9d1d9;
-    --color-text-muted: #8b949e;
-    --color-text-dark: #484f58;
-    --color-accent-400: #58a6ff;
-    --color-accent-500: #1f6feb;
-    --color-accent-600: #1158c7;
-    --color-accent-700: #0d419d;
-    --color-glow: rgba(88, 166, 255, 0.3);
-  }
-  /* Add other theme variables here... */
-  [data-theme="green"] {
-    --color-bg: #000500;
-    --color-card: rgba(10, 15, 10, 0.6);
-    --color-border: rgba(34, 50, 34, 0.6);
-    --color-text-base: #C0C0C0;
-    --color-text-muted: #808080;
-    --color-text-dark: #404040;
-    --color-accent-400: #39FF14;
-    --color-accent-500: #00FF00;
-    --color-accent-600: #00CF00;
-    --color-accent-700: #009A00;
-    --color-glow: rgba(57, 255, 20, 0.3);
-  }
-}
-
-@layer components {
-  .interactive-glow {
-    @apply transition-all duration-300 ease-in-out;
-    box-shadow: 0 0 0px theme('colors.glow');
-  }
-  .interactive-glow:hover {
-    box-shadow: 0 0 20px 5px theme('colors.glow');
-    transform: translateY(-4px);
-  }
-  
-  .glass-card {
-    @apply bg-card border border-border backdrop-blur-lg;
+  header,
+  footer,
+  main,
+  #data-config-modal,
+  .print-hide {
+    display: none !important;
   }
 
-  .project-button {
-    @apply inline-flex items-center gap-2 font-semibold transition-all duration-200 ease-in-out px-4 py-2 rounded-md text-sm;
-  }
-  .project-button-details {
-    @apply bg-border/50 text-text-base;
-  }
-  .project-button-details:hover {
-    @apply bg-border/80 scale-105;
-  }
-  .project-button-visit {
-    @apply bg-transparent text-accent-400 border border-accent-500;
-  }
-  .project-button-visit:hover {
-    @apply bg-accent-500 text-background scale-105;
-  }
-}
-
-@layer utilities {
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  #ats-resume-document {
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    background: transparent !important;
+    color: #000000 !important;
   }
 
-  /* Aurora Background Shapes */
-  .aurora-bg div {
-    @apply absolute rounded-full opacity-40 blur-[100px];
-  }
-  .aurora-shape-1 {
-    @apply w-[500px] h-[500px] bg-accent-500 animate-aurora-1;
-    top: -100px;
-    left: -100px;
-  }
-  .aurora-shape-2 {
-    @apply w-[400px] h-[400px] bg-accent-700 animate-aurora-2;
-    top: 100px;
-    right: -50px;
-  }
-  .aurora-shape-3 {
-    @apply w-[300px] h-[400px] bg-accent-400 animate-aurora-3;
-    bottom: -50px;
-    left: 100px;
+  @page {
+    margin: 0.5in;
+    size: letter;
   }
 }

@@ -1,5 +1,8 @@
 {
-  "name": "AI-Powered Developer Portfolio",
-  "description": "A sleek, modern, and easily customizable portfolio for developers, featuring dynamic GitHub analysis powered by the Gemini API.",
-  "requestFramePermissions": []
+  "name": "Divansh Prasad - Portfolio",
+  "description": "Sleek, modern, and easily customizable developer portfolio featuring projects, experience, skills, and homelab setup.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

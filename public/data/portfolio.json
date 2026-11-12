@@ -1,0 +1,529 @@
+{
+  "profile": {
+    "name": "Divansh Prasad",
+    "title": "Software Engineer · Daimler Truck (DTICI)",
+    "company": "Daimler Truck Innovation Center India (DTICI)",
+    "location": "Bengaluru, India",
+    "email": "divanshthebest@gmail.com",
+    "phone": "+91 9873354637",
+    "domains": [
+      "diivvansh.com",
+      "fiorejoy.com"
+    ],
+    "pveConsoleUrl": "https://pve.diivvansh.com",
+    "udayanAuthUrl": "https://udayan.diivvansh.com",
+    "googlePlayUrl": "https://play.google.com/store/apps/dev?id=8541457488243382905",
+    "githubUrl": "https://github.com/Divansh369",
+    "linkedinUrl": "https://www.linkedin.com/in/divansh-prasad-893b05230/"
+  },
+  "hero": {
+    "kicker": [
+      "Software Engineer",
+      "Daimler Truck (DTICI)",
+      "Bengaluru"
+    ],
+    "headline": "Software Engineer building data systems and backend apps.",
+    "lead": "At Daimler Truck, I work on Databricks ETL for 70,000+ trucks, FastAPI web apps, and automated OTA data workflows. I also build Flutter apps for non-profits and run my own Proxmox and Linux lab.",
+    "metrics": [
+      {
+        "value": "70,000+",
+        "label": "Trucks in Daily ETL"
+      },
+      {
+        "value": "FastAPI + Spark",
+        "label": "Internal Databricks Apps"
+      },
+      {
+        "value": "Google Play",
+        "label": "Live App for Udayan Care"
+      },
+      {
+        "value": "Proxmox + Linux",
+        "label": "Self-Hosted Lab & K3s"
+      }
+    ]
+  },
+  "about": [
+    "I'm a Software Engineer at Daimler Truck Innovation Center India (DTICI) in Bengaluru. After starting out as a trainee focused on analytics and Power BI reporting, I transitioned into software engineering—maintaining Databricks ETL pipelines for ~70,000 connected trucks, replacing legacy BI reports with custom FastAPI and React internal apps, and validating automated Over-The-Air (OTA) data scripts on test rigs.",
+    "Outside work, I volunteer as the developer for Udayan Care NGO. I built the bilingual (English & Hindi) FiT-UC mobile app in Flutter using AI-assisted UI workflows alongside a custom Proxmox LXC backend running NocoDB and an auth server at udayan.diivvansh.com. After Google Play testing with Care Leavers on the ground, the app is live with 20–30 monthly active users.",
+    "At home, I run and tinker with Linux infrastructure. I started with bare-metal Debian, Kali, and Alpine Linux across spare laptops running Docker Compose, progressed to a 3-node High-Availability Proxmox VE cluster backed up by a 4th laptop running Proxmox Backup Server (PBS), and later consolidated everything onto a single dedicated Proxmox VE 8 server hosting production containers and a K3s cluster."
+  ],
+  "experience": [
+    {
+      "role": "Software Engineer",
+      "company": "Daimler Truck Innovation Center India (DTICI)",
+      "location": "Bengaluru, India",
+      "duration": "July 2026 - Present",
+      "logo": "/images/daimler.jpeg",
+      "bulletPoints": [
+        "Maintain and tune Databricks Spark ETL pipelines processing daily telemetry across ~70,000 connected commercial trucks.",
+        "Built a FastAPI + React/Node.js internal web application hosted inside Databricks to replace legacy Power BI dashboards on multi-million-row tables.",
+        "Write and validate automated daily Over-The-Air (OTA) fleet data collection scripts on hardware test rigs prior to fleet rollout."
+      ],
+      "skills": [
+        "Python",
+        "Databricks",
+        "Apache Spark",
+        "FastAPI",
+        "Node.js",
+        "React",
+        "OTA Data Collection",
+        "C++",
+        "Test Rig Validation"
+      ]
+    },
+    {
+      "role": "Lead Volunteer Developer",
+      "company": "Udayan Care (NGO)",
+      "location": "Bengaluru / Remote",
+      "duration": "2025 - Present",
+      "logo": "/images/udayan.svg",
+      "bulletPoints": [
+        "Built and shipped FiT-UC, an aftercare mobile platform for Care Leavers at Udayan Care NGO, live on Google Play Store (20–30 monthly active users).",
+        "Developed the bilingual (English & Hindi) Flutter client using AI-assisted UI iteration paired with a self-hosted NocoDB LXC REST backend and Node.js auth server at udayan.diivvansh.com.",
+        "Worked closely with the NGO team and field Care Leavers through Google Play closed testing to ship skilling courses, mentor booking, and Red Alert notifications via Gotify."
+      ],
+      "skills": [
+        "Flutter",
+        "Dart",
+        "NocoDB (LXC)",
+        "Node.js",
+        "Proxmox VE",
+        "REST APIs",
+        "Gotify",
+        "Google Play Console"
+      ]
+    },
+    {
+      "role": "Data Analyst (Graduate Engineer Trainee)",
+      "company": "Daimler Truck Innovation Center India (DTICI)",
+      "location": "Bengaluru, India",
+      "duration": "July 2025 - July 2026",
+      "logo": "/images/daimler.jpeg",
+      "bulletPoints": [
+        "Automated daily fleet data extraction jobs and reporting workflows across connected commercial vehicles.",
+        "Delivered Power BI dashboards and internal cloud data views before transitioning full-time into software engineering."
+      ],
+      "skills": [
+        "Power BI",
+        "Python",
+        "SQL",
+        "Data Pipelines",
+        "Automation"
+      ]
+    },
+    {
+      "role": "Digital Verification and Automation Intern",
+      "company": "STMicroelectronics",
+      "location": "Greater Noida, India",
+      "duration": "Jan 2025 - July 2025",
+      "bulletPoints": [
+        "Automated digital verification test workflows using Python scripts.",
+        "Studied SAT solver algorithms for automated problem-solving and explored hardware acceleration models."
+      ],
+      "skills": [
+        "Python",
+        "Automation",
+        "SAT Solvers",
+        "Digital Verification",
+        "VHDL"
+      ]
+    },
+    {
+      "role": "Data Science Intern",
+      "company": "Multiplier",
+      "location": "Delhi, India",
+      "duration": "May 2024 - July 2024",
+      "bulletPoints": [
+        "Built workforce analytics dashboards in Microsoft Power BI and trained Python forecasting models to analyze workforce trends."
+      ],
+      "skills": [
+        "Microsoft Power BI",
+        "Python",
+        "Machine Learning",
+        "Forecasting",
+        "Microsoft Excel"
+      ]
+    },
+    {
+      "role": "IoT Intern",
+      "company": "IIT Delhi",
+      "location": "Delhi, India",
+      "duration": "Dec 2023 - Jan 2024",
+      "bulletPoints": [
+        "Built a voice-interactive smart mirror by integrating a Raspberry Pi with the Alexa SDK, handling hardware setup, coding, and testing."
+      ],
+      "skills": [
+        "Linux",
+        "AWS",
+        "Raspberry Pi",
+        "Alexa SDK",
+        "IoT"
+      ]
+    },
+    {
+      "role": "Data Science Intern",
+      "company": "Goalkeep",
+      "location": "Remote",
+      "duration": "Jun 2023 - Aug 2023",
+      "logo": "/images/goalkeep.jpeg",
+      "bulletPoints": [
+        "Built survey analytics dashboards in Apache Superset and handled data migration across SQL databases, Kobo Toolbox, Glide Apps, Google Sheets, and AppSheet."
+      ],
+      "skills": [
+        "Python",
+        "SQL",
+        "Apache Superset",
+        "Kobo Toolbox",
+        "Glide Apps",
+        "Google AppSheet"
+      ]
+    }
+  ],
+  "realWorldProjects": [
+    {
+      "name": "FiT - Udayan Care (NGO Platform)",
+      "category": "Mobile & Production",
+      "description": "End-to-end bilingual (English & Hindi) mobile app for Care Leavers at Udayan Care NGO, live on Google Play Store with self-hosted Proxmox backend.",
+      "url": "https://play.google.com/store/apps/dev?id=8541457488243382905",
+      "logo": "/images/udayan.svg",
+      "badge": "Google Play · 20–30 MAU",
+      "stack": "Flutter|Dart|NocoDB (LXC)|Node.js|Proxmox VE|Gotify|REST APIs",
+      "details": "Built the Flutter mobile client with AI-assisted iteration and shipped open-source code at github.com/FioreJoy/FiT-UC.|Self-hosted backend running in a Proxmox LXC (NocoDB REST API) alongside a Node.js auth server at udayan.diivvansh.com.|Passed Google Play field testing with Care Leavers to serve 3 core workflows: TTS skilling lessons, mentor scheduling, and Red Alert crisis dispatch."
+    },
+    {
+      "name": "DTICI Connected Truck Databricks App & ETL",
+      "category": "Big Data & Enterprise",
+      "description": "Custom FastAPI + React internal web application built inside Databricks alongside ETL pipelines processing daily telemetry for ~70,000 trucks.",
+      "url": "https://www.daimlertruck.com",
+      "logo": "/images/daimler.jpeg",
+      "badge": "Enterprise · ~70k Fleet",
+      "stack": "Databricks|Apache Spark|FastAPI|React|Node.js|Python|Delta Lake",
+      "details": "Replaced slow legacy Power BI dashboards on multi-million-row tables with a custom FastAPI and React/Node.js app inside Databricks.|Optimized Spark ETL jobs handling daily operational telemetry from ~70,000 connected commercial trucks.|Automated daily OTA fleet data collection scripts and validated script safety and throughput on hardware test rigs."
+    },
+    {
+      "name": "HA NGINX Load Balancer on Proxmox K3s",
+      "category": "Infrastructure & Systems",
+      "description": "Multi-replica NGINX load balancer running inside a 6-node K3s cluster on Proxmox VE, using MetalLB Layer-2 VIPs and Traefik ingress.",
+      "url": "https://pve.diivvansh.com",
+      "logo": "/images/cuda.webp",
+      "badge": "K3s · Bare-Metal VIP",
+      "stack": "Proxmox VE|Kubernetes (K3s)|MetalLB|Traefik|NGINX|Docker|Linux",
+      "details": "Allocated bare-metal Layer-2 VIPs with MetalLB paired with Traefik ingress routing traffic across replica pods.|Configured per-session distribution so serving pod hostnames and internal cluster IPs rotate cleanly across concurrent users and browser tabs.|Built as an extension of my multi-node Proxmox lab behind Cloudflare Tunnels and Tailscale."
+    },
+    {
+      "name": "Fiorejoy",
+      "category": "Full-Stack Platform",
+      "description": "Community event-discovery app combining social graph queries with real-time chat and media sharing.",
+      "url": "https://fiorejoy.com",
+      "logo": "/images/fiorejoy.png",
+      "badge": "Live Platform",
+      "stack": "Flutter|FastAPI|PostgreSQL|Apache AGE|MinIO|WebSockets",
+      "details": "Modeled user-event recommendations using PostgreSQL with the Apache AGE graph extension.|Built real-time group messaging over WebSockets with MinIO S3-compatible media storage."
+    },
+    {
+      "name": "AvignaTattva",
+      "category": "Full-Stack Web",
+      "description": "Consultation and scheduling web platform connecting users with verified wellness practitioners.",
+      "url": "https://avignatattva.com",
+      "logo": "/images/avignatattva.jpg",
+      "badge": "Production Web",
+      "stack": "Flutter|PostgreSQL|NocoDB|REST APIs",
+      "details": "Implemented appointment booking flows and practitioner profile views.|Backed scheduling tables with NocoDB REST endpoints on PostgreSQL."
+    },
+    {
+      "name": "PokeRoyale",
+      "category": "Real-Time Multiplayer Game",
+      "description": "Work-in-progress real-time lane-combat multiplayer game built with Godot Engine and a Go/Redis server.",
+      "url": "",
+      "badge": "In Development",
+      "stack": "Godot|Go|WebSockets|Redis|Docker",
+      "details": "Writing a server-authoritative game loop in Go backed by Redis for fast state synchronization.|Designing real-time unit deployment and combat mechanics in Godot."
+    }
+  ],
+  "otherProjects": [
+    {
+      "name": "SixSortAlgoCUDA",
+      "description": "Benchmarked GPU parallel speedup vs serial C++ across six sorting algorithms on NVIDIA CUDA.",
+      "url": "https://github.com/divansh369/cuda-sorting-algo",
+      "logo": "/images/cuda.webp",
+      "stack": "C++|CUDA|Algorithms|Parallel Computing",
+      "details": "Implemented parallel Bubble, Insertion, and Merge sort kernels in CUDA C++.|Measured GPU vs CPU runtime scaling across varied array sizes."
+    },
+    {
+      "name": "LeetCode Solutions",
+      "description": "Collection of 150+ algorithm and data structure solutions maintained in Python.",
+      "url": "https://github.com/divansh369/leetcode-solutions",
+      "logo": "/images/leetcode.webp",
+      "stack": "Python|Algorithms|Data Structures",
+      "details": "Organized solutions across dynamic programming, graph traversal, trees, and greedy problems."
+    },
+    {
+      "name": "MIT Labs",
+      "description": "All-semester Manipal B.Tech Data Science coursework spanning statistical modeling and ML pipelines.",
+      "url": "https://github.com/divansh369/mit-labs",
+      "stack": "Python|Pandas|NumPy|Scikit-learn",
+      "details": "Completed supervised, unsupervised, and statistical data analysis lab notebooks across B.Tech semesters."
+    },
+    {
+      "name": "ChatBot Cynthia",
+      "description": "Intent-recognition conversational bot built with Recurrent Neural Networks (RNN) and TensorFlow.",
+      "url": "https://github.com/divansh369/chatbot-cynthia",
+      "logo": "/images/chatbot.webp",
+      "stack": "Python|TensorFlow|Keras|NLTK|RNN",
+      "details": "Trained sequence models on custom intent JSON corpora using tokenization and padding."
+    },
+    {
+      "name": "Dwarka BookStore",
+      "description": "Lightweight online bookstore inventory and search interface built with Streamlit.",
+      "url": "https://github.com/divansh369/dwarka-bookstore",
+      "logo": "/images/book.webp",
+      "stack": "Python|Streamlit|Pandas",
+      "details": "Built dynamic catalog filtering and cart workflows in Streamlit."
+    }
+  ],
+  "homelab": {
+    "evolution": [
+      {
+        "stage": "Phase 01 · Bare-Metal Linux & Docker Compose",
+        "title": "Debian, Kali & Alpine on Repurposed Laptops",
+        "summary": "Before discovering hypervisors, I ran bare-metal Debian, Kali Linux, and Alpine Linux across spare laptops, orchestrating all self-hosted apps by hand with Docker Engine and Docker Compose.",
+        "learnings": [
+          "Managed Linux networking, firewalling, systemd services, and persistent volume permissions manually.",
+          "Used Alpine for lightweight production containers, Debian for host stability, and Kali for local network troubleshooting."
+        ],
+        "stack": "Debian · Kali Linux · Alpine Linux · Docker · Docker Compose · systemd"
+      },
+      {
+        "stage": "Phase 02 · 3-Node HA Proxmox Cluster + 4th Laptop PBS",
+        "title": "Distributed Proxmox VE Quorum & Proxmox Backup Server",
+        "summary": "Uncovered Proxmox VE and rebuilt the 4-laptop stack into a 3-node High-Availability (HA) PVE cluster with a dedicated 4th laptop acting exclusively as a Proxmox Backup Server (PBS).",
+        "learnings": [
+          "Learned Corosync quorum voting, split-brain prevention, HA failover groups, and live migration across cluster nodes.",
+          "Configured Proxmox Backup Server (PBS) for incremental deduplicated backups, retention policies, and tested disaster recovery restores.",
+          "Mastered Linux bridges (vmbr0), thin storage provisioning, and LXC vs KVM workload trade-offs."
+        ],
+        "stack": "Proxmox VE · Proxmox Backup Server (PBS) · Corosync HA · LXC · KVM"
+      },
+      {
+        "stage": "Phase 03 · Consolidated PVE 8 Host & K3s Cluster",
+        "title": "Production NGO LXCs & 6-Node K3s Virtualization Lab",
+        "summary": "Consolidated the 4-laptop cluster onto one primary 24/7 Proxmox VE 8 server for lower power draw and unified memory, running production LXC services alongside a 6-node K3s cluster.",
+        "learnings": [
+          "Hosts live Udayan Care NGO production containers (NocoDB LXC, Node.js Auth at udayan.diivvansh.com, Gotify alerts).",
+          "Operates a nested 6-node K3s cluster (3 masters + 3 workers) with MetalLB VIPs and Traefik ingress exposed safely via Cloudflare Tunnels and Tailscale."
+        ],
+        "stack": "Proxmox VE 8 · 6-Node K3s · MetalLB · Traefik · Cloudflare Tunnels · Tailscale"
+      }
+    ],
+    "nodes": [
+      {
+        "hostname": "Primary Proxmox Node",
+        "type": "Proxmox VE 8 Host (Consolidated)",
+        "cpu": "6C / 12T Server CPU",
+        "ram": "64 GB DDR4 Unified Pool",
+        "gpu": "Hardware Transcoding & Display",
+        "storage": "512 GB NVMe (Thin-LVM + PBS Snapshots)",
+        "url": "https://pve.diivvansh.com",
+        "notes": "Replaced 4 individual laptops; hosts Udayan Care production LXCs (NocoDB, Auth, Gotify) and the 6-node K3s cluster."
+      },
+      {
+        "hostname": "Legacy 3+1 Laptop Rack (Retired)",
+        "type": "3x PVE HA + 1x PBS Backup",
+        "cpu": "Multi-node Intel/AMD Laptops",
+        "ram": "48 GB Combined Pool",
+        "gpu": "Integrated",
+        "storage": "2+ TB Combined SSD/HDD",
+        "url": "",
+        "notes": "Former bare-metal Debian/Kali/Alpine Docker hosts converted to a 3-node Proxmox HA quorum + 4th PBS backup laptop before consolidation."
+      }
+    ],
+    "consolidationNote": "Moving from 4 separate laptops (3 PVE HA nodes + 1 PBS laptop) onto one unified Proxmox VE 8 host reduced power draw and noise while keeping automated snapshots and LXC isolation intact.",
+    "k3sTopology": [
+      {
+        "os": "Udayan Care NocoDB (LXC)",
+        "description": "Production database & REST API container serving the live FiT-UC mobile app."
+      },
+      {
+        "os": "Udayan Care Auth Server (LXC)",
+        "description": "Node.js authentication microservice exposed securely at udayan.diivvansh.com."
+      },
+      {
+        "os": "Gotify Alert Relay (LXC)",
+        "description": "Self-hosted push server handling instant crisis Red Alert notifications for NGO mentors."
+      },
+      {
+        "os": "K3s Control Plane (3 Master VMs)",
+        "description": "Embedded etcd quorum managing cluster scheduling and state across 3 control-plane nodes."
+      },
+      {
+        "os": "K3s Worker Pool (3 Worker VMs)",
+        "description": "Runs multi-replica NGINX workloads behind MetalLB Layer-2 VIPs and Traefik ingress."
+      },
+      {
+        "os": "Cloudflare Zero-Trust + Tailscale",
+        "description": "Routes diivvansh.com (pve & udayan subdomains) and fiorejoy.com with zero open firewall ports."
+      }
+    ],
+    "network": {
+      "domains": [
+        "diivvansh.com (pve.diivvansh.com · udayan.diivvansh.com)",
+        "fiorejoy.com"
+      ],
+      "overlay": "Tailscale WireGuard mesh for peer-to-peer admin access",
+      "ingress": "Cloudflare Zero-Trust Tunnels & SSL termination",
+      "loadBalancer": "MetalLB Layer-2 VIP + Traefik Ingress"
+    },
+    "tooling": [
+      "Proxmox VE 8",
+      "Proxmox Backup Server (PBS)",
+      "Debian · Kali · Alpine",
+      "Docker & Compose",
+      "K3s (6-Node)",
+      "MetalLB & Traefik",
+      "Tailscale WireGuard",
+      "Cloudflare Tunnels",
+      "NocoDB (LXC)",
+      "Gotify"
+    ]
+  },
+  "skills": {
+    "categories": [
+      {
+        "name": "Languages & App Development",
+        "desc": "Production software, backend APIs, cross-platform mobile apps, and automation scripting.",
+        "items": [
+          "Python",
+          "C++ & CUDA",
+          "SQL & PostgreSQL",
+          "Dart & Flutter",
+          "TypeScript & JavaScript",
+          "FastAPI & Node.js",
+          "React",
+          "Go (Systems & Games)",
+          "Java"
+        ]
+      },
+      {
+        "name": "Big Data, ML & Analytics",
+        "desc": "Fleet telemetry pipelines, distributed processing, and BI reporting.",
+        "items": [
+          "Databricks",
+          "Apache Spark",
+          "Delta Lake",
+          "OTA Fleet Data Collection",
+          "Pandas & NumPy",
+          "Scikit-learn & TensorFlow",
+          "Power BI & Apache Superset",
+          "Kobo Toolbox & Glide Apps"
+        ]
+      },
+      {
+        "name": "Infrastructure, Linux & Virtualization",
+        "desc": "Bare-metal Linux, hypervisors, cluster networking, and self-hosted backends.",
+        "items": [
+          "Proxmox VE & PBS Backups",
+          "Debian · Kali · Alpine Linux",
+          "Docker & Docker Compose",
+          "Kubernetes (K3s) & NGINX",
+          "MetalLB & Traefik",
+          "Tailscale & Cloudflare Tunnels",
+          "NocoDB · Redis · MinIO",
+          "AWS & Git"
+        ]
+      }
+    ],
+    "principles": [
+      "Spark & Databricks Query Tuning",
+      "OTA Script Validation on Test Rigs",
+      "End-to-End Product Delivery",
+      "Proxmox HA Quorum & PBS Recovery",
+      "AI-Assisted Rapid UI Prototyping",
+      "Bare-Metal Linux to Virtualization",
+      "Zero-Trust Self-Hosted Ingress",
+      "Iterative NGO & Stakeholder Feedback"
+    ],
+    "languages": [
+      "English (Fluent)",
+      "Hindi (Fluent)"
+    ],
+    "interests": [
+      "Chess",
+      "Quantum Physics",
+      "Fitness",
+      "Fiction Novels",
+      "Open Source",
+      "Gaming"
+    ]
+  },
+  "education": [
+    {
+      "institution": "Manipal Institute of Technology (MIT)",
+      "degree": "B.Tech in Data Science",
+      "duration": "Oct 2021 - July 2025",
+      "gpa": "CGPA: 7.3 / 10.0"
+    },
+    {
+      "institution": "ITL Public School (CBSE)",
+      "degree": "Senior Secondary (Class XII)",
+      "duration": "Apr 2020 - Oct 2021",
+      "gpa": "94%"
+    },
+    {
+      "institution": "ITL Public School (CBSE)",
+      "degree": "Secondary School (Class X)",
+      "duration": "Apr 2017 - Apr 2018",
+      "gpa": "95%"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Number Theory & Cryptography",
+      "date": "Nov 2023"
+    },
+    {
+      "name": "Natural Language Processing in Microsoft Azure",
+      "date": "Nov 2023"
+    },
+    {
+      "name": "Build Your First GUI App With Java",
+      "date": "Nov 2022"
+    },
+    {
+      "name": "Writing Java Application Code",
+      "date": "Nov 2022"
+    },
+    {
+      "name": "Data Science using Python",
+      "date": "Oct 2022"
+    }
+  ],
+  "socials": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/Divansh369",
+      "logos": "/images/logos/git.svg"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/divansh-prasad-893b05230/",
+      "logos": "/images/logos/react.svg"
+    },
+    {
+      "name": "Google Play",
+      "url": "https://play.google.com/store/apps/dev?id=8541457488243382905",
+      "logos": "/images/logos/flutter.svg"
+    },
+    {
+      "name": "Proxmox PVE",
+      "url": "https://pve.diivvansh.com",
+      "logos": "/images/logos/proxmox.svg"
+    }
+  ],
+  "contact": {
+    "heading": "Get In Touch",
+    "message": "Open to software engineering roles, distributed data infrastructure discussions, and collaborative open-source or impact builds.",
+    "email": "divanshthebest@gmail.com",
+    "phone": "+91 9873354637"
+  }
+}
