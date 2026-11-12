@@ -34,7 +34,9 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
     window.addEventListener('keydown', handleEsc);
 
     setIsLoading(true);
-    fetch('/data/portfolio.json?v=' + Date.now())
+    const baseUrl = import.meta.env.BASE_URL || '/';
+    const jsonPath = `${baseUrl.replace(/\/$/, '')}/data/portfolio.json?v=${Date.now()}`;
+    fetch(jsonPath)
       .then((res) => res.json())
       .then((data) => {
         setJsonData(JSON.stringify(data, null, 2));

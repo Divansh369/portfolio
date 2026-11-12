@@ -48,10 +48,17 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
   const githubUrl = profile.githubUrl || 'https://github.com/Divansh369';
   const githubLabel = githubUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 
+  const baseUrl = import.meta.env.BASE_URL || '/';
+  const staticPdfUrl = `${baseUrl.replace(/\/$/, '')}/Divansh_Prasad_CV.pdf`;
+
   const handleDownloadPdf = async () => {
     try {
       setIsDownloading(true);
-      const res = await fetch('/api/cv.pdf');
+      // Try express backend endpoint first; fall back to pre-built static PDF on GitHub Pages
+      let res = await fetch('/api/cv.pdf').catch(() => null);
+      if (!res || !res.ok) {
+        res = await fetch(staticPdfUrl);
+      }
       if (!res.ok) {
         throw new Error(`Server returned ${res.status}`);
       }
@@ -73,16 +80,21 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
     } catch (err) {
       console.warn('Blob download failed, using direct static fallback:', err);
       const link = document.createElement('a');
-      link.href = '/api/cv-download';
+      link.style.display = 'none';
+      link.href = staticPdfUrl;
       link.download = 'Divansh_Prasad_CV.pdf';
+      document.body.appendChild(link);
       link.click();
+      setTimeout(() => document.body.removeChild(link), 500);
     } finally {
       setIsDownloading(false);
     }
   };
 
   const handleOpenInNewTab = () => {
-    window.open('/api/cv.pdf?view=inline', '_blank');
+    // Check if on static domain or express backend
+    const targetUrl = window.location.hostname.includes('github.io') ? staticPdfUrl : '/api/cv.pdf?view=inline';
+    window.open(targetUrl, '_blank');
   };
 
   const handlePrint = () => {
@@ -90,7 +102,10 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
   };
 
   const handleCopyPdfLink = () => {
-    const fullUrl = `${window.location.origin}/api/cv.pdf`;
+    const isGithub = window.location.hostname.includes('github.io');
+    const fullUrl = isGithub
+      ? new URL(staticPdfUrl, window.location.origin).href
+      : `${window.location.origin}/api/cv.pdf`;
     navigator.clipboard.writeText(fullUrl);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
