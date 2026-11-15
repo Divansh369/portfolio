@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Box,
   Boxes,
   ChevronDown,
   ChevronUp,
   Cpu,
   Eye,
+  Flower2,
   Grid,
   Orbit,
   Play,
@@ -38,49 +38,49 @@ const MORPH_SPECS: MorphModeSpec[] = [
   {
     id: 'proxmox',
     shortLabel: 'Proxmox Core',
-    title: 'Proxmox VE 8 Hypervisor Core',
+    title: 'Proxmox VE 8 Hypervisor Core (Structured Bud)',
     domain: 'Infrastructure · pve.diivvansh.com',
     caption:
-      'Consolidated Proxmox VE 8 host with Linux bridge networking, PBS snapshots, and isolated LXC workloads.',
+      'Consolidated Proxmox VE 8 host with Linux bridge networking, PBS snapshots, and isolated LXC workloads represented in an upright structured bud.',
     stack: 'Proxmox VE 8 / Debian & Alpine LXCs / PBS Backups',
     icon: Server,
   },
   {
     id: 'databricks',
-    shortLabel: 'Fleet Torus',
-    title: 'Databricks Fleet Stream Topology',
+    shortLabel: 'Fleet Stream',
+    title: 'Databricks Fleet Stream Topology (Flowing Bloom)',
     domain: 'Big Data ETL · ~70,000 Trucks',
     caption:
-      'Continuous Apache Spark and Delta Lake telemetry streams feeding FastAPI + React internal apps.',
+      'Continuous Apache Spark & Delta Lake telemetry stream ribbons weaving through unfolding petals to feed live internal apps.',
     stack: 'Databricks / Apache Spark / Delta Lake / FastAPI',
     icon: Truck,
   },
   {
     id: 'k3s',
     shortLabel: 'K3s Quorum',
-    title: '6-Node K3s HA Cluster Manifold',
+    title: '6-Node K3s Cluster Manifold (Hexagonal Blossom)',
     domain: 'Kubernetes · 3 Masters + 3 Workers',
     caption:
-      'Hexagonal cluster symmetry separating control-plane masters and NGINX worker pods behind MetalLB & Traefik.',
+      'Hexagonal 6-symmetry bloom separating control-plane masters and NGINX worker pods behind MetalLB VIP & Traefik ingress.',
     stack: 'K3s (3+3) / MetalLB VIP / Traefik Ingress / CoreDNS',
     icon: Boxes,
   },
   {
     id: 'fituc',
-    shortLabel: 'FiT-UC Field',
-    title: 'FiT-UC Mobile Harmonic Network',
+    shortLabel: 'FiT-UC Blossom',
+    title: 'FiT-UC Mobile Harmonic Network (Full Open Bloom)',
     domain: 'Production NGO · Google Play Live',
     caption:
-      'Bilingual Flutter app connecting Care Leavers with self-hosted NocoDB APIs, Node auth, and Gotify alerts.',
+      'Radiant full open blossom with luminous stamen core, connecting Care Leavers with self-hosted NocoDB APIs and Gotify alerts.',
     stack: 'Flutter / Dart / NocoDB LXC / Node Auth / Gotify',
     icon: Smartphone,
   },
 ];
 
 const CAMERA_OPTIONS: Array<{ id: CameraPreset; label: string }> = [
+  { id: 'top', label: 'Top' },
   { id: 'iso', label: 'Iso' },
   { id: 'front', label: 'Front' },
-  { id: 'top', label: 'Top' },
 ];
 
 export const SpatialMorphViewport: React.FC = () => {
@@ -90,8 +90,10 @@ export const SpatialMorphViewport: React.FC = () => {
 
   const prefersReduced = useReducedMotion();
   const [activeState, setActiveState] = useState<MorphStateId>('proxmox');
-  const [wireframe, setWireframe] = useState<boolean>(true);
+  const [wireframe, setWireframe] = useState<boolean>(false);
   const [autoCycle, setAutoCycle] = useState<boolean>(!prefersReduced);
+  const [explodedFactor, setExplodedFactor] = useState<number>(0.06);
+  const [activeCamera, setActiveCamera] = useState<CameraPreset>('top');
   const [controlsCollapsed, setControlsCollapsed] = useState<boolean>(false);
   const [webglFailed, setWebglFailed] = useState<boolean>(false);
 
@@ -109,6 +111,7 @@ export const SpatialMorphViewport: React.FC = () => {
         mountEl,
         {
           onStateChange: (nextState) => setActiveState(nextState),
+          onBloomChange: (nextBloom) => setExplodedFactor(nextBloom),
           onWebglError: () => setWebglFailed(true),
         },
         Boolean(prefersReduced)
@@ -172,7 +175,14 @@ export const SpatialMorphViewport: React.FC = () => {
     });
   };
 
+  const handleExplodedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    setExplodedFactor(val);
+    controllerRef.current?.setExploded(val);
+  };
+
   const handleSelectCamera = (preset: CameraPreset) => {
+    setActiveCamera(preset);
     controllerRef.current?.setCameraPreset(preset);
   };
 
@@ -184,23 +194,23 @@ export const SpatialMorphViewport: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
-            <Box className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>3D Architecture Morph</span>
+            <Flower2 className="w-3.5 h-3.5 text-[#39FF14]" aria-hidden="true" />
+            <span>3D Blooming Lotus · Systems Architecture</span>
           </span>
           <SplitText
             as="h2"
-            text="Interactive 3D Systems Form Explorer"
+            text="Interactive 3D Blooming Lotus Architecture"
             stagger={0.04}
             className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-zinc-50 block"
           />
           <p className="text-sm text-zinc-400 mt-2 max-w-2xl leading-relaxed">
-            Real-time WebGL morphing between Proxmox hypervisor topology, Databricks streaming pipelines, 6-node K3s cluster geometry, and FiT-UC service flow. Drag to orbit or click any form to inspect.
+            Procedural 3D blooming pink lotus with emerald calyx leaves and swirling cherry blossoms — mapping Proxmox hypervisor topology, Databricks Spark pipelines, 6-node K3s cluster geometry, and FiT-UC mobile mesh.
           </p>
         </div>
 
         <div className="text-xs font-mono text-zinc-400 flex items-center gap-2 whitespace-nowrap shrink-0">
-          <Orbit className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
-          <span>Drag to Orbit · Click Model to Morph</span>
+          <Orbit className="w-3.5 h-3.5 text-pink-400" aria-hidden="true" />
+          <span>Drag to Orbit · Click Lotus to Morph</span>
         </div>
       </div>
 
@@ -209,16 +219,16 @@ export const SpatialMorphViewport: React.FC = () => {
         ref={stageRef}
         tabIndex={0}
         onKeyDown={handleStageKeyDown}
-        className="group relative h-[440px] sm:h-[510px] lg:h-[550px] w-full rounded-2xl overflow-hidden border border-white/[0.14] bg-[#040711] shadow-[0_28px_72px_-28px_rgba(0,0,0,0.92)] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+        className="group relative h-[440px] sm:h-[510px] lg:h-[560px] w-full rounded-2xl overflow-hidden border border-white/[0.14] bg-[#000000] shadow-[0_28px_72px_-28px_rgba(0,0,0,0.95)] focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
       >
-        <CornerBrackets className="text-white/30 group-hover:text-cyan-400/90 z-20" />
+        <CornerBrackets className="text-white/30 group-hover:text-pink-400/80 z-20" />
 
-        {/* Dedicated Isolated WebGL Canvas Container (zero React HUD children inside) */}
+        {/* Dedicated Isolated WebGL Canvas Container */}
         {!webglFailed ? (
           <div ref={canvasMountRef} className="absolute inset-0 w-full h-full z-0" />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#060b18]">
-            <Cpu className="w-10 h-10 text-cyan-400 mb-3" aria-hidden="true" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#000000]">
+            <Cpu className="w-10 h-10 text-pink-400 mb-3" aria-hidden="true" />
             <h3 className="font-display text-lg font-bold text-zinc-100 mb-1">
               {activeSpec.title}
             </h3>
@@ -228,10 +238,10 @@ export const SpatialMorphViewport: React.FC = () => {
           </div>
         )}
 
-        {/* Minimal Top-Left Readout (solid rgba backing — zero backdrop-blur over WebGL) */}
+        {/* Minimal Top-Left Readout (solid rgba backing) */}
         <div className="pointer-events-none absolute top-4 left-4 right-4 sm:right-auto z-10 max-w-md">
-          <div className="rounded-xl bg-[#050915]/88 border border-white/[0.12] px-4 py-3 shadow-lg">
-            <div className="flex items-center gap-2 text-[11px] font-mono text-cyan-400 mb-1">
+          <div className="rounded-xl bg-black/85 border border-white/[0.14] px-4 py-3 shadow-lg">
+            <div className="flex items-center gap-2 text-[11px] font-mono text-pink-400 mb-1">
               <ActiveIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
               <TextScramble
                 text={activeSpec.domain}
@@ -248,13 +258,13 @@ export const SpatialMorphViewport: React.FC = () => {
           </div>
         </div>
 
-        {/* Unified Collapsible Bottom Control Dock (Zero Viewport Center Occlusion, Zero backdrop-blur) */}
+        {/* Unified Collapsible Bottom Control Dock */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center max-w-[94vw]">
           <button
             type="button"
             onClick={() => setControlsCollapsed((prev) => !prev)}
             aria-expanded={!controlsCollapsed}
-            className="mb-1.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#050915]/92 border border-white/15 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            className="mb-1.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-black/90 border border-white/15 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-colors cursor-pointer whitespace-nowrap shrink-0"
           >
             {controlsCollapsed ? (
               <>
@@ -277,10 +287,10 @@ export const SpatialMorphViewport: React.FC = () => {
                 : { opacity: 1, y: 0, pointerEvents: 'auto' as const }
             }
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-2xl bg-[#050915]/94 border border-white/[0.15] px-2.5 py-2 shadow-[0_16px_40px_rgba(0,0,0,0.8)] flex items-center gap-2 overflow-x-auto max-w-full"
+            className="rounded-2xl bg-black/92 border border-white/[0.18] px-2.5 py-2 shadow-[0_16px_40px_rgba(0,0,0,0.9)] flex items-center gap-2 overflow-x-auto max-w-full"
           >
-            {/* 4 Morph Topology States */}
-            <div className="flex items-center gap-1" role="group" aria-label="Select 3D morph architecture">
+            {/* 4 Architecture States */}
+            <div className="flex items-center gap-1" role="group" aria-label="Select 3D architecture state">
               {MORPH_SPECS.map((spec) => {
                 const selected = activeState === spec.id;
                 const Icon = spec.icon;
@@ -292,8 +302,8 @@ export const SpatialMorphViewport: React.FC = () => {
                     onClick={() => handleSelectMorph(spec.id)}
                     className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-medium whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                       selected
-                        ? 'bg-blue-600 text-white border border-cyan-300/40'
-                        : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                        ? 'bg-blue-600/90 text-white border border-cyan-300/40 shadow-sm'
+                        : 'text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-transparent'
                     }`}
                   >
                     <Icon
@@ -310,16 +320,36 @@ export const SpatialMorphViewport: React.FC = () => {
 
             <div className="w-px h-5 bg-white/12 shrink-0" aria-hidden="true" />
 
+            {/* Bloom / Unfold Slider */}
+            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.05] border border-white/12 shrink-0">
+              <Flower2 className="w-3.5 h-3.5 text-pink-400 shrink-0" aria-hidden="true" />
+              <span className="text-[11px] font-mono text-zinc-300 whitespace-nowrap">
+                Bloom <span className="text-pink-400 font-semibold">{Math.round(explodedFactor * 100)}%</span>
+              </span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={explodedFactor}
+                onChange={handleExplodedChange}
+                aria-label="Lotus flower bloom and petal unfolding factor"
+                className="w-20 sm:w-28 h-1.5 bg-zinc-700/80 rounded-lg appearance-none cursor-pointer accent-pink-400 focus:outline-none"
+              />
+            </div>
+
+            <div className="w-px h-5 bg-white/12 shrink-0" aria-hidden="true" />
+
             {/* Mesh Wireframe & Auto-Morph Toggles */}
             <div className="flex items-center gap-1 shrink-0">
               <button
                 type="button"
                 aria-pressed={wireframe}
                 onClick={handleToggleWireframe}
-                title="Toggle structural wireframe overlay"
+                title="Toggle structural petal CAD wireframe overlay"
                 className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                   wireframe
-                    ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-400/40'
+                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
                     : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border border-transparent'
                 }`}
               >
@@ -335,7 +365,7 @@ export const SpatialMorphViewport: React.FC = () => {
                   title="Toggle continuous shape morph cycling"
                   className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                     autoCycle
-                      ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-400/40'
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
                       : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border border-transparent'
                   }`}
                 >
@@ -344,7 +374,7 @@ export const SpatialMorphViewport: React.FC = () => {
                   ) : (
                     <Play className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   )}
-                  <span>Auto-Morph</span>
+                  <span>Auto-Bloom</span>
                 </button>
               )}
             </div>
@@ -358,16 +388,24 @@ export const SpatialMorphViewport: React.FC = () => {
               aria-label="Camera angle presets"
             >
               <Eye className="w-3.5 h-3.5 text-zinc-500 ml-1 mr-0.5 shrink-0" aria-hidden="true" />
-              {CAMERA_OPTIONS.map((cam) => (
-                <button
-                  key={cam.id}
-                  type="button"
-                  onClick={() => handleSelectCamera(cam.id)}
-                  className="px-2.5 py-2 min-h-[40px] rounded-xl text-xs font-mono text-zinc-300 hover:text-white hover:bg-white/[0.08] whitespace-nowrap shrink-0 cursor-pointer transition-colors"
-                >
-                  {cam.label}
-                </button>
-              ))}
+              {CAMERA_OPTIONS.map((cam) => {
+                const isCamActive = activeCamera === cam.id;
+                return (
+                  <button
+                    key={cam.id}
+                    type="button"
+                    aria-pressed={isCamActive}
+                    onClick={() => handleSelectCamera(cam.id)}
+                    className={`px-2.5 py-2 min-h-[40px] rounded-xl text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                      isCamActive
+                        ? 'bg-pink-500/20 text-pink-300 border border-pink-400/40'
+                        : 'text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-transparent'
+                    }`}
+                  >
+                    {cam.label}
+                  </button>
+                );
+              })}
             </div>
           </motion.div>
         </div>

@@ -1,0 +1,37 @@
+skill,logo,type
+Apache,/images/logos/apache.svg,tech
+Python,/images/logos/python.svg,tech
+SQL,/images/logos/sql_postgresql.svg,tech
+Microsoft Power BI,/images/logos/powerbi.webp,tech
+C++,/images/logos/cpp.webp,tech
+JAVA,/images/logos/java.webp,tech
+HTML,/images/logos/html5.svg,tech
+CSS,/images/logos/css.webp,tech
+Javascript,/images/logos/javascript.svg,tech
+React,/images/logos/react.svg,tech
+Node.js,/images/logos/nodejs.svg,tech
+Linux ,/images/logos/linux.svg,tech
+Shellscript, /images/logos/shell-bash.svg,tech
+Docker,/images/logos/docker.svg,tech
+Git ,/images/logos/git.svg,tech
+TensorFlow , /images/logos/tensorflow.svg,tech
+PyTorch ,/images/logos/pytorch.svg,tech
+Scikit-learn,/images/logos/scikit-learn.svg,tech
+Pandas , /images/logos/pandas.svg,tech
+NumPy, /images/logos/numpy.svg,tech
+Raspberry Pi,/images/logos/raspberry-pi.svg,tech
+Microsoft Office,/images/logos/ms.webp,tech
+Analytical Thinking,,soft
+Stratgeic Planning,,soft
+Critical Thinking,,soft
+Self Motivation,,soft
+Creativity & Innovation,,soft
+Adaptability,,soft
+Time Management,,soft
+Collaboration ,,soft
+Communication Skills,,soft
+Attention to Detail,,soft
+Learning Agility,,soft
+Decision Making,,soft
+Problem Solving,,soft
+Project Management,,soft

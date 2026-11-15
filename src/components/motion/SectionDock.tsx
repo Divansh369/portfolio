@@ -8,7 +8,7 @@ interface SectionStop {
 
 const SECTION_STOPS: SectionStop[] = [
   { id: 'hero', label: 'Overview' },
-  { id: 'systems-3d', label: '3D Morph' },
+  { id: 'systems-3d', label: '3D Lotus' },
   { id: 'projects', label: 'Projects' },
   { id: 'homelab', label: 'Proxmox' },
   { id: 'experience', label: 'Experience' },

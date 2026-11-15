@@ -54,13 +54,13 @@ export const GlassCard: React.FC<GlassCardProps> = ({
   const rotateYRaw = useMotionValue(0);
   const glareAngleRaw = useMotionValue(122);
 
-  const springConfig = { stiffness: 260, damping: 24, mass: 0.7 };
+  const springConfig = { stiffness: 280, damping: 22, mass: 0.6 };
   const rotateX = useSpring(rotateXRaw, springConfig);
   const rotateY = useSpring(rotateYRaw, springConfig);
   const glareAngle = useSpring(glareAngleRaw, { stiffness: 180, damping: 26 });
 
-  const spotlightBg = useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, rgba(56, 189, 248, 0.14), rgba(37, 99, 235, 0.055) 45%, transparent 72%)`;
-  const specularGlare = useMotionTemplate`linear-gradient(${glareAngle}deg, transparent 22%, rgba(255, 255, 255, 0.055) 48%, rgba(56, 189, 248, 0.075) 52%, transparent 78%)`;
+  const spotlightBg = useMotionTemplate`radial-gradient(420px circle at ${mouseX}px ${mouseY}px, rgba(56, 189, 248, 0.22), rgba(37, 99, 235, 0.08) 45%, transparent 72%)`;
+  const specularGlare = useMotionTemplate`linear-gradient(${glareAngle}deg, transparent 20%, rgba(255, 255, 255, 0.08) 48%, rgba(56, 189, 248, 0.12) 52%, transparent 80%)`;
 
   const canTilt = tilt && !prefersReduced;
 
@@ -81,8 +81,9 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     }
 
     if (canTilt) {
-      rotateXRaw.set(-py * 3.4);
-      rotateYRaw.set(px * 3.4);
+      // Amplified tactile 3D perspective tilt lean
+      rotateXRaw.set(-py * 6.2);
+      rotateYRaw.set(px * 6.2);
     }
   };
 

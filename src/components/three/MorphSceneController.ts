@@ -2,9 +2,16 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import {
-  createMorphCoreGeometry,
-  createMachinedRingGeometry,
+  createLotusFlowerAssembly,
+  updateLotusBloom,
+  LotusPetalAssembly,
+  createCherryBlossomGeometry,
+  createSingleSakuraPetalGeometry,
+  createFlowingBlueRibbonGeometry,
   createSatelliteNodeParts,
+  createInternalTelemetryCoreGeometry,
+  createOpticalBusRingGeometry,
+  createFloatingStreamRibbonGeometries,
   MORPH_STATES,
   MorphStateId,
 } from './morphGeometries';
@@ -14,26 +21,44 @@ export type CameraPreset = 'iso' | 'front' | 'top';
 
 export interface MorphSceneCallbacks {
   onStateChange?: (state: MorphStateId) => void;
+  onBloomChange?: (bloom: number) => void;
   onWebglError?: (reason: string) => void;
 }
 
 // Module-scoped zero-GC scratch math objects
 const _v1 = new THREE.Vector3();
-const _v2 = new THREE.Vector3();
 const _targetCamPos = new THREE.Vector3();
-const _targetCtrlTarget = new THREE.Vector3(0, 0.12, 0);
+const _targetCtrlTarget = new THREE.Vector3(0, 0.28, 0);
 const _quat = new THREE.Quaternion();
 const _euler = new THREE.Euler();
 const _scale = new THREE.Vector3();
 const _mat4 = new THREE.Matrix4();
 const _pointerNdc = new THREE.Vector2();
+const _tmpColor = new THREE.Color();
 
-const SHARD_COUNT = 220;
+const SAKURA_BLOSSOM_COUNT = 48;
+const SAKURA_PETAL_COUNT = 110;
+
+const BABY_PINK_PALETTE = ['#fce7f3', '#fbcfe8', '#f9a8d4', '#fda4af'];
 
 const CAMERA_PRESETS: Record<CameraPreset, [number, number, number]> = {
-  iso: [3.4, 1.9, 4.55],
-  front: [0.0, 0.65, 5.45],
-  top: [0.0, 5.2, 2.2],
+  top: [0.0, 5.15, 1.35],
+  iso: [3.2, 2.25, 4.45],
+  front: [0.0, 1.05, 5.1],
+};
+
+const MODE_BASE_BLOOM: Record<MorphStateId, number> = {
+  proxmox: 0.06,
+  databricks: 0.38,
+  k3s: 0.72,
+  fituc: 1.0,
+};
+
+const MODE_ACCENTS: Record<MorphStateId, string> = {
+  proxmox: '#f472b6', // Rose Pink
+  databricks: '#ec4899', // Magenta Pink
+  k3s: '#39ff14', // Neon Green accent
+  fituc: '#f9a8d4', // Baby Pink
 };
 
 function detectSoftwareGl(): boolean {
@@ -64,44 +89,60 @@ export class MorphSceneController {
   private materials: MorphMaterialsBundle;
 
   private heroGroup: THREE.Group;
-  private coreMesh: THREE.Mesh;
-  private wireMesh: THREE.Mesh;
+  private lotusAssembly: LotusPetalAssembly;
+  private siliconCrystalMesh: THREE.Mesh;
+  private busRingMesh: THREE.Mesh;
+  private streamRibbonMeshes: THREE.Mesh[] = [];
   private gimbalInner: THREE.Mesh;
   private gimbalOuter: THREE.Mesh;
   private glassCollar: THREE.Mesh;
   private podGroups: THREE.Group[] = [];
   private podOrbits: Array<{ angleOffset: number; planeSign: number }> = [];
-  private shardsMesh: THREE.InstancedMesh;
-  private shardSeeds: Float32Array;
-  private rayProxyMesh: THREE.Mesh;
 
+  // Swirling Baby-Pink Cherry Blossoms & Petals (replacing diamond debris)
+  private sakuraBlossomsMesh: THREE.InstancedMesh;
+  private sakuraBlossomSeeds: Float32Array;
+  private sakuraPetalsMesh: THREE.InstancedMesh;
+  private sakuraPetalSeeds: Float32Array;
+
+  private rayProxyMesh: THREE.Mesh;
   private disposables: Array<{ dispose: () => void }> = [];
 
   private activeState: MorphStateId = 'proxmox';
-  private wireframeVisible = true;
+  private wireframeVisible = false;
   private autoCycle = true;
   private reducedMotion = false;
   private isVisible = true;
   private disposed = false;
 
-  // Morph blending state (weights for morphTargetInfluences[0..2])
+  // Unified Bloom / Unfold Slider State (0.0 = closed bud, 1.0 = full blossom)
+  private currentExploded = MODE_BASE_BLOOM.proxmox;
+  private targetExploded = MODE_BASE_BLOOM.proxmox;
+
+  // Architecture weights [databricks, k3s, fituc]
   private currentWeights = [0, 0, 0];
   private targetWeights = [0, 0, 0];
   private morphPulse = 0;
   private scanProgress = -1.6;
   private autoTimer = 0;
 
-  // Smooth camera transition flag (yields cleanly when user drags)
   private camPresetActive = false;
 
-  // Hover & click raycast state
   private pointerX = 0;
   private pointerY = 0;
+  private prevPointerX = 0;
+  private prevPointerY = 0;
+  private pointerFlowX = 0;
+  private pointerFlowY = 0;
+  private pointerSpeed = 0;
+  private viewportHovered = false;
+  private currentHoverMix = 0;
+  private ribbonWavePhase = 0;
+  private ribbonFlowOffset = 0;
   private hoveredCore = false;
   private raycaster = new THREE.Raycaster();
   private downPos = { x: 0, y: 0 };
 
-  // Timing & pacing
   private elapsed = 0;
   private lastTickTime = 0;
   private frameId = 0;
@@ -128,7 +169,7 @@ export class MorphSceneController {
     });
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.12;
+    this.renderer.toneMappingExposure = 1.02;
     this.renderer.setPixelRatio(
       this.isSoftwareGl ? 1 : Math.min(window.devicePixelRatio || 1, 2)
     );
@@ -140,17 +181,17 @@ export class MorphSceneController {
     this.renderer.domElement.style.height = '100%';
     this.renderer.domElement.setAttribute(
       'aria-label',
-      'Interactive 3D Morphing Systems Architecture Viewport'
+      'Interactive 3D Blooming Pink Lotus with Swirling Cherry Blossoms'
     );
 
     container.appendChild(this.renderer.domElement);
 
-    // Scene + Depth Fog matching #040711 portfolio background
+    // Pure black cinematic canvas background
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color('#040711');
-    this.scene.fog = new THREE.FogExp2(0x040711, 0.052);
+    this.scene.background = new THREE.Color('#000000');
+    this.scene.fog = new THREE.FogExp2(0x000000, 0.042);
 
-    // Studio IBL Environment Map (RoomEnvironment via PMREM)
+    // Studio IBL Environment Map
     const pmrem = new THREE.PMREMGenerator(this.renderer);
     const roomEnv = new RoomEnvironment();
     this.envRT = pmrem.fromScene(roomEnv, 0.04);
@@ -158,19 +199,19 @@ export class MorphSceneController {
     roomEnv.dispose();
     pmrem.dispose();
 
-    // Camera
+    // Camera — Default overhead Top view showcasing full lotus mandala & swirling cherry blossoms
     this.camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 80);
-    this.camera.position.set(...CAMERA_PRESETS.iso);
+    this.camera.position.set(...CAMERA_PRESETS.top);
     _targetCamPos.copy(this.camera.position);
 
-    // OrbitControls (wheel zoom disabled to avoid trapping vertical page scroll)
+    // OrbitControls (allow full overhead Top polar angle cleanly)
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.target.copy(_targetCtrlTarget);
     this.controls.enableZoom = false;
     this.controls.enablePan = false;
     this.controls.enableDamping = !this.isSoftwareGl;
     this.controls.dampingFactor = 0.06;
-    this.controls.minPolarAngle = Math.PI * 0.18;
+    this.controls.minPolarAngle = Math.PI * 0.04;
     this.controls.maxPolarAngle = Math.PI * 0.56;
     this.controls.autoRotate = false;
     this.controls.update();
@@ -178,18 +219,18 @@ export class MorphSceneController {
     this.controls.addEventListener('start', this.onControlStart);
     this.controls.addEventListener('change', this.onControlChange);
 
-    // 3-Point Warm/Cool Studio Lighting Rig (same intensities on GPU & software GL)
-    const hemi = new THREE.HemisphereLight(0x7dd3fc, 0x070d1c, 0.78);
+    // Balanced Botanical Lighting Rig (Preserves rich rose pink & emerald green, zero white blowout!)
+    const hemi = new THREE.HemisphereLight(0xfbcfe8, 0x062c1b, 0.58);
     this.scene.add(hemi);
 
-    const keyLight = new THREE.DirectionalLight(0xfff1e0, 2.35);
-    keyLight.position.set(4.8, 6.4, 4.2);
+    const keyLight = new THREE.DirectionalLight(0xfff0f5, 1.38);
+    keyLight.position.set(4.2, 5.8, 4.0);
     keyLight.castShadow = !this.isSoftwareGl;
     keyLight.shadow.mapSize.width = 1024;
     keyLight.shadow.mapSize.height = 1024;
     keyLight.shadow.camera.near = 1;
     keyLight.shadow.camera.far = 20;
-    const d = 4.2;
+    const d = 3.8;
     keyLight.shadow.camera.left = -d;
     keyLight.shadow.camera.right = d;
     keyLight.shadow.camera.top = d;
@@ -198,19 +239,19 @@ export class MorphSceneController {
     keyLight.shadow.normalBias = 0.02;
     this.scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x22d3ee, 1.65);
-    rimLight.position.set(-4.8, 3.2, -4.4);
+    const rimLight = new THREE.DirectionalLight(0xf472b6, 1.15);
+    rimLight.position.set(-4.5, 3.2, -4.2);
     this.scene.add(rimLight);
 
-    const fillLight = new THREE.DirectionalLight(0x3b82f6, 0.85);
-    fillLight.position.set(3.2, -1.5, -3.5);
+    const fillLight = new THREE.DirectionalLight(0x22c55e, 0.55);
+    fillLight.position.set(3.2, -1.0, -3.4);
     this.scene.add(fillLight);
 
     // Materials
     const maxAnisotropy = Math.min(8, this.renderer.capabilities.getMaxAnisotropy() || 1);
     this.materials = createMorphMaterials(this.isSoftwareGl, maxAnisotropy);
 
-    // Grounded Anodized Calibration Pedestal (strictly bottom-grounded with zero Z-fighting)
+    // Grounded Dark Pond Calibration Pedestal
     const pedestalCylGeo = new THREE.CylinderGeometry(2.65, 2.95, 0.22, 64);
     const pedestalBody = new THREE.Mesh(pedestalCylGeo, this.materials.pedestalSideMaterial);
     pedestalBody.position.set(0, -1.96, 0);
@@ -232,66 +273,100 @@ export class MorphSceneController {
 
     // Hero Multi-Part Assembly Group
     this.heroGroup = new THREE.Group();
-    this.heroGroup.position.set(0, 0.22, 0);
+    this.heroGroup.position.set(0, 0.18, 0);
     this.scene.add(this.heroGroup);
 
-    // 1. Morphing Core Manifold Mesh + Locked Hardware Wireframe Overlay
-    const coreGeo = createMorphCoreGeometry(76, 54);
-    this.coreMesh = new THREE.Mesh(coreGeo, this.materials.coreMaterial);
-    this.coreMesh.castShadow = !this.isSoftwareGl;
-    this.coreMesh.receiveShadow = true;
-    this.heroGroup.add(this.coreMesh);
+    // 1. Procedural 3D Blooming Pink Lotus with Green Calyx Petals & Lily Pad
+    this.lotusAssembly = createLotusFlowerAssembly(
+      this.materials.petalMaterial,
+      this.materials.wireMaterial,
+      this.materials.greenPetalMaterial,
+      this.materials.stamenMaterial,
+      this.materials.receptacleMaterial,
+      this.materials.stemMaterial,
+      this.materials.lilyPadMaterial
+    );
+    this.heroGroup.add(this.lotusAssembly.lotusGroup);
+    this.disposables.push(...this.lotusAssembly.disposables);
 
-    this.wireMesh = new THREE.Mesh(coreGeo, this.materials.wireMaterial);
-    this.wireMesh.scale.setScalar(1.004);
-    this.wireMesh.morphTargetInfluences = this.coreMesh.morphTargetInfluences;
-    this.wireMesh.visible = this.wireframeVisible;
-    this.heroGroup.add(this.wireMesh);
+    // 1b. Internal Golden Pollen Heart Crystal
+    const siliconGeo = createInternalTelemetryCoreGeometry();
+    this.siliconCrystalMesh = new THREE.Mesh(siliconGeo, this.materials.siliconCrystalMaterial);
+    this.siliconCrystalMesh.position.set(0, 0.36, 0);
+    this.heroGroup.add(this.siliconCrystalMesh);
+    this.disposables.push(siliconGeo);
 
-    // Invisible simplified raycast proxy sphere on Layer 1 for cheap hover/click detection
-    const rayProxyGeo = new THREE.SphereGeometry(1.55, 16, 12);
+    // 1c. Blue Water-Silk Ribbon Halo below the lily pad
+    const busRingGeo = createOpticalBusRingGeometry();
+    this.busRingMesh = new THREE.Mesh(busRingGeo, this.materials.busRingMaterial);
+    this.busRingMesh.position.y = -0.82;
+    this.heroGroup.add(this.busRingMesh);
+    this.disposables.push(busRingGeo);
+
+    // 1d. Sweeping Flowing Sky-Blue Silk Ribbons around the lotus
+    const ribbonGeos = createFloatingStreamRibbonGeometries();
+    ribbonGeos.forEach((rGeo) => {
+      const ribbonMesh = new THREE.Mesh(rGeo, this.materials.streamRibbonMaterial);
+      this.streamRibbonMeshes.push(ribbonMesh);
+      this.heroGroup.add(ribbonMesh);
+      this.disposables.push(rGeo);
+    });
+
+    // Simplified raycast proxy on Layer 1
+    const rayProxyGeo = new THREE.SphereGeometry(1.65, 16, 12);
     const rayProxyMat = new THREE.MeshBasicMaterial({ visible: false });
     this.rayProxyMesh = new THREE.Mesh(rayProxyGeo, rayProxyMat);
+    this.rayProxyMesh.position.set(0, 0.5, 0);
     this.rayProxyMesh.layers.set(1);
     this.heroGroup.add(this.rayProxyMesh);
     this.raycaster.layers.set(1);
+    this.disposables.push(rayProxyGeo, rayProxyMat);
 
-    // 2. Two Machined Titanium Gimbal Rings (LatheGeometry)
-    const gimbalInnerGeo = createMachinedRingGeometry(1.62, 1.72, 0.04, 72);
+    // 2. Two Flowing Azure-Blue Silk Orbital Ribbons framing the lotus
+    const gimbalInnerGeo = createFlowingBlueRibbonGeometry(2.08, 0.088, 0.30, 3, 2, 160, 4);
     this.gimbalInner = new THREE.Mesh(gimbalInnerGeo, this.materials.titaniumMaterial);
-    this.gimbalInner.rotation.set(Math.PI * 0.22, 0, Math.PI * 0.14);
-    this.gimbalInner.castShadow = !this.isSoftwareGl;
+    this.gimbalInner.rotation.set(Math.PI * 0.16, 0, Math.PI * 0.10);
     this.heroGroup.add(this.gimbalInner);
+    this.disposables.push(gimbalInnerGeo);
 
-    const gimbalOuterGeo = createMachinedRingGeometry(1.94, 2.02, 0.032, 72);
+    const gimbalOuterGeo = createFlowingBlueRibbonGeometry(2.38, 0.075, 0.24, 2, -2, 160, 4);
     this.gimbalOuter = new THREE.Mesh(gimbalOuterGeo, this.materials.titaniumMaterial);
-    this.gimbalOuter.rotation.set(-Math.PI * 0.18, 0, -Math.PI * 0.25);
-    this.gimbalOuter.castShadow = !this.isSoftwareGl;
+    this.gimbalOuter.rotation.set(-Math.PI * 0.14, 0, -Math.PI * 0.18);
     this.heroGroup.add(this.gimbalOuter);
+    this.disposables.push(gimbalOuterGeo);
 
-    // 3. Sapphire Optical Collar Ring (Depth-Sorted Outer Containment Rim)
-    const glassCollarGeo = new THREE.TorusGeometry(1.82, 0.055, 24, 96);
+    // 3. Luminous Sky-Blue Translucent Silk-Glass Ribbon
+    const glassCollarGeo = createFlowingBlueRibbonGeometry(2.22, 0.056, 0.18, 4, 1, 140, 4);
     this.glassCollar = new THREE.Mesh(glassCollarGeo, this.materials.opticalGlassMaterial);
-    this.glassCollar.rotation.x = Math.PI * 0.5;
     this.glassCollar.renderOrder = 3;
     this.heroGroup.add(this.glassCollar);
+    this.disposables.push(glassCollarGeo);
 
-    // 4. 6 Composite 3-Part Satellite Cluster Pods (3 Masters + 3 Workers)
+    // 4. 6 Compact Architectural Telemetry Nodes orbiting outer perimeter
     const podParts = createSatelliteNodeParts();
+    this.disposables.push(
+      podParts.chassisGeo,
+      podParts.collarGeo,
+      podParts.opticGeo,
+      podParts.probeGeo
+    );
     for (let i = 0; i < 6; i++) {
       const pod = new THREE.Group();
       const chassis = new THREE.Mesh(podParts.chassisGeo, this.materials.chassisMaterial);
-      chassis.castShadow = !this.isSoftwareGl;
       pod.add(chassis);
 
       const collar = new THREE.Mesh(podParts.collarGeo, this.materials.titaniumMaterial);
       collar.rotation.x = Math.PI * 0.5;
-      collar.position.z = 0.09;
+      collar.position.z = 0.075;
       pod.add(collar);
 
       const optic = new THREE.Mesh(podParts.opticGeo, this.materials.opticBarMaterial);
-      optic.position.y = 0.125;
+      optic.position.y = 0.10;
       pod.add(optic);
+
+      const probe = new THREE.Mesh(podParts.probeGeo, this.materials.titaniumMaterial);
+      probe.position.set(0, 0.15, 0.06);
+      pod.add(probe);
 
       const angleOffset = (i / 6) * Math.PI * 2;
       const planeSign = i % 2 === 0 ? 1 : -1;
@@ -300,70 +375,99 @@ export class MorphSceneController {
       this.heroGroup.add(pod);
     }
 
-    // 5. 220 InstancedMesh Orbital Micro-Shards (zero GC updates)
-    const shardGeo = new THREE.OctahedronGeometry(0.034, 0);
-    this.shardsMesh = new THREE.InstancedMesh(shardGeo, this.materials.shardMaterial, SHARD_COUNT);
-    this.shardsMesh.frustumCulled = false;
-    this.shardSeeds = new Float32Array(SHARD_COUNT * 3);
-    for (let i = 0; i < SHARD_COUNT; i++) {
-      // Deterministic golden-ratio sphere-spiral seeds (no Math.random flicker across mounts)
-      const phi = (i * 2.399963229728653) % (Math.PI * 2);
-      const u = (i + 0.5) / SHARD_COUNT;
-      this.shardSeeds[i * 3] = phi;
-      this.shardSeeds[i * 3 + 1] = Math.acos(1 - 2 * u);
-      this.shardSeeds[i * 3 + 2] = 0.5 + ((i * 37) % 100) / 100;
-    }
-    this.heroGroup.add(this.shardsMesh);
-
-    this.disposables.push(
-      pedestalCylGeo,
-      pedestalTopGeo,
-      contactGeo,
-      coreGeo,
-      rayProxyGeo,
-      rayProxyMat,
-      gimbalInnerGeo,
-      gimbalOuterGeo,
-      glassCollarGeo,
-      podParts.chassisGeo,
-      podParts.collarGeo,
-      podParts.opticGeo,
-      shardGeo
+    // 5a. 48 5-Petal Sculpted Baby-Pink Cherry Blossoms swirling around the Lotus
+    const blossomGeo = createCherryBlossomGeometry(0.145);
+    this.disposables.push(blossomGeo);
+    this.sakuraBlossomsMesh = new THREE.InstancedMesh(
+      blossomGeo,
+      this.materials.sakuraBlossomMaterial,
+      SAKURA_BLOSSOM_COUNT
     );
+    this.sakuraBlossomsMesh.frustumCulled = false;
+    this.sakuraBlossomSeeds = new Float32Array(SAKURA_BLOSSOM_COUNT * 4);
+    for (let i = 0; i < SAKURA_BLOSSOM_COUNT; i++) {
+      const phi = (i / SAKURA_BLOSSOM_COUNT) * Math.PI * 2 + (i % 3) * 0.25;
+      const yBase = -0.85 + ((i * 7) % 24) / 24 * 2.25; // Vertical helical height band
+      const rad = 1.48 + ((i * 13) % 19) / 19 * 1.15;
+      const scaleJitter = 0.85 + ((i * 11) % 10) / 33; // ±15% scale variation
 
-    // Pre-warm GPU shader programs cleanly (skipped on software WebGL per skill guideline)
-    if (!this.isSoftwareGl) {
-      this.renderer.compile(this.scene, this.camera);
+      this.sakuraBlossomSeeds[i * 4] = phi;
+      this.sakuraBlossomSeeds[i * 4 + 1] = yBase;
+      this.sakuraBlossomSeeds[i * 4 + 2] = rad;
+      this.sakuraBlossomSeeds[i * 4 + 3] = scaleJitter;
+
+      _tmpColor.set(BABY_PINK_PALETTE[i % BABY_PINK_PALETTE.length]);
+      this.sakuraBlossomsMesh.setColorAt(i, _tmpColor);
     }
+    if (this.sakuraBlossomsMesh.instanceColor) {
+      this.sakuraBlossomsMesh.instanceColor.needsUpdate = true;
+    }
+    this.heroGroup.add(this.sakuraBlossomsMesh);
 
-    // Bind interaction & lifecycle listeners
+    // 5b. 110 Single Notched Baby-Pink Sakura Petals fluttering in the swirl
+    const petalGeo = createSingleSakuraPetalGeometry(0.11, 0.085);
+    this.disposables.push(petalGeo);
+    this.sakuraPetalsMesh = new THREE.InstancedMesh(
+      petalGeo,
+      this.materials.sakuraPetalMaterial,
+      SAKURA_PETAL_COUNT
+    );
+    this.sakuraPetalsMesh.frustumCulled = false;
+    this.sakuraPetalSeeds = new Float32Array(SAKURA_PETAL_COUNT * 4);
+    for (let i = 0; i < SAKURA_PETAL_COUNT; i++) {
+      const phi = (i * 2.399963229728653) % (Math.PI * 2);
+      const yBase = -0.95 + ((i * 17) % 31) / 31 * 2.55;
+      const rad = 1.32 + ((i * 23) % 29) / 29 * 1.45;
+      const scaleJitter = 0.82 + ((i * 7) % 12) / 34;
+
+      this.sakuraPetalSeeds[i * 4] = phi;
+      this.sakuraPetalSeeds[i * 4 + 1] = yBase;
+      this.sakuraPetalSeeds[i * 4 + 2] = rad;
+      this.sakuraPetalSeeds[i * 4 + 3] = scaleJitter;
+
+      _tmpColor.set(BABY_PINK_PALETTE[(i + 1) % BABY_PINK_PALETTE.length]);
+      this.sakuraPetalsMesh.setColorAt(i, _tmpColor);
+    }
+    if (this.sakuraPetalsMesh.instanceColor) {
+      this.sakuraPetalsMesh.instanceColor.needsUpdate = true;
+    }
+    this.heroGroup.add(this.sakuraPetalsMesh);
+
+    // Event listeners
     const dom = this.renderer.domElement;
+    dom.addEventListener('pointerenter', this.onPointerEnter, { passive: true });
     dom.addEventListener('pointermove', this.onPointerMove, { passive: true });
-    dom.addEventListener('pointerdown', this.onPointerDown, { passive: true });
-    dom.addEventListener('pointerup', this.onPointerUp, { passive: true });
+    dom.addEventListener('pointerdown', this.onPointerDown);
+    dom.addEventListener('pointerup', this.onPointerUp);
     dom.addEventListener('pointerleave', this.onPointerLeave);
     dom.addEventListener('webglcontextlost', this.onContextLost);
     dom.addEventListener('webglcontextrestored', this.onContextRestored);
     document.addEventListener('visibilitychange', this.onVisibilityChange);
 
-    // Viewport Visibility Gate via IntersectionObserver
+    if (!this.isSoftwareGl) {
+      try {
+        this.renderer.compile(this.scene, this.camera);
+      } catch {
+        // Silent fallback
+      }
+    }
+
     if (typeof IntersectionObserver !== 'undefined') {
       this.intersectionObs = new IntersectionObserver(
         (entries) => {
           const entry = entries[0];
-          this.isVisible = Boolean(entry?.isIntersecting);
-          if (this.isVisible) {
-            this.startOrRenderOnce();
-          } else {
+          this.isVisible = entry ? entry.isIntersecting : true;
+          if (this.isVisible && !this.reducedMotion && !this.isLoopRunning) {
+            this.startLoop();
+          } else if (!this.isVisible && this.isLoopRunning) {
             this.stopLoop();
           }
         },
-        { threshold: 0.05 }
+        { threshold: 0.1 }
       );
       this.intersectionObs.observe(this.container);
     }
 
-    // Apply initial pose synchronously before first draw
     this.updateSceneKinematics(0);
     this.renderer.render(this.scene, this.camera);
 
@@ -377,13 +481,19 @@ export class MorphSceneController {
     this.activeState = state;
     this.autoTimer = 0;
 
-    // Target morph target weights across states [0]=base, [1..3]=targets 0..2
     const idx = MORPH_STATES.indexOf(state);
     this.targetWeights[0] = idx === 1 ? 1 : 0;
     this.targetWeights[1] = idx === 2 ? 1 : 0;
     this.targetWeights[2] = idx === 3 ? 1 : 0;
 
-    // Spark luminous cyan morph scan wavefront
+    // Set bloom target cleanly to match the chosen state and sync UI slider
+    const nextBloom = MODE_BASE_BLOOM[state];
+    this.targetExploded = nextBloom;
+    this.callbacks.onBloomChange?.(nextBloom);
+
+    const hex = MODE_ACCENTS[state];
+    this.materials.coreUniforms.uAccent.value.set(hex);
+
     this.morphPulse = 1.0;
     this.scanProgress = -1.55;
 
@@ -392,18 +502,33 @@ export class MorphSceneController {
     }
 
     if (this.reducedMotion) {
-      // Snap cleanly on reduced-motion user action & request single on-demand draw
       this.currentWeights[0] = this.targetWeights[0];
       this.currentWeights[1] = this.targetWeights[1];
       this.currentWeights[2] = this.targetWeights[2];
+      this.currentExploded = nextBloom;
       this.morphPulse = 0;
       this.requestSingleRender();
     }
   }
 
+  public setExploded(factor: number): void {
+    const clamped = Math.max(0, Math.min(1, factor));
+    this.targetExploded = clamped;
+    if (this.reducedMotion) {
+      this.currentExploded = clamped;
+      this.requestSingleRender();
+    }
+  }
+
+  public setBloom(factor: number): void {
+    this.setExploded(factor);
+  }
+
   public setWireframe(visible: boolean): void {
     this.wireframeVisible = visible;
-    this.wireMesh.visible = visible;
+    this.lotusAssembly.wireframeMeshes.forEach((w) => {
+      w.visible = visible;
+    });
     if (this.reducedMotion) this.requestSingleRender();
   }
 
@@ -459,12 +584,29 @@ export class MorphSceneController {
     }
   };
 
+  private onPointerEnter = (e: PointerEvent) => {
+    this.viewportHovered = true;
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    this.prevPointerX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    this.prevPointerY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+  };
+
   private onPointerMove = (e: PointerEvent) => {
+    this.viewportHovered = true;
     const rect = this.renderer.domElement.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return;
 
     _pointerNdc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     _pointerNdc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    const dx = _pointerNdc.x - this.prevPointerX;
+    const dy = _pointerNdc.y - this.prevPointerY;
+    this.prevPointerX = _pointerNdc.x;
+    this.prevPointerY = _pointerNdc.y;
+
+    const moveDist = Math.hypot(dx, dy);
+    this.pointerSpeed = Math.min(6.0, this.pointerSpeed + moveDist * 18.0);
     this.pointerX = _pointerNdc.x;
     this.pointerY = _pointerNdc.y;
 
@@ -494,6 +636,7 @@ export class MorphSceneController {
   };
 
   private onPointerLeave = () => {
+    this.viewportHovered = false;
     this.pointerX = 0;
     this.pointerY = 0;
     this.hoveredCore = false;
@@ -601,86 +744,152 @@ export class MorphSceneController {
   };
 
   private updateSceneKinematics(dt: number): void {
-    // Optional auto-morph showcase cycling every 5.8s
+    // Auto-cycle architecture bloom stages every 6.2s
     if (this.autoCycle && !this.reducedMotion && dt > 0) {
       this.autoTimer += dt;
-      if (this.autoTimer >= 5.8) {
+      if (this.autoTimer >= 6.2) {
         this.autoTimer = 0;
         const nextIdx = (MORPH_STATES.indexOf(this.activeState) + 1) % MORPH_STATES.length;
         this.setState(MORPH_STATES[nextIdx], true);
       }
     }
 
-    // 1. Exponential damping on morph target weights
+    // Smooth exponential damping on direct Bloom slider value
+    if (dt > 0) {
+      this.currentExploded = THREE.MathUtils.damp(this.currentExploded, this.targetExploded, 4.5, dt);
+    } else {
+      this.currentExploded = this.targetExploded;
+    }
+    const bloom = this.currentExploded;
+
+    // Exponential damping on architecture weights
     const morphLambda = 4.2;
-    const influences = this.coreMesh.morphTargetInfluences;
     for (let i = 0; i < 3; i++) {
       this.currentWeights[i] =
         dt > 0
           ? THREE.MathUtils.damp(this.currentWeights[i], this.targetWeights[i], morphLambda, dt)
           : this.targetWeights[i];
-      if (influences) influences[i] = this.currentWeights[i];
     }
 
-    // Decay cyan morph wavefront glow & advance upward scan sweep
     if (dt > 0) {
       this.morphPulse = THREE.MathUtils.damp(this.morphPulse, 0, 2.2, dt);
       if (this.morphPulse > 0.02) {
-        this.scanProgress += dt * 3.1;
+        this.scanProgress += dt * 3.2;
       }
     }
     this.materials.coreUniforms.uTime.value = this.elapsed;
     this.materials.coreUniforms.uMorphPulse.value = this.morphPulse;
     this.materials.coreUniforms.uScanProgress.value = this.scanProgress;
-    this.materials.wireMaterial.opacity = 0.14 + this.morphPulse * 0.24;
+    this.materials.wireMaterial.opacity = 0.14 + this.morphPulse * 0.22;
 
-    // 2. Smooth hero float + pointer parallax lean
+    // Update Pink Lotus & Green Calyx Petals Kinematics
+    updateLotusBloom(
+      this.lotusAssembly,
+      bloom,
+      this.currentWeights as [number, number, number],
+      this.elapsed,
+      this.reducedMotion
+    );
+
     const t = this.elapsed;
     const hoverScale = this.hoveredCore ? 1.03 : 1.0;
     if (dt > 0) {
-      const s = THREE.MathUtils.damp(this.coreMesh.scale.x, hoverScale, 6, dt);
-      this.coreMesh.scale.setScalar(s);
-      this.wireMesh.scale.setScalar(s * 1.004);
+      const s = THREE.MathUtils.damp(this.heroGroup.scale.x, hoverScale, 6, dt);
+      this.heroGroup.scale.setScalar(s);
     }
-    this.heroGroup.position.y = 0.22 + (this.reducedMotion ? 0 : Math.sin(t * 1.15) * 0.055);
-    this.coreMesh.rotation.y = this.reducedMotion ? 0.35 : t * 0.26 + this.pointerX * 0.18;
-    this.coreMesh.rotation.x = this.reducedMotion ? 0.12 : this.pointerY * 0.14;
-    this.wireMesh.rotation.copy(this.coreMesh.rotation);
+    this.heroGroup.position.y = 0.16 + (this.reducedMotion ? 0 : Math.sin(t * 1.1) * 0.04);
+    this.lotusAssembly.lotusGroup.rotation.y = this.reducedMotion
+      ? 0.35
+      : t * 0.2 + this.pointerX * 0.15;
+    this.lotusAssembly.lotusGroup.rotation.x = this.reducedMotion ? 0.06 : this.pointerY * 0.1;
 
-    // 3. Machined Gimbal Ring Choreography by active architecture mode
-    const isTorus = this.currentWeights[0]; // databricks weight
-    const isK3s = this.currentWeights[1]; // k3s weight
-    const isFituc = this.currentWeights[2]; // fituc weight
+    // Subtle glowing pollen crystal inside the receptacle
+    this.siliconCrystalMesh.rotation.y = this.reducedMotion ? 0 : -t * 0.45;
+    this.siliconCrystalMesh.scale.setScalar(0.65 + bloom * 0.25);
 
-    const gimbalSpeed = this.reducedMotion ? 0 : dt;
-    this.gimbalInner.rotation.y += gimbalSpeed * (0.35 + isTorus * 0.55);
+    // Smooth hover & pointer-movement wave frequency modulation (phase-accumulated to prevent jumps)
+    const targetHover = this.viewportHovered && !this.reducedMotion ? 1.0 : 0.0;
+    if (dt > 0) {
+      this.currentHoverMix = THREE.MathUtils.damp(this.currentHoverMix, targetHover, 4.2, dt);
+      this.pointerSpeed = THREE.MathUtils.damp(this.pointerSpeed, 0, 3.6, dt);
+      this.pointerFlowX = THREE.MathUtils.damp(
+        this.pointerFlowX,
+        this.viewportHovered ? this.pointerX : 0,
+        4.5,
+        dt
+      );
+      this.pointerFlowY = THREE.MathUtils.damp(
+        this.pointerFlowY,
+        this.viewportHovered ? this.pointerY : 0,
+        4.5,
+        dt
+      );
+
+      if (!this.reducedMotion) {
+        const waveFreqSpeed = 1.65 + 3.25 * this.currentHoverMix + Math.min(2.2, this.pointerSpeed * 0.45);
+        this.ribbonWavePhase += dt * waveFreqSpeed;
+        this.ribbonFlowOffset += dt * (0.14 + 0.26 * this.currentHoverMix + Math.min(0.18, this.pointerSpeed * 0.04));
+      }
+    }
+
+    this.materials.ribbonUniforms.uWavePhase.value = this.ribbonWavePhase;
+    this.materials.ribbonUniforms.uHoverMix.value = this.currentHoverMix;
+    this.materials.ribbonUniforms.uPointerFlow.value.set(this.pointerFlowX, this.pointerFlowY);
+    this.materials.blueRibbonTexture.offset.x = -this.ribbonFlowOffset;
+
+    const hoverFlowMul = 1.0 + this.currentHoverMix * 0.65;
+
+    // Lower blue silk ribbon halo beneath lily pad
+    this.busRingMesh.position.y = -0.82;
+    this.busRingMesh.rotation.y = this.reducedMotion ? 0 : this.ribbonWavePhase * 0.11;
+
+    // Sweeping Sky-Blue Stream Ribbons
+    this.streamRibbonMeshes.forEach((ribbon, rIdx) => {
+      const dir = rIdx % 2 === 0 ? 1 : -1;
+      ribbon.rotation.y = this.reducedMotion
+        ? rIdx * 1.2
+        : this.ribbonWavePhase * (0.09 + rIdx * 0.035) * dir;
+      ribbon.rotation.x = (rIdx - 0.5) * 0.28 + this.pointerFlowY * 0.06;
+      ribbon.rotation.z = this.pointerFlowX * 0.05 * dir;
+      ribbon.position.y = (rIdx - 0.5) * 0.28;
+    });
+
+    // Outer Flowing Azure Silk Ribbons choreography
+    const isTorus = this.currentWeights[0];
+    const isK3s = this.currentWeights[1];
+    const isFituc = this.currentWeights[2];
+
+    const gimbalSpeed = this.reducedMotion ? 0 : dt * hoverFlowMul;
+    this.gimbalInner.rotation.y += gimbalSpeed * (0.28 + isTorus * 0.45);
     const targetInnerTiltX =
-      Math.PI * 0.22 * (1 - isTorus) + Math.PI * 0.48 * isTorus - Math.PI * 0.12 * isK3s;
+      Math.PI * 0.16 * (1 - isTorus) + Math.PI * 0.28 * isTorus - Math.PI * 0.10 * isK3s + this.pointerFlowY * 0.08;
     this.gimbalInner.rotation.x =
       dt > 0
         ? THREE.MathUtils.damp(this.gimbalInner.rotation.x, targetInnerTiltX, 3.8, dt)
         : targetInnerTiltX;
 
-    this.gimbalOuter.rotation.y -= gimbalSpeed * (0.24 + isK3s * 0.4);
-    const targetOuterTiltZ = -Math.PI * 0.25 * (1 - isFituc) + Math.PI * 0.15 * isFituc;
+    this.gimbalOuter.rotation.y -= gimbalSpeed * (0.22 + isK3s * 0.35);
+    const targetOuterTiltZ = -Math.PI * 0.18 * (1 - isFituc) + Math.PI * 0.12 * isFituc + this.pointerFlowX * 0.08;
     this.gimbalOuter.rotation.z =
       dt > 0
         ? THREE.MathUtils.damp(this.gimbalOuter.rotation.z, targetOuterTiltZ, 3.8, dt)
         : targetOuterTiltZ;
 
-    this.glassCollar.rotation.z = this.reducedMotion ? 0 : t * 0.18;
-    this.glassCollar.rotation.x = Math.PI * 0.5 + (this.reducedMotion ? 0 : Math.sin(t * 0.6) * 0.14);
+    this.glassCollar.rotation.y = this.reducedMotion ? 0 : this.ribbonWavePhase * 0.09;
+    this.glassCollar.rotation.x = this.reducedMotion
+      ? 0
+      : Math.sin(this.ribbonWavePhase * 0.35) * 0.15 + this.pointerFlowY * 0.06;
 
-    // 4. Composite 6-Pod Cluster Nodes Orbital Expansion (Proxmox Rack -> Fleet Ring -> K3s 3M+3W -> FiT-UC Wave)
+    // Compact Perimeter Nodes
     for (let i = 0; i < 6; i++) {
       const pod = this.podGroups[i];
       const { angleOffset, planeSign } = this.podOrbits[i];
-      const baseAngle = angleOffset + (this.reducedMotion ? 0.2 : t * (0.28 + isTorus * 0.45));
+      const baseAngle = angleOffset + (this.reducedMotion ? 0.2 : t * (0.22 + isTorus * 0.35));
 
-      const radius = 1.66 + isTorus * 0.28 + isK3s * 0.56 + isFituc * 0.22;
+      const radius = 2.18 + isTorus * 0.18 + isK3s * 0.32 + isFituc * 0.16;
       const elevation =
-        planeSign * (0.14 * (1 - isTorus) + 0.32 * isK3s) +
-        (isFituc * Math.sin(baseAngle * 2 + t * 1.6) * 0.42);
+        planeSign * (0.18 * (1 - isTorus) + 0.30 * isK3s) +
+        isFituc * Math.sin(baseAngle * 2 + t * 1.5) * 0.35;
 
       pod.position.set(
         Math.cos(baseAngle) * radius,
@@ -690,34 +899,64 @@ export class MorphSceneController {
       pod.lookAt(this.heroGroup.position);
     }
 
-    // 5. Instanced Orbital Data Shards (Zero-GC Matrix4 transform composition)
-    for (let i = 0; i < SHARD_COUNT; i++) {
-      const phi0 = this.shardSeeds[i * 3];
-      const theta0 = this.shardSeeds[i * 3 + 1];
-      const rand = this.shardSeeds[i * 3 + 2];
+    // 5a. Swirling 5-Petal Baby-Pink Cherry Blossoms (Helical Wind Current)
+    for (let i = 0; i < SAKURA_BLOSSOM_COUNT; i++) {
+      const phi0 = this.sakuraBlossomSeeds[i * 4];
+      const yBase = this.sakuraBlossomSeeds[i * 4 + 1];
+      const rad = this.sakuraBlossomSeeds[i * 4 + 2];
+      const sc = this.sakuraBlossomSeeds[i * 4 + 3];
 
-      const phi = phi0 + (this.reducedMotion ? 0 : t * (0.14 + rand * 0.26) * (1 + isTorus * 1.1));
-      const baseR = 2.08 + rand * 0.62;
-      const waveOffset = isFituc * Math.sin(phi * 3 + t * 1.8) * 0.24;
-      const diskFlatten = 1 - isTorus * 0.52;
-      const hexPinch = 1 + isK3s * 0.14 * Math.cos(6 * phi);
+      // Graceful swirling orbital speed + gentle rising spiral drift
+      const windSpeed = 0.26 + (i % 5) * 0.04;
+      const phi = phi0 + (this.reducedMotion ? 0 : t * windSpeed);
+      const swirlRad = rad + (this.reducedMotion ? 0 : Math.sin(t * 0.8 + i) * 0.18);
+      const yFloat = yBase + (this.reducedMotion ? 0 : Math.sin(t * 0.95 + phi0 * 2.0) * 0.22);
 
-      const sinT = Math.sin(theta0);
-      const x = Math.cos(phi) * sinT * baseR * hexPinch;
-      const y = (Math.cos(theta0) * baseR * diskFlatten) + waveOffset;
-      const z = Math.sin(phi) * sinT * baseR * hexPinch;
+      const x = Math.cos(phi) * swirlRad;
+      const z = Math.sin(phi) * swirlRad;
 
-      _v1.set(x, y, z);
-      _euler.set(phi * 0.7, theta0, t * 0.5 * rand);
+      _v1.set(x, yFloat, z);
+      _euler.set(
+        Math.sin(t * 0.7 + i) * 0.65,
+        phi + t * 0.45,
+        Math.cos(t * 0.6 + i) * 0.55
+      );
       _quat.setFromEuler(_euler);
-      const pulseScale = 0.7 + rand * 0.65 + this.morphPulse * 0.35;
-      _scale.setScalar(pulseScale);
+      _scale.setScalar(sc * (0.9 + bloom * 0.18));
       _mat4.compose(_v1, _quat, _scale);
-      this.shardsMesh.setMatrixAt(i, _mat4);
+      this.sakuraBlossomsMesh.setMatrixAt(i, _mat4);
     }
-    this.shardsMesh.instanceMatrix.needsUpdate = true;
+    this.sakuraBlossomsMesh.instanceMatrix.needsUpdate = true;
 
-    // 6. Camera Preset Exponential Damping (cancels once settled or when dragging starts)
+    // 5b. Swirling Single Notched Baby-Pink Sakura Petals (Fluttering Stream)
+    for (let i = 0; i < SAKURA_PETAL_COUNT; i++) {
+      const phi0 = this.sakuraPetalSeeds[i * 4];
+      const yBase = this.sakuraPetalSeeds[i * 4 + 1];
+      const rad = this.sakuraPetalSeeds[i * 4 + 2];
+      const sc = this.sakuraPetalSeeds[i * 4 + 3];
+
+      const windSpeed = 0.34 + (i % 7) * 0.045;
+      const phi = phi0 + (this.reducedMotion ? 0 : t * windSpeed);
+      const swirlRad = rad + (this.reducedMotion ? 0 : Math.cos(t * 1.1 + i * 0.4) * 0.22);
+      const yFloat = yBase + (this.reducedMotion ? 0 : Math.cos(t * 1.15 + phi0) * 0.26);
+
+      const x = Math.cos(phi) * swirlRad;
+      const z = Math.sin(phi) * swirlRad;
+
+      _v1.set(x, yFloat, z);
+      _euler.set(
+        t * 0.9 + i,
+        phi * 1.3 + t * 0.7,
+        Math.sin(t * 1.2 + i) * 0.85
+      );
+      _quat.setFromEuler(_euler);
+      _scale.setScalar(sc);
+      _mat4.compose(_v1, _quat, _scale);
+      this.sakuraPetalsMesh.setMatrixAt(i, _mat4);
+    }
+    this.sakuraPetalsMesh.instanceMatrix.needsUpdate = true;
+
+    // Camera Preset Exponential Damping
     if (this.camPresetActive && dt > 0) {
       this.camera.position.x = THREE.MathUtils.damp(
         this.camera.position.x,
@@ -769,6 +1008,7 @@ export class MorphSceneController {
     this.intersectionObs?.disconnect();
 
     const dom = this.renderer.domElement;
+    dom.removeEventListener('pointerenter', this.onPointerEnter);
     dom.removeEventListener('pointermove', this.onPointerMove);
     dom.removeEventListener('pointerdown', this.onPointerDown);
     dom.removeEventListener('pointerup', this.onPointerUp);

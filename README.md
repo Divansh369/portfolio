@@ -322,4 +322,3 @@ All content on the website and within the generated CV is controlled by **`publi
 ## License
 
 MIT © [Divansh Prasad](https://github.com/Divansh369)
-

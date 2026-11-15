@@ -194,49 +194,59 @@ export const Homelab: React.FC<HomelabProps> = ({
             transition={{ duration: 0.2 }}
             className="space-y-10"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-              {stages.map((item, idx) => {
-                const StageIcon = stageIcons[idx % stageIcons.length];
-                const dimmed = hoveredStage !== null && hoveredStage !== idx;
-                const isFinalPhase = idx === stages.length - 1;
+            {/* Horizontal kinetic connector track on desktop */}
+            <div className="relative">
+              <div
+                aria-hidden="true"
+                className="hidden lg:block absolute top-[28px] left-8 right-8 h-px bg-white/10 z-0"
+              >
+                <div className="h-full w-full bg-gradient-to-r from-cyan-400/60 via-blue-500/60 to-cyan-300/60 opacity-70" />
+              </div>
 
-                return (
-                  <GlassCard
-                    key={item.stage}
-                    tilt={true}
-                    spotlight={true}
-                    brackets={isFinalPhase}
-                    chamfer={isFinalPhase}
-                    dimmed={dimmed}
-                    onMouseEnter={() => setHoveredStage(idx)}
-                    onMouseLeave={() => setHoveredStage(null)}
-                    className="p-6"
-                  >
-                    <div>
-                      <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 mb-3">
-                        <StageIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
-                        <span>{item.stage}</span>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 relative z-10">
+                {stages.map((item, idx) => {
+                  const StageIcon = stageIcons[idx % stageIcons.length];
+                  const dimmed = hoveredStage !== null && hoveredStage !== idx;
+                  const isFinalPhase = idx === stages.length - 1;
+
+                  return (
+                    <GlassCard
+                      key={item.stage}
+                      tilt={true}
+                      spotlight={true}
+                      brackets={isFinalPhase}
+                      chamfer={isFinalPhase}
+                      dimmed={dimmed}
+                      onMouseEnter={() => setHoveredStage(idx)}
+                      onMouseLeave={() => setHoveredStage(null)}
+                      className="p-6"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 mb-3">
+                          <StageIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
+                          <span>{item.stage}</span>
+                        </div>
+                        <h3 className="font-display text-lg font-bold text-zinc-50 mb-3 tracking-tight">
+                          {item.title}
+                        </h3>
+                        <p className="text-sm text-zinc-300/90 leading-relaxed mb-5">
+                          {item.summary}
+                        </p>
+
+                        <ul className="space-y-2 text-xs text-zinc-300 leading-relaxed list-disc pl-4 border-t border-white/[0.08] pt-4">
+                          {item.learnings.map((pt, lIdx) => (
+                            <li key={lIdx}>{pt}</li>
+                          ))}
+                        </ul>
                       </div>
-                      <h3 className="font-display text-lg font-bold text-zinc-50 mb-3 tracking-tight">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm text-zinc-300/90 leading-relaxed mb-5">
-                        {item.summary}
-                      </p>
 
-                      <ul className="space-y-2 text-xs text-zinc-300 leading-relaxed list-disc pl-4 border-t border-white/[0.08] pt-4">
-                        {item.learnings.map((pt, lIdx) => (
-                          <li key={lIdx}>{pt}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="mt-5 pt-4 border-t border-white/[0.08] text-xs font-mono text-zinc-400 pr-2">
-                      {item.stack}
-                    </div>
-                  </GlassCard>
-                );
-              })}
+                      <div className="mt-5 pt-4 border-t border-white/[0.08] text-xs font-mono text-zinc-400 pr-2">
+                        {item.stack}
+                      </div>
+                    </GlassCard>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Core Proxmox Engineering Takeaways */}
