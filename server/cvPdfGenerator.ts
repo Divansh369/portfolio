@@ -1,432 +1,629 @@
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
 
+export type DocumentMode = 'resume' | 'cv';
+
 export interface GeneratePdfOptions {
   outputPath?: string;
+  mode?: DocumentMode;
 }
 
 /**
- * Builds an ATS-compliant, single-stream vector PDF directly from portfolio JSON data.
- * Designed strictly for recruiter clarity and automated ATS parsing:
- * - Linear single-column flow with Helvetica fonts natively parsed across Workday, Greenhouse, Lever, and Taleo.
- * - Zero consumer PC hardware specs; highlights production work, Udayan Care Play Store app, and Proxmox/Linux evolution.
- * - Dynamically reflects updates from public/data/portfolio.json.
+ * Resolves a safe PDF filename for CV mode from profile.cvFileName or profile.name.
  */
-export function buildCvPdf(portfolioData: any): PDFKit.PDFDocument {
+export function resolveCvFileName(portfolioData: any): string {
+  const profile = portfolioData?.profile || {};
+  if (profile.cvFileName && typeof profile.cvFileName === 'string') {
+    return profile.cvFileName.endsWith('.pdf')
+      ? profile.cvFileName
+      : `${profile.cvFileName}.pdf`;
+  }
+  const cleanName = String(profile.name || '')
+    .trim()
+    .replace(/[^a-zA-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return cleanName ? `${cleanName}_CV.pdf` : 'Candidate_CV.pdf';
+}
+
+/**
+ * Resolves a safe PDF filename for 1-page Resume mode from profile.resumeFileName or profile.name.
+ */
+export function resolveResumeFileName(portfolioData: any): string {
+  const profile = portfolioData?.profile || {};
+  if (profile.resumeFileName && typeof profile.resumeFileName === 'string') {
+    return profile.resumeFileName.endsWith('.pdf')
+      ? profile.resumeFileName
+      : `${profile.resumeFileName}.pdf`;
+  }
+  const cleanName = String(profile.name || '')
+    .trim()
+    .replace(/[^a-zA-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return cleanName ? `${cleanName}_Resume.pdf` : 'Candidate_Resume.pdf';
+}
+
+export function resolveDocumentFileName(portfolioData: any, mode: DocumentMode): string {
+  return mode === 'resume'
+    ? resolveResumeFileName(portfolioData)
+    : resolveCvFileName(portfolioData);
+}
+
+/**
+ * Builds an ATS-compliant, single-column linear vector PDF from portfolio.json.
+ * Supports two distinct modes:
+ * - 'resume': Tight, high-impact 1-page US Letter executive resume tuned for automated ATS extraction.
+ * - 'cv': Comprehensive multi-page academic & technical curriculum vitae including full history, infrastructure lab, and credentials.
+ *
+ * ATS Formatting Guarantees:
+ * - Strictly sequential left-to-right text stream (zero overlapping right-aligned columns sharing Y baselines).
+ * - Unified bullet strings (`•  ...`) emitted in single text calls so parsers never drop bullet associations.
+ * - Explicit labeled contact rows with clickable mailto/https annotations for LinkedIn, GitHub, and portfolio links.
+ */
+export function buildDocumentPdf(
+  portfolioData: any,
+  mode: DocumentMode = 'cv'
+): PDFKit.PDFDocument {
+  const profile = portfolioData?.profile || {};
+  const cvConfig = portfolioData?.cv || {};
+  const authorName = profile.name || 'Candidate';
+  const isResume = mode === 'resume';
+
+  const marginX = isResume ? 32 : 36;
+  const marginY = isResume ? 24 : 34;
+
   const doc = new PDFDocument({
     size: 'LETTER',
     margins: {
-      top: 34,
-      bottom: 34,
-      left: 36,
-      right: 36,
+      top: marginY,
+      bottom: marginY,
+      left: marginX,
+      right: marginX,
     },
     info: {
-      Title: `${portfolioData.profile?.name || 'Divansh Prasad'} - Curriculum Vitae`,
-      Author: portfolioData.profile?.name || 'Divansh Prasad',
-      Subject: 'Software Developer Resume - ATS Compliant',
+      Title: `${authorName} - ${isResume ? 'Resume' : 'Curriculum Vitae'}`,
+      Author: authorName,
+      Subject: `${profile.resumeHeadline || profile.title || 'Software Engineer'} - ATS Compliant ${
+        isResume ? 'Resume' : 'CV'
+      }`,
       Keywords:
-        'Software Developer, Databricks, Apache Spark, Python, FastAPI, Flutter, Proxmox VE, Linux, Docker Compose, Kubernetes, K3s',
-      Creator: 'Portfolio CV Generator',
+        cvConfig.keywords ||
+        'Software Engineer, Backend, Data Pipelines, Cloud Infrastructure, Full-Stack',
+      Creator: 'Modular Portfolio ATS Document Engine',
     },
     autoFirstPage: true,
   });
 
   const pageWidth = doc.page.width;
   const pageHeight = doc.page.height;
-  const contentWidth = pageWidth - 72; // 36pt left/right margins
-  const bottomLimit = pageHeight - 36;
+  const contentWidth = pageWidth - marginX * 2;
+  const bottomLimit = pageHeight - marginY;
 
   const primaryColor = '#111827';
   const headerBlue = '#0f3a68';
+  const linkBlue = '#1d4ed8';
   const subtextColor = '#374151';
   const mutedColor = '#4b5563';
   const dividerColor = '#cbd5e1';
 
+  const bodySize = isResume ? 7.6 : 8.2;
+  const subSize = isResume ? 7.4 : 7.9;
+  const metaSize = isResume ? 7.1 : 7.6;
+  const entryTitleSize = isResume ? 8.3 : 9.0;
+  const sectionTitleSize = isResume ? 8.6 : 9.5;
+  const bulletLineGap = isResume ? 0.6 : 1.2;
+
   const ensureSpace = (neededHeight: number) => {
+    if (isResume) return; // Single-page resume fits cleanly on 1 Letter page
     if (doc.y + neededHeight > bottomLimit) {
       doc.addPage();
     }
   };
 
-  // Helper: Section Header
+  // Helper: Standard uppercase ATS section header with subtle horizontal rule
   const renderSectionHeader = (title: string) => {
-    ensureSpace(78);
-    doc.moveDown(0.35);
+    ensureSpace(isResume ? 36 : 72);
+    doc.moveDown(isResume ? 0.2 : 0.35);
     const y = doc.y;
     doc
       .font('Helvetica-Bold')
-      .fontSize(9.5)
+      .fontSize(sectionTitleSize)
       .fillColor(headerBlue)
-      .text(title.toUpperCase(), 36, y, { characterSpacing: 0.7 });
+      .text(title.toUpperCase(), marginX, y, { characterSpacing: 0.65 });
 
-    const lineY = doc.y + 1.5;
+    const lineY = doc.y + (isResume ? 1 : 1.5);
     doc
       .strokeColor(dividerColor)
       .lineWidth(0.75)
-      .moveTo(36, lineY)
-      .lineTo(36 + contentWidth, lineY)
+      .moveTo(marginX, lineY)
+      .lineTo(marginX + contentWidth, lineY)
       .stroke();
 
-    doc.y = lineY + 4;
+    doc.y = lineY + (isResume ? 2.5 : 4);
   };
 
-  // Helper: Non-colliding 2-row header for Experience / Projects / Education
-  const renderEntryHeader = (
-    leftPrimary: string,
-    leftSecondary: string,
-    rightSecondary: string,
-    rightPrimary: string,
-    badge?: string,
-    rightPrimaryLink?: string
-  ) => {
-    ensureSpace(36);
-    const startY = doc.y;
-    const leftWidth = contentWidth - 145;
+  // Helper: Strictly linear single-column entry header (Zero overlapping right-aligned X coordinates)
+  const renderLinearEntryHeader = (options: {
+    primary: string;
+    secondary?: string;
+    location?: string;
+    dateOrLink?: string;
+    dateOrLinkUrl?: string;
+    badge?: string;
+  }) => {
+    ensureSpace(isResume ? 26 : 44);
+    const cleanBadge = options.badge ? options.badge.replace('★ ', '').trim() : '';
+    const primaryLine = cleanBadge ? `${options.primary} (${cleanBadge})` : options.primary;
 
-    const cleanBadge = badge ? badge.replace('★ ', '').trim() : '';
-    const primaryDisplay = cleanBadge ? `${leftPrimary} (${cleanBadge})` : leftPrimary;
-
-    // Row 1 Left
+    // Row 1: Primary Role/Title + Badge (left-to-right linear)
     doc
       .font('Helvetica-Bold')
-      .fontSize(9)
+      .fontSize(entryTitleSize)
       .fillColor(primaryColor)
-      .text(primaryDisplay, 36, startY, { width: leftWidth });
-    const afterRow1LeftY = doc.y;
-
-    // Row 1 Right
-    if (rightPrimary) {
-      doc
-        .font('Helvetica-Oblique')
-        .fontSize(8)
-        .fillColor(rightPrimaryLink ? '#1d4ed8' : mutedColor)
-        .text(rightPrimary, 36, startY, {
-          align: 'right',
-          width: contentWidth,
-          ...(rightPrimaryLink ? { link: rightPrimaryLink } : {}),
-        });
-    }
-    const row2Y = Math.max(afterRow1LeftY, doc.y) + 1;
-
-    // Row 2 Left
-    if (leftSecondary) {
-      doc
-        .font('Helvetica')
-        .fontSize(8.2)
-        .fillColor(subtextColor)
-        .text(leftSecondary, 36, row2Y, { width: leftWidth });
-    }
-    const afterRow2LeftY = doc.y;
-
-    // Row 2 Right
-    if (rightSecondary) {
-      doc
-        .font('Helvetica-Oblique')
-        .fontSize(8)
-        .fillColor('#6b7280')
-        .text(rightSecondary, 36, row2Y, {
-          align: 'right',
-          width: contentWidth,
-        });
-    }
-
-    doc.y = Math.max(afterRow2LeftY, doc.y, row2Y + 9) + 1.5;
-  };
-
-  // Helper: Full-width bullet (prevents 1-char vertical column bug)
-  const renderBullet = (text: string) => {
-    const bulletHeight = doc.heightOfString(text, {
-      width: contentWidth - 12,
-      lineGap: 1.2,
-    });
-    ensureSpace(bulletHeight + 4);
-
-    const bulletY = doc.y;
-    doc
-      .font('Helvetica')
-      .fontSize(8.2)
-      .fillColor('#1f2937')
-      .text('•', 38, bulletY);
-
-    doc
-      .font('Helvetica')
-      .fontSize(8.2)
-      .fillColor('#1f2937')
-      .text(text, 48, bulletY, {
-        width: contentWidth - 12,
-        lineGap: 1.2,
+      .text(primaryLine, marginX, doc.y, {
+        width: contentWidth,
       });
 
-    doc.y += 1.5;
+    // Row 2: Organization · Location | Duration/Link (strictly inline left-to-right for 100% ATS stream fidelity)
+    const metaSegments: string[] = [];
+    if (options.secondary) metaSegments.push(options.secondary);
+    if (options.location) metaSegments.push(options.location);
+
+    const hasInlineMeta = metaSegments.length > 0 || Boolean(options.dateOrLink);
+    if (hasInlineMeta) {
+      const prefixStr = metaSegments.join('  ·  ');
+      const y = doc.y + 0.5;
+      if (prefixStr && options.dateOrLink) {
+        doc
+          .font('Helvetica')
+          .fontSize(subSize)
+          .fillColor(subtextColor)
+          .text(`${prefixStr}  |  `, marginX, y, { continued: true, width: contentWidth });
+        doc
+          .font('Helvetica-Oblique')
+          .fontSize(subSize)
+          .fillColor(options.dateOrLinkUrl ? linkBlue : mutedColor)
+          .text(options.dateOrLink, {
+            width: contentWidth,
+            ...(options.dateOrLinkUrl ? { link: options.dateOrLinkUrl } : {}),
+          });
+      } else if (prefixStr) {
+        doc
+          .font('Helvetica')
+          .fontSize(subSize)
+          .fillColor(subtextColor)
+          .text(prefixStr, marginX, y, { width: contentWidth });
+      } else if (options.dateOrLink) {
+        doc
+          .font('Helvetica-Oblique')
+          .fontSize(subSize)
+          .fillColor(options.dateOrLinkUrl ? linkBlue : mutedColor)
+          .text(options.dateOrLink, marginX, y, {
+            width: contentWidth,
+            ...(options.dateOrLinkUrl ? { link: options.dateOrLinkUrl } : {}),
+          });
+      }
+    }
+
+    doc.y += isResume ? 1.2 : 2;
   };
 
-  // ==================== 1. HEADER & CONTACT ====================
-  const profile = portfolioData.profile || {};
-  const fullName = (profile.name || 'Divansh Prasad').toUpperCase();
-  const roleHeadline = 'Software Engineer  |  Data Pipelines & Backend Infrastructure';
+  // Helper: Unified single-stream bullet point
+  const renderBullet = (text: string) => {
+    const bulletStr = `•  ${text}`;
+    const bulletHeight = doc.heightOfString(bulletStr, {
+      width: contentWidth - 8,
+      lineGap: bulletLineGap,
+    });
+    ensureSpace(bulletHeight + 3);
+
+    doc
+      .font('Helvetica')
+      .fontSize(bodySize)
+      .fillColor('#1f2937')
+      .text(bulletStr, marginX + 6, doc.y, {
+        width: contentWidth - 8,
+        lineGap: bulletLineGap,
+      });
+
+    doc.y += isResume ? 0.6 : 1.4;
+  };
+
+  // ==================== 1. HEADER & EXPLICIT CONTACT ROWS ====================
+  const fullName = authorName.toUpperCase();
+  const roleHeadline = profile.resumeHeadline || profile.title || 'Software Engineer';
 
   doc
     .font('Helvetica-Bold')
-    .fontSize(17)
+    .fontSize(isResume ? 15 : 17)
     .fillColor(primaryColor)
-    .text(fullName, { align: 'center', characterSpacing: 1.1 });
-
-  doc.moveDown(0.15);
-
-  doc
-    .font('Helvetica-Bold')
-    .fontSize(9)
-    .fillColor(headerBlue)
-    .text(roleHeadline, { align: 'center', characterSpacing: 0.35 });
-
-  doc.moveDown(0.2);
-
-  const linkedinDisplay = profile.linkedinUrl
-    ? profile.linkedinUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
-    : 'linkedin.com/in/divansh-prasad-893b05230';
-  const githubDisplay = profile.githubUrl
-    ? profile.githubUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
-    : 'github.com/Divansh369';
-
-  const contactParts: string[] = [];
-  if (profile.location) contactParts.push(profile.location);
-  if (profile.email) contactParts.push(profile.email);
-  if (profile.phone) contactParts.push(profile.phone);
-  contactParts.push(githubDisplay);
-  contactParts.push(linkedinDisplay);
-  contactParts.push('diivvansh.com');
-
-  doc
-    .font('Helvetica')
-    .fontSize(7.5)
-    .fillColor(mutedColor)
-    .text(contactParts.join('  |  '), 36, doc.y, {
+    .text(fullName, marginX, doc.y, {
       align: 'center',
       width: contentWidth,
+      characterSpacing: 1.0,
     });
 
-  doc.moveDown(0.35);
+  doc.moveDown(0.08);
+
+  doc
+    .font('Helvetica-Bold')
+    .fontSize(isResume ? 8.3 : 9.0)
+    .fillColor(headerBlue)
+    .text(roleHeadline, marginX, doc.y, {
+      align: 'center',
+      width: contentWidth,
+      characterSpacing: 0.3,
+    });
+
+  doc.moveDown(0.14);
+
+  const primaryDomain =
+    Array.isArray(profile.domains) && profile.domains.length > 0 ? profile.domains[0] : '';
+  const linkedinHref = profile.linkedinUrl ? String(profile.linkedinUrl).trim() : '';
+  const linkedinDisplay = linkedinHref
+    .replace(/^https?:\/\/(www\.)?/, '')
+    .replace(/\/$/, '');
+  const githubHref = profile.githubUrl ? String(profile.githubUrl).trim() : '';
+  const githubDisplay = githubHref.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+
+  // Row A: Location | Email | Phone (explicit readable contact line)
+  const contactRowA: Array<{ text: string; link?: string }> = [];
+  if (profile.location) contactRowA.push({ text: profile.location });
+  if (profile.email) contactRowA.push({ text: profile.email, link: `mailto:${profile.email}` });
+  if (profile.phone) contactRowA.push({ text: profile.phone });
+
+  if (contactRowA.length > 0) {
+    doc.font('Helvetica').fontSize(metaSize).fillColor(mutedColor);
+    const totalLine = contactRowA.map((c) => c.text).join('  |  ');
+    const approxWidth = doc.widthOfString(totalLine);
+    const startX = Math.max(marginX, marginX + (contentWidth - approxWidth) / 2);
+    const rowY = doc.y;
+
+    let cursorWritten = false;
+    contactRowA.forEach((part, idx) => {
+      const suffix = idx < contactRowA.length - 1 ? '  |  ' : '';
+      const opts: PDFKit.Mixins.TextOptions = {
+        continued: idx < contactRowA.length - 1 || Boolean(suffix),
+        ...(part.link ? { link: part.link } : {}),
+      };
+      if (!cursorWritten) {
+        doc.fillColor(part.link ? linkBlue : mutedColor).text(part.text, startX, rowY, opts);
+        cursorWritten = true;
+      } else {
+        doc.fillColor(part.link ? linkBlue : mutedColor).text(part.text, opts);
+      }
+      if (suffix) {
+        doc.fillColor(mutedColor).text(suffix, { continued: idx < contactRowA.length - 1 });
+      }
+    });
+    doc.y += isResume ? 0.5 : 1;
+  }
+
+  // Row B: Explicit LinkedIn, GitHub & Web Links (ensures ATS parsers never miss LinkedIn)
+  const contactRowB: Array<{ label: string; text: string; link?: string }> = [];
+  if (linkedinDisplay) {
+    contactRowB.push({
+      label: 'LinkedIn: ',
+      text: linkedinDisplay,
+      link: linkedinHref.startsWith('http') ? linkedinHref : `https://${linkedinDisplay}`,
+    });
+  }
+  if (githubDisplay) {
+    contactRowB.push({
+      label: 'GitHub: ',
+      text: githubDisplay,
+      link: githubHref.startsWith('http') ? githubHref : `https://${githubDisplay}`,
+    });
+  }
+  if (primaryDomain) {
+    contactRowB.push({
+      label: 'Portfolio: ',
+      text: primaryDomain,
+      link: primaryDomain.startsWith('http') ? primaryDomain : `https://${primaryDomain}`,
+    });
+  }
+
+  if (contactRowB.length > 0) {
+    doc.font('Helvetica').fontSize(metaSize);
+    const fullRowB = contactRowB.map((c) => `${c.label}${c.text}`).join('  |  ');
+    const approxWidth = doc.widthOfString(fullRowB);
+    const startX = Math.max(marginX, marginX + (contentWidth - approxWidth) / 2);
+    const rowY = doc.y;
+
+    contactRowB.forEach((item, idx) => {
+      const isLast = idx === contactRowB.length - 1;
+      if (idx === 0) {
+        doc.fillColor(mutedColor).text(item.label, startX, rowY, { continued: true });
+      } else {
+        doc.fillColor(mutedColor).text(item.label, { continued: true });
+      }
+      doc.fillColor(linkBlue).text(item.text, {
+        continued: !isLast,
+        ...(item.link ? { link: item.link } : {}),
+      });
+      if (!isLast) {
+        doc.fillColor(mutedColor).text('  |  ', { continued: true });
+      }
+    });
+  }
+
+  doc.moveDown(isResume ? 0.2 : 0.35);
   const headerBottomY = doc.y;
   doc
-    .strokeColor('#d1d5db')
+    .strokeColor(dividerColor)
     .lineWidth(0.6)
-    .moveTo(36, headerBottomY)
-    .lineTo(36 + contentWidth, headerBottomY)
+    .moveTo(marginX, headerBottomY)
+    .lineTo(marginX + contentWidth, headerBottomY)
     .stroke();
-  doc.y = headerBottomY + 3;
+  doc.y = headerBottomY + (isResume ? 2 : 3);
 
   // ==================== 2. SUMMARY ====================
-  renderSectionHeader('Summary');
-  const summaryText =
-    'Software Engineer at Daimler Truck Innovation Center India (DTICI) working on Databricks ETL pipelines for ~70,000 connected trucks, internal FastAPI and React web apps, and automated Over-The-Air (OTA) fleet data collection scripts validated on test rigs. Lead volunteer developer for Udayan Care NGO, shipping the bilingual FiT-UC mobile app on Google Play Store backed by self-hosted Proxmox LXC containers. Experienced advancing from bare-metal Debian, Kali, and Alpine Linux with Docker Compose to a 3-node Proxmox VE HA cluster with Proxmox Backup Server (PBS) and K3s routing.';
+  const rawSummary: string = isResume
+    ? profile.resumeSummary || profile.summary || ''
+    : profile.summary || (Array.isArray(portfolioData.about) ? portfolioData.about.join(' ') : '');
 
-  doc
-    .font('Helvetica')
-    .fontSize(8.2)
-    .fillColor('#1f2937')
-    .text(summaryText, 36, doc.y, {
-      width: contentWidth,
-      lineGap: 1.5,
-    });
+  if (rawSummary) {
+    renderSectionHeader('Summary');
+    doc
+      .font('Helvetica')
+      .fontSize(bodySize)
+      .fillColor('#1f2937')
+      .text(rawSummary, marginX, doc.y, {
+        width: contentWidth,
+        lineGap: isResume ? 0.7 : 1.4,
+      });
+  }
 
   // ==================== 3. TECHNICAL SKILLS ====================
-  renderSectionHeader('Technical Skills');
-
   const skillCats: Array<{ name: string; items: string[] }> =
-    portfolioData.skills?.categories && portfolioData.skills.categories.length > 0
-      ? portfolioData.skills.categories
-      : [
-          {
-            name: 'Languages & Frameworks',
-            items: ['Python', 'C++ & CUDA', 'SQL & PostgreSQL', 'Dart & Flutter', 'TypeScript & JavaScript', 'FastAPI & Node.js', 'React', 'Go', 'Java'],
-          },
-          {
-            name: 'Big Data & Analytics',
-            items: ['Databricks', 'Apache Spark', 'Delta Lake', 'OTA Fleet Data Collection', 'Pandas & NumPy', 'Scikit-learn & TensorFlow', 'Power BI', 'Apache Superset'],
-          },
-          {
-            name: 'Linux & Infrastructure',
-            items: ['Proxmox VE & PBS', 'Debian, Kali, Alpine Linux', 'Docker & Docker Compose', 'Kubernetes (K3s) & NGINX', 'MetalLB & Traefik', 'Tailscale & Cloudflare Tunnels', 'NocoDB, Redis, MinIO', 'Git'],
-          },
-        ];
+    portfolioData.skills?.categories || [];
 
-  skillCats.forEach((cat) => {
-    const cleanItems = cat.items.map((item) => item.replace(/\s*·\s*/g, ', '));
-    const lineText = `${cat.name}: ${cleanItems.join(', ')}`;
-    ensureSpace(doc.heightOfString(lineText, { width: contentWidth }) + 3);
-    const y = doc.y;
-    doc
-      .font('Helvetica-Bold')
-      .fontSize(8.2)
-      .fillColor(primaryColor)
-      .text(`${cat.name}: `, 36, y, { continued: true, width: contentWidth });
+  if (skillCats.length > 0) {
+    renderSectionHeader('Skills');
 
-    doc
-      .font('Helvetica')
-      .fontSize(8.2)
-      .fillColor(subtextColor)
-      .text(cleanItems.join(', '), { width: contentWidth });
+    skillCats.forEach((cat) => {
+      const cleanItems = (cat.items || []).map((item) => item.replace(/\s*·\s*/g, ', '));
+      const lineText = `${cat.name}: ${cleanItems.join(', ')}`;
+      ensureSpace(doc.heightOfString(lineText, { width: contentWidth }) + 3);
+      const y = doc.y;
+      doc
+        .font('Helvetica-Bold')
+        .fontSize(bodySize)
+        .fillColor(primaryColor)
+        .text(`${cat.name}: `, marginX, y, { continued: true, width: contentWidth });
 
-    doc.y += 1.5;
-  });
+      doc
+        .font('Helvetica')
+        .fontSize(bodySize)
+        .fillColor(subtextColor)
+        .text(cleanItems.join(', '), { width: contentWidth });
 
-  if (portfolioData.skills?.languages && portfolioData.skills.languages.length > 0) {
-    const langY = doc.y;
-    doc
-      .font('Helvetica-Bold')
-      .fontSize(8.2)
-      .fillColor(primaryColor)
-      .text('Spoken Languages: ', 36, langY, { continued: true, width: contentWidth });
-    doc
-      .font('Helvetica')
-      .fontSize(8.2)
-      .fillColor(subtextColor)
-      .text(portfolioData.skills.languages.join(', '), { width: contentWidth });
-    doc.y += 1.5;
+      doc.y += isResume ? 0.6 : 1.4;
+    });
+
+    if (!isResume && portfolioData.skills?.languages && portfolioData.skills.languages.length > 0) {
+      const langY = doc.y;
+      doc
+        .font('Helvetica-Bold')
+        .fontSize(bodySize)
+        .fillColor(primaryColor)
+        .text('Spoken Languages: ', marginX, langY, { continued: true, width: contentWidth });
+      doc
+        .font('Helvetica')
+        .fontSize(bodySize)
+        .fillColor(subtextColor)
+        .text(portfolioData.skills.languages.join(', '), { width: contentWidth });
+      doc.y += 1.4;
+    }
   }
 
   // ==================== 4. PROFESSIONAL EXPERIENCE ====================
-  renderSectionHeader('Experience');
+  const allExperiences: any[] = portfolioData.experience || [];
+  const maxExperiences = isResume
+    ? typeof cvConfig.maxExperiencesInResume === 'number'
+      ? cvConfig.maxExperiencesInResume
+      : 5
+    : allExperiences.length;
+  const experiences = allExperiences.slice(0, maxExperiences);
 
-  const experiences = portfolioData.experience || [];
-  experiences.forEach((exp: any) => {
-    ensureSpace(48);
-    renderEntryHeader(
-      exp.role,
-      exp.company,
-      exp.location || 'India',
-      exp.duration,
-      exp.milestone
+  if (experiences.length > 0) {
+    renderSectionHeader('Experience');
+
+    experiences.forEach((exp: any) => {
+      ensureSpace(isResume ? 30 : 48);
+      renderLinearEntryHeader({
+        primary: exp.role,
+        secondary: exp.company,
+        location: exp.location || '',
+        dateOrLink: exp.duration,
+        badge: exp.milestone,
+      });
+
+      const bullets: string[] = Array.isArray(exp.bulletPoints) ? exp.bulletPoints : [];
+      const shownBullets = isResume ? bullets.slice(0, 2) : bullets;
+      shownBullets.forEach((bullet: string) => {
+        renderBullet(bullet);
+      });
+
+      if (exp.skills && exp.skills.length > 0) {
+        const shownSkills = isResume ? exp.skills.slice(0, 6) : exp.skills;
+        const stackText = `Tools: ${shownSkills.join(', ')}`;
+        ensureSpace(12);
+        doc
+          .font('Helvetica-Oblique')
+          .fontSize(metaSize)
+          .fillColor('#6b7280')
+          .text(stackText, marginX + 6, doc.y, { width: contentWidth - 8 });
+        doc.y += isResume ? 1.4 : 2.5;
+      } else {
+        doc.y += isResume ? 1.2 : 2;
+      }
+    });
+  }
+
+  // ==================== 5. SELECTED PROJECTS & INFRASTRUCTURE ====================
+  const rawProjects: any[] = portfolioData.realWorldProjects || [];
+  const maxProjects = isResume
+    ? typeof cvConfig.maxProjectsInResume === 'number'
+      ? cvConfig.maxProjectsInResume
+      : 3
+    : typeof cvConfig.maxProjectsInCv === 'number'
+    ? cvConfig.maxProjectsInCv
+    : 4;
+
+  const activeProjects = rawProjects
+    .filter(
+      (p) => p.status !== 'hidden' && p.status !== 'archived' && p.status !== 'unmaintained'
+    )
+    .map((p, idx) => ({ p, idx }))
+    .sort((a, b) => {
+      const aFeat = a.p.featured ? 0 : 1;
+      const bFeat = b.p.featured ? 0 : 1;
+      if (aFeat !== bFeat) return aFeat - bFeat;
+      const aPrio = typeof a.p.priority === 'number' ? a.p.priority : a.idx + 100;
+      const bPrio = typeof b.p.priority === 'number' ? b.p.priority : b.idx + 100;
+      if (aPrio !== bPrio) return aPrio - bPrio;
+      return a.idx - b.idx;
+    })
+    .map((entry) => entry.p)
+    .slice(0, maxProjects);
+
+  const evolutionStages = portfolioData.homelab?.evolution || [];
+  const includeHomelab = isResume
+    ? cvConfig.includeHomelabInResume === true && evolutionStages.length > 0
+    : cvConfig.includeHomelabInCv !== false && evolutionStages.length > 0;
+
+  if (activeProjects.length > 0 || includeHomelab) {
+    renderSectionHeader(
+      isResume
+        ? 'Key Projects'
+        : cvConfig.projectsSectionTitle || 'Selected Projects & Infrastructure'
     );
 
-    const bullets: string[] = exp.bulletPoints || [];
-    bullets.forEach((bullet: string) => {
-      renderBullet(bullet);
+    activeProjects.forEach((proj: any) => {
+      ensureSpace(isResume ? 26 : 44);
+      const cleanUrl = proj.url && proj.url !== '#' ? proj.url.replace(/^https?:\/\//, '') : '';
+      renderLinearEntryHeader({
+        primary: proj.name,
+        secondary: proj.category || 'Engineering Project',
+        dateOrLink: cleanUrl,
+        dateOrLinkUrl: proj.url && proj.url !== '#' ? proj.url : undefined,
+        badge: proj.badge,
+      });
+
+      if (proj.details) {
+        const pts = String(proj.details)
+          .split('|')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        const shownPts = isResume ? pts.slice(0, 2) : pts;
+        shownPts.forEach((pt: string) => renderBullet(pt));
+      } else if (proj.description) {
+        renderBullet(proj.description);
+      }
+
+      if (proj.stack) {
+        const stackItems = String(proj.stack)
+          .split('|')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        const shownStack = isResume ? stackItems.slice(0, 5) : stackItems;
+        ensureSpace(12);
+        doc
+          .font('Helvetica-Oblique')
+          .fontSize(metaSize)
+          .fillColor('#6b7280')
+          .text(`Stack: ${shownStack.join(', ')}`, marginX + 6, doc.y, {
+            width: contentWidth - 8,
+          });
+        doc.y += isResume ? 1.2 : 2.5;
+      }
     });
 
-    if (exp.skills && exp.skills.length > 0) {
-      const stackText = `Tools: ${exp.skills.join(', ')}`;
-      ensureSpace(14);
-      doc
-        .font('Helvetica-Oblique')
-        .fontSize(7.5)
-        .fillColor('#6b7280')
-        .text(stackText, 48, doc.y, { width: contentWidth - 12 });
-      doc.y += 2.5;
-    } else {
-      doc.y += 2;
-    }
-  });
+    if (includeHomelab) {
+      ensureSpace(42);
+      const homelabTitle =
+        cvConfig.homelabCvTitle || 'Self-Hosted Infrastructure & Virtualization';
+      const homelabSubtitle =
+        cvConfig.homelabCvSubtitle ||
+        evolutionStages.map((s: any) => s.title).slice(0, 3).join(' -> ');
+      const homelabLinkUrl =
+        profile.primaryConsoleUrl ||
+        (cvConfig.homelabCvLink ? `https://${cvConfig.homelabCvLink}` : '');
+      const homelabDisplay =
+        cvConfig.homelabCvLink ||
+        (homelabLinkUrl ? String(homelabLinkUrl).replace(/^https?:\/\//, '') : '');
 
-  // ==================== 5. SELECTED PROJECTS & PROXMOX ARCHITECTURE ====================
-  renderSectionHeader('Selected Projects & Virtualization');
-
-  const realProjects = portfolioData.realWorldProjects || [];
-  realProjects.slice(0, 4).forEach((proj: any) => {
-    ensureSpace(44);
-    const cleanUrl = proj.url && proj.url !== '#' ? proj.url.replace(/^https?:\/\//, '') : '';
-    renderEntryHeader(
-      proj.name,
-      proj.category || 'Engineering Project',
-      '',
-      cleanUrl,
-      proj.badge,
-      proj.url && proj.url !== '#' ? proj.url : undefined
-    );
-
-    if (proj.details) {
-      proj.details.split('|').forEach((pt: string) => {
-        if (pt.trim()) renderBullet(pt.trim());
+      renderLinearEntryHeader({
+        primary: homelabTitle,
+        secondary: homelabSubtitle,
+        dateOrLink: homelabDisplay,
+        dateOrLinkUrl: homelabLinkUrl || undefined,
+        badge: 'Self-Hosted',
       });
-    } else if (proj.description) {
-      renderBullet(proj.description);
-    }
 
-    if (proj.stack) {
-      const stackStr = proj.stack.split('|').join(', ');
-      ensureSpace(12);
-      doc
-        .font('Helvetica-Oblique')
-        .fontSize(7.5)
-        .fillColor('#6b7280')
-        .text(`Stack: ${stackStr}`, 48, doc.y, { width: contentWidth - 12 });
-      doc.y += 2.5;
-    }
-  });
+      const bullets: string[] =
+        Array.isArray(cvConfig.homelabCvBullets) && cvConfig.homelabCvBullets.length > 0
+          ? cvConfig.homelabCvBullets
+          : evolutionStages.map((s: any) => `${s.stage}: ${s.summary}`);
 
-  // Include Proxmox VE & Bare-Metal Linux progression context directly if evolution exists
-  const evolutionStages = portfolioData.homelab?.evolution || [];
-  if (evolutionStages.length > 0) {
-    ensureSpace(42);
-    renderEntryHeader(
-      'Proxmox VE HA Cluster & Linux Infrastructure',
-      'Bare-Metal Linux -> Proxmox VE + PBS -> Consolidated PVE 8 & K3s',
-      '',
-      'pve.diivvansh.com',
-      'Self-Hosted',
-      portfolioData.profile?.pveConsoleUrl
-    );
-    renderBullet(
-      'Started bare-metal on Debian, Kali, and Alpine Linux across spare laptops managed with Docker and Docker Compose.'
-    );
-    renderBullet(
-      'Upgraded into a 3-node High-Availability (HA) Proxmox VE cluster with Corosync quorum plus a 4th laptop dedicated to Proxmox Backup Server (PBS) incremental snapshots.'
-    );
-    renderBullet(
-      'Consolidated onto a primary Proxmox VE 8 server running production Udayan Care LXCs and a nested 6-node K3s cluster behind Tailscale and Cloudflare Tunnels.'
-    );
+      (isResume ? bullets.slice(0, 2) : bullets).forEach((bullet: string) => renderBullet(bullet));
+    }
   }
 
   // ==================== 6. EDUCATION ====================
-  renderSectionHeader('Education');
+  const allEducation: any[] = portfolioData.education || [];
+  const shownEducation = isResume ? allEducation.slice(0, 1) : allEducation;
+  if (shownEducation.length > 0) {
+    renderSectionHeader('Education');
 
-  const educationList = portfolioData.education || [];
-  educationList.forEach((edu: any) => {
-    ensureSpace(26);
-    renderEntryHeader(
-      edu.degree,
-      edu.institution,
-      edu.gpa || '',
-      edu.duration
-    );
-  });
+    shownEducation.forEach((edu: any) => {
+      ensureSpace(24);
+      renderLinearEntryHeader({
+        primary: edu.degree,
+        secondary: `${edu.institution}${edu.gpa ? `  ·  ${edu.gpa}` : ''}`,
+        dateOrLink: edu.duration,
+      });
+    });
+  }
 
   // ==================== 7. CERTIFICATIONS & INTERESTS ====================
   const certs = portfolioData.certificates || [];
   const interests = portfolioData.skills?.interests || [];
-  if (certs.length > 0 || interests.length > 0) {
-    renderSectionHeader('Certifications & Interests');
+  const showCerts = isResume ? cvConfig.includeCertsInResume !== false && certs.length > 0 : certs.length > 0;
+  const showInterests = isResume ? cvConfig.includeInterestsInResume === true && interests.length > 0 : interests.length > 0;
 
-    if (certs.length > 0) {
+  if (showCerts || showInterests) {
+    renderSectionHeader(showInterests ? 'Certifications & Interests' : 'Certifications');
+
+    if (showCerts) {
       const certLine = certs.map((c: any) => `${c.name} (${c.date})`).join('  •  ');
       const y = doc.y;
       ensureSpace(doc.heightOfString(`Certifications: ${certLine}`, { width: contentWidth }) + 4);
       doc
         .font('Helvetica-Bold')
-        .fontSize(8)
+        .fontSize(bodySize)
         .fillColor(primaryColor)
-        .text('Certifications: ', 36, y, { continued: true, width: contentWidth });
+        .text('Certifications: ', marginX, y, { continued: true, width: contentWidth });
       doc
         .font('Helvetica')
-        .fontSize(8)
+        .fontSize(bodySize)
         .fillColor(subtextColor)
-        .text(certLine, { width: contentWidth, lineGap: 1.2 });
-      doc.y += 2;
+        .text(certLine, { width: contentWidth, lineGap: 1.0 });
+      doc.y += 1.5;
     }
 
-    if (interests.length > 0) {
+    if (showInterests) {
       const interestLine = interests.join(', ');
       const y = doc.y;
       ensureSpace(doc.heightOfString(`Interests: ${interestLine}`, { width: contentWidth }) + 4);
       doc
         .font('Helvetica-Bold')
-        .fontSize(8)
+        .fontSize(bodySize)
         .fillColor(primaryColor)
-        .text('Interests: ', 36, y, { continued: true, width: contentWidth });
+        .text('Interests: ', marginX, y, { continued: true, width: contentWidth });
       doc
         .font('Helvetica')
-        .fontSize(8)
+        .fontSize(bodySize)
         .fillColor(subtextColor)
         .text(interestLine, { width: contentWidth });
     }
@@ -437,20 +634,32 @@ export function buildCvPdf(portfolioData: any): PDFKit.PDFDocument {
 }
 
 /**
+ * Backwards-compatible alias that builds full Curriculum Vitae PDF.
+ */
+export function buildCvPdf(portfolioData: any): PDFKit.PDFDocument {
+  return buildDocumentPdf(portfolioData, 'cv');
+}
+
+/**
  * Generates and saves the PDF file to disk.
  */
-export async function writeCvPdfToFile(portfolioJsonPath: string, outputPath: string): Promise<string> {
+export async function writeCvPdfToFile(
+  portfolioJsonPath: string,
+  outputPath?: string,
+  mode: DocumentMode = 'cv'
+): Promise<string> {
   return new Promise((resolve, reject) => {
     try {
       const raw = fs.readFileSync(portfolioJsonPath, 'utf8');
       const data = JSON.parse(raw);
-      const doc = buildCvPdf(data);
+      const targetPath = outputPath || `public/${resolveDocumentFileName(data, mode)}`;
+      const doc = buildDocumentPdf(data, mode);
 
-      const writeStream = fs.createWriteStream(outputPath);
+      const writeStream = fs.createWriteStream(targetPath);
       doc.pipe(writeStream);
 
       writeStream.on('finish', () => {
-        resolve(outputPath);
+        resolve(targetPath);
       });
 
       writeStream.on('error', (err) => {

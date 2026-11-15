@@ -4,20 +4,32 @@ import { Award, BookOpen, GraduationCap } from 'lucide-react';
 import { Certificate } from '../types';
 import GlassCard from './motion/GlassCard';
 import SplitText from './motion/SplitText';
+import RepoImage from './common/RepoImage';
+import BrandMark from './icons/BrandMarks';
 
 export interface EducationType {
   institution: string;
   degree: string;
   duration: string;
   gpa: string;
+  logo?: string;
 }
 
 interface EducationProps {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
   education: EducationType[];
   certificates?: Certificate[];
 }
 
-export const Education: React.FC<EducationProps> = ({ education, certificates }) => {
+export const Education: React.FC<EducationProps> = ({
+  eyebrow = 'Academic History & Credentials',
+  title = 'Education & Certifications',
+  subtitle = 'Academic degrees, foundational coursework, and verified technical certifications.',
+  education,
+  certificates,
+}) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const prefersReduced = useReducedMotion();
 
@@ -27,16 +39,16 @@ export const Education: React.FC<EducationProps> = ({ education, certificates })
       <div className="mb-12">
         <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
           <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
-          <span>Academic History &amp; Credentials</span>
+          <span>{eyebrow}</span>
         </span>
         <SplitText
           as="h2"
-          text="Education & Certifications"
+          text={title}
           stagger={0.04}
           className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-zinc-50 mb-3 block"
         />
         <p className="text-sm sm:text-base text-zinc-400 max-w-2xl leading-relaxed">
-          B.Tech in Data Science from Manipal Institute of Technology alongside CBSE schooling in New Delhi and completed coursework certifications.
+          {subtitle}
         </p>
       </div>
 
@@ -62,10 +74,23 @@ export const Education: React.FC<EducationProps> = ({ education, certificates })
                 className="p-6 w-full"
               >
                 <div>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 tabular-nums mb-2">
-                    <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span>{edu.duration}</span>
-                  </span>
+                  <div className="flex items-center justify-between gap-3 mb-4">
+                    <RepoImage
+                      src={edu.logo}
+                      alt={edu.institution}
+                      className="w-11 h-11 rounded-xl border border-white/15 bg-white/95 p-1 shrink-0"
+                      imgClassName="w-full h-full object-contain rounded-lg"
+                      fallback={
+                        <span className="w-full h-full flex items-center justify-center bg-slate-900 rounded-lg">
+                          <BrandMark brand={edu.institution} className="w-6 h-6" />
+                        </span>
+                      }
+                    />
+                    <span className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 tabular-nums">
+                      <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>{edu.duration}</span>
+                    </span>
+                  </div>
                   <h3 className="font-display font-bold text-lg text-zinc-50 mb-1.5 tracking-tight">
                     {edu.institution}
                   </h3>
@@ -93,9 +118,18 @@ export const Education: React.FC<EducationProps> = ({ education, certificates })
             {certificates.map((cert, idx) => (
               <div
                 key={`${cert.name}-${idx}`}
-                className="glass-panel-subtle glass-panel-hover rounded-xl px-4 py-3.5 flex items-baseline justify-between gap-4 text-sm transition-colors"
+                className="glass-panel-subtle glass-panel-hover rounded-xl px-4 py-3.5 flex items-center justify-between gap-4 text-sm transition-colors"
               >
-                <span className="text-zinc-200 font-medium">{cert.name}</span>
+                <span className="inline-flex items-center gap-2.5 text-zinc-200 font-medium min-w-0">
+                  <RepoImage
+                    src={cert.logo}
+                    alt={cert.name}
+                    className="w-4 h-4 shrink-0"
+                    imgClassName="w-full h-full object-contain"
+                    fallback={<BrandMark brand={cert.name} className="w-4 h-4 shrink-0" />}
+                  />
+                  <span className="truncate">{cert.name}</span>
+                </span>
                 <span className="text-xs font-mono text-cyan-400/90 whitespace-nowrap shrink-0 tabular-nums">
                   {cert.date}
                 </span>

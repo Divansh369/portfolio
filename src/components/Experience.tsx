@@ -7,13 +7,19 @@ import {
   Cpu,
   Database,
   HeartHandshake,
+  Images,
   Radio,
 } from 'lucide-react';
 import GlassCard from './motion/GlassCard';
 import SplitText from './motion/SplitText';
 import TextScramble from './motion/TextScramble';
+import RepoImage from './common/RepoImage';
+import BrandMark from './icons/BrandMarks';
+import { ProgressMilestone } from '../types';
+import { resolveItemId } from '../utils/itemId';
 
 interface ExperienceType {
+  id?: string;
   role: string;
   company: string;
   location: string;
@@ -25,17 +31,27 @@ interface ExperienceType {
 }
 
 interface ExperienceProps {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
   experience: ExperienceType[];
+  progressMilestones?: ProgressMilestone[];
+  onOpenGallery?: (payload: {
+    itemId: string;
+    title: string;
+    subtitle?: string;
+    milestones: ProgressMilestone[];
+  }) => void;
 }
 
 const getRoleIcon = (role: string, company: string) => {
   const combined = `${role} ${company}`.toLowerCase();
-  if (combined.includes('daimler')) return Code2;
-  if (combined.includes('udayan')) return HeartHandshake;
-  if (combined.includes('stmicroelectronics')) return Cpu;
-  if (combined.includes('multiplier')) return BarChart3;
-  if (combined.includes('iit')) return Radio;
-  if (combined.includes('goalkeep')) return Database;
+  if (combined.includes('volunteer') || combined.includes('ngo')) return HeartHandshake;
+  if (combined.includes('verification') || combined.includes('hardware')) return Cpu;
+  if (combined.includes('analyst') || combined.includes('bi')) return BarChart3;
+  if (combined.includes('iot') || combined.includes('embedded')) return Radio;
+  if (combined.includes('data')) return Database;
+  if (combined.includes('engineer') || combined.includes('developer')) return Code2;
   return Briefcase;
 };
 
@@ -44,6 +60,13 @@ interface ExperienceRowProps {
   index: number;
   dimmed: boolean;
   prefersReduced: boolean | null;
+  milestones: ProgressMilestone[];
+  onOpenGallery?: (payload: {
+    itemId: string;
+    title: string;
+    subtitle?: string;
+    milestones: ProgressMilestone[];
+  }) => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
@@ -53,14 +76,16 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
   index,
   dimmed,
   prefersReduced,
+  milestones,
+  onOpenGallery,
   onMouseEnter,
   onMouseLeave,
 }) => {
   const rowRef = useRef<HTMLDivElement>(null);
   const RoleIcon = getRoleIcon(job.role, job.company);
   const isFeatured = index === 0;
+  const itemId = resolveItemId(job.id, job.role, job.company);
 
-  // Multi-layer spatial depth: left metadata column glides subtly against right narrative column
   const { scrollYProgress } = useScroll({
     target: rowRef,
     offset: ['start end', 'end start'],
@@ -100,18 +125,33 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
           {/* Left Metadata Column (foreground scroll layer) */}
           <motion.div
             style={prefersReduced ? undefined : { y: metaY }}
-            className="md:col-span-4 space-y-1.5"
+            className="md:col-span-4 space-y-2"
           >
-            <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 tabular-nums">
+            <div className="flex items-center gap-3 pb-1">
+              <RepoImage
+                src={job.logo}
+                alt={job.company}
+                className="w-11 h-11 rounded-xl border border-white/15 bg-white/95 p-1 shrink-0 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.65)]"
+                imgClassName="w-full h-full object-contain rounded-lg"
+                fallback={
+                  <span className="w-full h-full flex items-center justify-center bg-slate-900 rounded-lg">
+                    <BrandMark brand={job.company} className="w-6 h-6" />
+                  </span>
+                }
+              />
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-zinc-100 leading-snug">
+                  {job.company}
+                </div>
+                <div className="text-xs text-zinc-400">{job.location}</div>
+              </div>
+            </div>
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 tabular-nums pt-0.5">
               <RoleIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
               <TextScramble text={job.duration} trigger="inView" durationMs={380} />
             </div>
-            <div className="text-sm font-semibold text-zinc-100 pt-1">
-              {job.company}
-            </div>
-            <div className="text-xs text-zinc-400">{job.location}</div>
             {job.milestone && (
-              <div className="text-xs font-mono text-blue-300 pt-2">
+              <div className="text-xs font-mono text-blue-300 pt-1">
                 {job.milestone}
               </div>
             )}
@@ -134,18 +174,45 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
               </ul>
             )}
 
-            {job.skills && (
-              <div className="mt-4 pt-3.5 border-t border-white/[0.08] text-xs font-mono text-zinc-400 flex flex-wrap gap-y-1 items-center">
-                {job.skills.split('|').map((skill, sIdx) => (
-                  <React.Fragment key={skill}>
-                    {sIdx > 0 && (
-                      <span className="mx-1.5 text-zinc-600" aria-hidden="true">
-                        /
-                      </span>
-                    )}
-                    <span>{skill.trim()}</span>
-                  </React.Fragment>
-                ))}
+            {(job.skills || (onOpenGallery && milestones.length > 0)) && (
+              <div className="mt-4 pt-3.5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-zinc-400">
+                {job.skills ? (
+                  <div className="flex flex-wrap gap-y-1.5 items-center">
+                    {job.skills.split('|').map((skill, sIdx) => (
+                      <React.Fragment key={skill}>
+                        {sIdx > 0 && (
+                          <span className="mx-1.5 text-zinc-600" aria-hidden="true">
+                            /
+                          </span>
+                        )}
+                        <span className="inline-flex items-center gap-1">
+                          <BrandMark brand={skill} className="w-3.5 h-3.5 shrink-0 opacity-85" />
+                          <span>{skill.trim()}</span>
+                        </span>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                ) : (
+                  <span />
+                )}
+
+                {onOpenGallery && milestones.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onOpenGallery({
+                        itemId,
+                        title: `${job.role} — ${job.company}`,
+                        subtitle: `${job.location} · ${job.duration}`,
+                        milestones,
+                      })
+                    }
+                    className="inline-flex items-center gap-1.5 text-cyan-300 hover:text-cyan-200 transition-colors cursor-pointer shrink-0 tabular-nums"
+                  >
+                    <Images className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                    <span>Work Timeline ({milestones.length})</span>
+                  </button>
+                )}
               </div>
             )}
           </motion.div>
@@ -155,12 +222,18 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
   );
 };
 
-export const Experience: React.FC<ExperienceProps> = ({ experience }) => {
+export const Experience: React.FC<ExperienceProps> = ({
+  eyebrow = 'Career History',
+  title = 'Work Experience & Volunteering',
+  subtitle = 'Production software engineering, data pipelines, community impact builds, and technical internships.',
+  experience,
+  progressMilestones = [],
+  onOpenGallery,
+}) => {
   const timelineRef = useRef<HTMLDivElement>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const prefersReduced = useReducedMotion();
 
-  // Scrubbed scroll-progress rail inspired by Kimi timeline progress thread & rotating marker
   const { scrollYProgress } = useScroll({
     target: timelineRef,
     offset: ['start 72%', 'end 82%'],
@@ -175,16 +248,16 @@ export const Experience: React.FC<ExperienceProps> = ({ experience }) => {
       <div className="mb-12">
         <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
           <Briefcase className="w-3.5 h-3.5" aria-hidden="true" />
-          <span>Career History</span>
+          <span>{eyebrow}</span>
         </span>
         <SplitText
           as="h2"
-          text="Work Experience & Volunteering"
+          text={title}
           stagger={0.04}
           className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-zinc-50 mb-3 block"
         />
         <p className="text-sm sm:text-base text-zinc-400 max-w-2xl leading-relaxed">
-          Data pipelines, fleet software, and cloud applications at Daimler Truck, alongside end-to-end product engineering for Udayan Care NGO and data science internships.
+          {subtitle}
         </p>
       </div>
 
@@ -199,7 +272,6 @@ export const Experience: React.FC<ExperienceProps> = ({ experience }) => {
             style={prefersReduced ? { height: '100%' } : { height: railHeight }}
             className="w-full bg-gradient-to-b from-blue-400 via-cyan-400 to-blue-500 origin-top relative"
           >
-            {/* Rotating diamond/square tracer node sliding down the progress rail */}
             {!prefersReduced && (
               <motion.div
                 style={{ rotate: markerRotate }}
@@ -210,17 +282,23 @@ export const Experience: React.FC<ExperienceProps> = ({ experience }) => {
         </div>
 
         <div className="space-y-5">
-          {experience.map((job, index) => (
-            <ExperienceRow
-              key={`${job.role}-${index}`}
-              job={job}
-              index={index}
-              dimmed={hoveredIndex !== null && hoveredIndex !== index}
-              prefersReduced={prefersReduced}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            />
-          ))}
+          {experience.map((job, index) => {
+            const jobId = resolveItemId(job.id, job.role, job.company);
+            const jobMilestones = progressMilestones.filter((m) => m.itemId === jobId);
+            return (
+              <ExperienceRow
+                key={`${job.role}-${index}`}
+                job={job}
+                index={index}
+                dimmed={hoveredIndex !== null && hoveredIndex !== index}
+                prefersReduced={prefersReduced}
+                milestones={jobMilestones}
+                onOpenGallery={onOpenGallery}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              />
+            );
+          })}
         </div>
       </div>
     </section>

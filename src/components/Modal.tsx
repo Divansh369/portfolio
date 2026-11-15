@@ -1,22 +1,24 @@
 import React, { useEffect } from 'react';
 import { motion, useReducedMotion, Variants } from 'framer-motion';
-import { ArrowUpRight, Code2, Layers, X } from 'lucide-react';
+import { ArrowUpRight, Code2, Images, Layers, X } from 'lucide-react';
 import NginxLoadBalancerDemo from './NginxLoadBalancerDemo';
 import FloodButton from './motion/FloodButton';
 import CornerBrackets from './motion/CornerBrackets';
-
-interface Project {
-  name: string;
-  category?: string;
-  badge?: string;
-  description: string;
-  url?: string;
-  details?: string;
-  stack?: string;
-}
+import RepoImage from './common/RepoImage';
+import BrandMark from './icons/BrandMarks';
+import { LoadBalancerDemoConfig, ProgressMilestone, Project } from '../types';
+import { resolveItemId } from '../utils/itemId';
 
 interface ModalProps {
   project: Project;
+  loadBalancerDemoConfig?: LoadBalancerDemoConfig;
+  progressMilestones?: ProgressMilestone[];
+  onOpenGallery?: (payload: {
+    itemId: string;
+    title: string;
+    subtitle?: string;
+    milestones: ProgressMilestone[];
+  }) => void;
   onClose: () => void;
 }
 
@@ -25,7 +27,28 @@ const backdrop: Variants = {
   hidden: { opacity: 0, transition: { duration: 0.16, ease: 'easeIn' } },
 };
 
-export const Modal: React.FC<ModalProps> = ({ project, onClose }) => {
+const formatStatusLabel = (status?: Project['status']): string => {
+  switch (status) {
+    case 'live':
+      return 'Live';
+    case 'wip':
+      return 'In Progress';
+    case 'archived':
+      return 'Archived';
+    case 'unmaintained':
+      return 'Not Maintained';
+    default:
+      return '';
+  }
+};
+
+export const Modal: React.FC<ModalProps> = ({
+  project,
+  loadBalancerDemoConfig,
+  progressMilestones = [],
+  onOpenGallery,
+  onClose,
+}) => {
   const prefersReduced = useReducedMotion();
 
   const modalVariants: Variants = {
@@ -64,6 +87,13 @@ export const Modal: React.FC<ModalProps> = ({ project, onClose }) => {
   const isGithub = project.url && project.url.includes('github.com');
   const isPlayStore = project.url && project.url.includes('play.google.com');
   const hasExternalUrl = project.url && project.url !== '#';
+  const statusLabel = formatStatusLabel(project.status);
+  const itemId = resolveItemId(project.id, project.name);
+  const itemMilestones = progressMilestones.filter((m) => m.itemId === itemId);
+  const showLoadBalancerWidget =
+    loadBalancerDemoConfig?.enabled !== false &&
+    (project.name.toLowerCase().includes('load balancer') ||
+      (project.stack && project.stack.toLowerCase().includes('metallb')));
 
   return (
     <motion.div
@@ -92,13 +122,35 @@ export const Modal: React.FC<ModalProps> = ({ project, onClose }) => {
           <X className="w-5 h-5" />
         </button>
 
-        <div className="text-xs font-mono text-cyan-400/90 mb-2 pr-12">
-          {project.category || 'Project Architecture'}
-          {project.badge ? ` · ${project.badge}` : ''}
+        <div className="flex items-center gap-3.5 mb-4 pr-10">
+          {project.logo && (
+            <RepoImage
+              src={project.logo}
+              alt={project.name}
+              className="w-12 h-12 rounded-xl border border-white/15 bg-white/[0.06] shrink-0"
+              imgClassName={`w-full h-full ${
+                project.logo.toLowerCase().includes('.svg')
+                  ? 'object-contain bg-white/95 p-1.5'
+                  : 'object-cover'
+              }`}
+              fallback={<BrandMark brand={project.stack?.split('|')[0] || project.name} className="w-6 h-6" />}
+            />
+          )}
+          <div className="min-w-0">
+            <div className="text-xs font-mono text-cyan-400/90 mb-1 flex flex-wrap items-center gap-2">
+              <span>
+                {project.category || 'Project Architecture'}
+                {project.badge ? ` · ${project.badge}` : ''}
+              </span>
+              {statusLabel && (
+                <span className="text-zinc-400">· {statusLabel}</span>
+              )}
+            </div>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-50 tracking-tight truncate">
+              {project.name}
+            </h2>
+          </div>
         </div>
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-50 mb-4 tracking-tight pr-10">
-          {project.name}
-        </h2>
 
         <div className="space-y-6 max-h-[65vh] overflow-y-auto pr-2">
           <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
@@ -125,7 +177,7 @@ export const Modal: React.FC<ModalProps> = ({ project, onClose }) => {
                 <Code2 className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
                 <span>Technologies Used</span>
               </h3>
-              <div className="text-xs font-mono text-zinc-200 flex flex-wrap gap-y-1 items-center">
+              <div className="text-xs font-mono text-zinc-200 flex flex-wrap gap-y-1.5 items-center">
                 {project.stack.split('|').map((tech, idx) => (
                   <React.Fragment key={tech}>
                     {idx > 0 && (
@@ -133,35 +185,56 @@ export const Modal: React.FC<ModalProps> = ({ project, onClose }) => {
                         /
                       </span>
                     )}
-                    <span>{tech}</span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <BrandMark brand={tech} className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tech}</span>
+                    </span>
                   </React.Fragment>
                 ))}
               </div>
             </div>
           )}
 
-          {(project.name.toLowerCase().includes('load balancer') ||
-            project.name.toLowerCase().includes('nginx')) && (
+          {showLoadBalancerWidget && (
             <div className="pt-4 border-t border-white/[0.08]">
-              <NginxLoadBalancerDemo />
+              <NginxLoadBalancerDemo config={loadBalancerDemoConfig} />
             </div>
           )}
         </div>
 
-        {hasExternalUrl && (
-          <div className="mt-6 pt-5 border-t border-white/[0.08] flex justify-end">
-            <FloodButton
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="primary"
-              className="text-xs py-2.5 px-4 min-h-[40px]"
-            >
-              <span>
-                {isPlayStore ? 'Open on Google Play' : isGithub ? 'View on GitHub' : 'Open Link'}
-              </span>
-              <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-            </FloodButton>
+        {(hasExternalUrl || (onOpenGallery && itemMilestones.length > 0)) && (
+          <div className="mt-6 pt-5 border-t border-white/[0.08] flex flex-wrap items-center justify-end gap-3">
+            {onOpenGallery && itemMilestones.length > 0 && (
+              <FloodButton
+                onClick={() =>
+                  onOpenGallery({
+                    itemId,
+                    title: project.name,
+                    subtitle: project.category,
+                    milestones: itemMilestones,
+                  })
+                }
+                variant="glass"
+                className="text-xs py-2.5 px-4 min-h-[40px]"
+              >
+                <Images className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+                <span className="tabular-nums">Progress Gallery ({itemMilestones.length})</span>
+              </FloodButton>
+            )}
+            {hasExternalUrl && (
+              <FloodButton
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="primary"
+                className="text-xs py-2.5 px-4 min-h-[40px]"
+              >
+                <span>
+                  {isPlayStore ? 'Open on Google Play' : isGithub ? 'View on GitHub' : 'Open Link'}
+                </span>
+                <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </FloodButton>
+            )}
           </div>
         )}
       </motion.div>

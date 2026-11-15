@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   Briefcase,
@@ -14,23 +14,36 @@ import {
 import FloodButton from './motion/FloodButton';
 import ScrollProgressRail from './motion/ScrollProgressRail';
 
-const navLinks = [
-  { name: 'Projects', href: '#projects', id: 'projects', icon: FolderGit2 },
-  { name: 'Proxmox', href: '#homelab', id: 'homelab', icon: Server },
-  { name: 'Experience', href: '#experience', id: 'experience', icon: Briefcase },
-  { name: 'Skills', href: '#skills', id: 'skills', icon: Code2 },
-  { name: 'Education', href: '#education', id: 'education', icon: GraduationCap },
-];
-
 interface NavbarProps {
+  brandName?: string;
+  homelabLabel?: string;
+  showHomelab?: boolean;
   onOpenCvModal?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  brandName = 'Portfolio',
+  homelabLabel = 'Infrastructure',
+  showHomelab = true,
+  onOpenCvModal,
+}) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState<string>('');
   const prefersReduced = useReducedMotion();
+
+  const navLinks = useMemo(() => {
+    const items = [
+      { name: 'Projects', href: '#projects', id: 'projects', icon: FolderGit2 },
+      ...(showHomelab
+        ? [{ name: homelabLabel, href: '#homelab', id: 'homelab', icon: Server }]
+        : []),
+      { name: 'Experience', href: '#experience', id: 'experience', icon: Briefcase },
+      { name: 'Skills', href: '#skills', id: 'skills', icon: Code2 },
+      { name: 'Education', href: '#education', id: 'education', icon: GraduationCap },
+    ];
+    return items;
+  }, [homelabLabel, showHomelab]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -63,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal }) => {
 
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [navLinks]);
 
   // Mobile sheet body scroll lock + Escape key + auto close above md
   useEffect(() => {
@@ -122,7 +135,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal }) => {
             }}
             className="font-display text-lg font-bold tracking-tight text-zinc-50 hover:text-cyan-300 transition-colors whitespace-nowrap shrink-0"
           >
-            Divansh Prasad
+            {brandName}
           </a>
 
           {/* Zone 2: Clean Single-Line Navigation Links with layoutId indicator */}
@@ -134,7 +147,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal }) => {
               const isActive = activeId === link.id;
               return (
                 <a
-                  key={link.name}
+                  key={link.id}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
                   className={`relative py-2 px-1 transition-colors whitespace-nowrap shrink-0 ${
@@ -203,7 +216,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal }) => {
                 }}
                 className="font-display text-lg font-bold tracking-tight text-zinc-50"
               >
-                Divansh Prasad
+                {brandName}
               </a>
 
               <button
@@ -222,7 +235,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCvModal }) => {
                   const Icon = link.icon;
                   return (
                     <motion.a
-                      key={link.name}
+                      key={link.id}
                       href={link.href}
                       onClick={(e) => handleLinkClick(e, link.href)}
                       initial={prefersReduced ? false : { opacity: 0, y: 12 }}

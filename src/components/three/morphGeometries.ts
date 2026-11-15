@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
-export type MorphStateId = 'proxmox' | 'databricks' | 'k3s' | 'fituc';
+export type MorphStateId = 'core' | 'stream' | 'cluster' | 'mesh';
 
-export const MORPH_STATES: MorphStateId[] = ['proxmox', 'databricks', 'k3s', 'fituc'];
+export const MORPH_STATES: MorphStateId[] = ['core', 'stream', 'cluster', 'mesh'];
 
 export interface LotusPetalAssembly {
   lotusGroup: THREE.Group;

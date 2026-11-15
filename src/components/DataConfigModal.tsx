@@ -15,7 +15,7 @@ const schemaTabs: Array<{
 }> = [
   { id: 'overview', label: 'Schema Overview', icon: Layers },
   { id: 'json', label: 'Raw JSON', icon: Code2 },
-  { id: 'instructions', label: 'How to Edit', icon: FileText },
+  { id: 'instructions', label: 'How to Customize', icon: FileText },
 ];
 
 export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClose }) => {
@@ -107,7 +107,7 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
                   Portfolio &amp; Resume Data Source
                 </h2>
                 <p className="text-xs text-zinc-400 mt-1">
-                  All sections, experience bullets, projects, Proxmox evolution, academics, and the generated PDF resume read from one JSON file.
+                  All section copy, projects, experience bullets, infrastructure notes, academics, and the generated PDF resume read dynamically from JSON (with CSV fallback).
                 </p>
               </div>
 
@@ -183,49 +183,49 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
                 <div className="grid md:grid-cols-2 gap-4 text-xs">
                   <div className="p-4 rounded-xl glass-panel-subtle">
                     <div className="font-mono font-semibold text-zinc-100 mb-1.5">
-                      profile &amp; hero
+                      profile, hero &amp; media.icons
                     </div>
                     <p className="text-zinc-400 leading-relaxed mb-2.5">
-                      Controls headline, summary lead, metrics strip, verified phone/email, LinkedIn URL, and domains (diivvansh.com, fiorejoy.com).
+                      Controls identity, summary/resumeSummary, links, sections, and global icon overrides via <code className="text-zinc-200">media.icons</code> or <code className="text-zinc-200">icon_overrides.csv</code> (local <code className="text-zinc-200">/images/...</code> or <code className="text-zinc-200">https://</code> URLs).
                     </p>
                     <code className="text-cyan-400 font-mono text-[11px]">
-                      portfolio.json → profile · hero
+                      portfolio.json → profile · media.icons · sections
                     </code>
                   </div>
 
                   <div className="p-4 rounded-xl glass-panel-subtle">
                     <div className="font-mono font-semibold text-zinc-100 mb-1.5">
-                      experience &amp; education
+                      Projects, Experience &amp; progressGallery
                     </div>
                     <p className="text-zinc-400 leading-relaxed mb-2.5">
-                      Covers Daimler Truck, Udayan Care, STMicroelectronics, Multiplier, IIT Delhi, Goalkeep, plus MIT &amp; CBSE schools and certificates.
+                      Set <code className="text-zinc-200">id</code>, <code className="text-zinc-200">status</code>, and <code className="text-zinc-200">priority</code> per item. Link dated milestone photos &amp; ideation notes in <code className="text-zinc-200">progressGallery</code> or <code className="text-zinc-200">progress_gallery.csv</code> via <code className="text-zinc-200">itemId</code>.
                     </p>
                     <code className="text-cyan-400 font-mono text-[11px]">
-                      portfolio.json → experience · education · certificates
+                      portfolio.json → realWorldProjects · experience · progressGallery
                     </code>
                   </div>
 
                   <div className="p-4 rounded-xl glass-panel-subtle">
                     <div className="font-mono font-semibold text-zinc-100 mb-1.5">
-                      realWorldProjects &amp; otherProjects
+                      Skills, Academics &amp; Credentials
                     </div>
                     <p className="text-zinc-400 leading-relaxed mb-2.5">
-                      Flagship systems (FiT-UC, DTICI Databricks App, K3s NGINX LB, Fiorejoy, AvignaTattva, PokeRoyale) and open-source coursework builds.
+                      Drives skill icon tiles (auto-resolved through <code className="text-zinc-200">MediaRegistry</code>), categorized stacks, degrees, and certificates with optional logos &amp; links.
                     </p>
                     <code className="text-cyan-400 font-mono text-[11px]">
-                      portfolio.json → realWorldProjects · otherProjects
+                      portfolio.json → skills · education · certificates
                     </code>
                   </div>
 
                   <div className="p-4 rounded-xl glass-panel-subtle">
                     <div className="font-mono font-semibold text-zinc-100 mb-1.5">
-                      homelab &amp; skills
+                      Split 1-Page Resume vs Full CV Engine
                     </div>
                     <p className="text-zinc-400 leading-relaxed mb-2.5">
-                      Captures the bare-metal Debian/Kali/Alpine → 3-node Proxmox HA + PBS → consolidated PVE 8 &amp; K3s evolution, plus skill groups, languages, and interests.
+                      Generates strictly linear ATS PDFs at <code className="text-zinc-200">/api/resume.pdf</code> (1-page executive) and <code className="text-zinc-200">/api/cv.pdf</code> (full archive) with live ATS Health Checks.
                     </p>
                     <code className="text-cyan-400 font-mono text-[11px]">
-                      portfolio.json → homelab · skills
+                      portfolio.json → cv · /api/resume.pdf · /api/cv.pdf
                     </code>
                   </div>
                 </div>
@@ -248,17 +248,20 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
               {activeTab === 'instructions' && (
                 <div className="p-5 rounded-xl glass-panel-subtle space-y-3 text-xs text-zinc-300 leading-relaxed">
                   <h4 className="font-display font-bold text-sm text-zinc-100">
-                    Editing Content &amp; Updating the CV
+                    Customizing Your Clone &amp; Updating the CV
                   </h4>
                   <ol className="list-decimal pl-5 space-y-2 text-zinc-400">
                     <li>
-                      Open <code className="text-cyan-400 font-mono">public/data/portfolio.json</code> to edit any copy, project, experience item, academic score, or skill category.
+                      Copy <code className="text-cyan-400 font-mono">public/data/portfolio.example.json</code> over <code className="text-cyan-400 font-mono">public/data/portfolio.json</code> (or edit CSVs in <code className="text-cyan-400 font-mono">public/data/*.csv</code>).
                     </li>
                     <li>
-                      Every website section and the server-generated <code className="text-cyan-400 font-mono">/api/cv.pdf</code> download pull directly from this single JSON file.
+                      Swap any brand, tech stack, hardware, or company logo in <code className="text-cyan-400 font-mono">media.icons</code> (or <code className="text-cyan-400 font-mono">icon_overrides.csv</code>) using local paths (<code className="text-zinc-200 font-mono">/images/...</code>) or external <code className="text-zinc-200 font-mono">https://</code> CDN URLs.
                     </li>
                     <li>
-                      Type safety is declared in <code className="text-zinc-200 font-mono">src/types.ts</code> under <code className="text-zinc-200 font-mono">PortfolioData</code>.
+                      Attach progress timeline photos &amp; ideation notes via <code className="text-cyan-400 font-mono">progressGallery</code> / <code className="text-cyan-400 font-mono">progress_gallery.csv</code> matched to each project or role <code className="text-zinc-200 font-mono">itemId</code>.
+                    </li>
+                    <li>
+                      Run <code className="text-cyan-400 font-mono">npm run generate-cv</code> to emit both your 1-page <code className="text-zinc-200 font-mono">_Resume.pdf</code> and full <code className="text-zinc-200 font-mono">_CV.pdf</code> into <code className="text-cyan-400 font-mono">public/</code>, or serve live via <code className="text-cyan-400 font-mono">/api/resume.pdf</code> &amp; <code className="text-cyan-400 font-mono">/api/cv.pdf</code>.
                     </li>
                   </ol>
                 </div>

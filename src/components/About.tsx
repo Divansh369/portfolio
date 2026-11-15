@@ -2,7 +2,10 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   Briefcase,
+  Code2,
   Compass,
+  Database,
+  Globe,
   GraduationCap,
   HeartHandshake,
   Server,
@@ -12,12 +15,51 @@ import {
 import GlassCard from './motion/GlassCard';
 import SplitText from './motion/SplitText';
 
+interface AboutFact {
+  label: string;
+  value: string;
+  icon?: string;
+}
+
 interface AboutProps {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  facts?: AboutFact[];
   bio: string[];
   interests?: string[];
 }
 
-export const About: React.FC<AboutProps> = ({ bio, interests }) => {
+const getFactIcon = (iconKey?: string) => {
+  switch ((iconKey || '').toLowerCase()) {
+    case 'briefcase':
+      return Briefcase;
+    case 'truck':
+      return Truck;
+    case 'heart':
+      return HeartHandshake;
+    case 'server':
+      return Server;
+    case 'graduation':
+      return GraduationCap;
+    case 'database':
+      return Database;
+    case 'code':
+      return Code2;
+    case 'globe':
+    default:
+      return Globe;
+  }
+};
+
+export const About: React.FC<AboutProps> = ({
+  eyebrow = 'Background',
+  title = 'Engineering Approach & Focus',
+  subtitle = 'Building reliable software, distributed systems, and practical infrastructure end-to-end.',
+  facts = [],
+  bio,
+  interests,
+}) => {
   const prefersReduced = useReducedMotion();
 
   return (
@@ -27,61 +69,36 @@ export const About: React.FC<AboutProps> = ({ bio, interests }) => {
         <div className="lg:col-span-5">
           <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
             <User className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Background</span>
+            <span>{eyebrow}</span>
           </span>
           <SplitText
             as="h2"
-            text="Engineering Across Fleet Data, Apps & Linux"
+            text={title}
             stagger={0.04}
             className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-zinc-50 mb-4 block"
           />
           <p className="text-sm text-zinc-400 leading-relaxed mb-8">
-            Day-to-day focus on Databricks data pipelines and fleet data software, paired with solo non-profit product delivery and hands-on Proxmox virtualization.
+            {subtitle}
           </p>
 
-          <GlassCard tilt={true} spotlight={true} brackets={true} className="p-6">
-            <dl className="divide-y divide-white/[0.07] text-xs font-mono">
-              <div className="py-2.5 flex justify-between items-center gap-4">
-                <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                  <Briefcase className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                  <span>Current Role</span>
-                </dt>
-                <dd className="text-zinc-100 font-semibold text-right">
-                  Software Engineer · Daimler Truck
-                </dd>
-              </div>
-              <div className="py-2.5 flex justify-between items-center gap-4">
-                <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                  <Truck className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                  <span>Fleet Scale</span>
-                </dt>
-                <dd className="text-zinc-200 tabular-nums text-right">
-                  ~70,000 Connected Trucks
-                </dd>
-              </div>
-              <div className="py-2.5 flex justify-between items-center gap-4">
-                <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                  <HeartHandshake className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                  <span>Volunteering</span>
-                </dt>
-                <dd className="text-zinc-200 text-right">Udayan Care (FiT-UC Lead)</dd>
-              </div>
-              <div className="py-2.5 flex justify-between items-center gap-4">
-                <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                  <Server className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                  <span>Infrastructure</span>
-                </dt>
-                <dd className="text-zinc-200 text-right">Proxmox VE 8 · LXC · K3s</dd>
-              </div>
-              <div className="py-2.5 flex justify-between items-center gap-4">
-                <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                  <GraduationCap className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                  <span>Degree</span>
-                </dt>
-                <dd className="text-zinc-200 text-right">B.Tech Data Science · MIT Manipal</dd>
-              </div>
-            </dl>
-          </GlassCard>
+          {facts.length > 0 && (
+            <GlassCard tilt={true} spotlight={true} brackets={true} className="p-6">
+              <dl className="divide-y divide-white/[0.07] text-xs font-mono">
+                {facts.map((fact) => {
+                  const FactIcon = getFactIcon(fact.icon);
+                  return (
+                    <div key={fact.label} className="py-2.5 flex justify-between items-center gap-4">
+                      <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
+                        <FactIcon className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
+                        <span>{fact.label}</span>
+                      </dt>
+                      <dd className="text-zinc-100 font-semibold text-right">{fact.value}</dd>
+                    </div>
+                  );
+                })}
+              </dl>
+            </GlassCard>
+          )}
 
           {interests && interests.length > 0 && (
             <div className="mt-6 pt-5 border-t border-white/[0.08] text-xs font-mono text-zinc-400">

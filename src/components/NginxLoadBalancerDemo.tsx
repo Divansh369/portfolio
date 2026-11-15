@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Activity, Network, Plus, Send, Server, Zap } from 'lucide-react';
 import FloodButton from './motion/FloodButton';
 import TextScramble from './motion/TextScramble';
+import { LoadBalancerDemoConfig } from '../types';
 
 interface Pod {
   id: string;
@@ -20,75 +21,94 @@ interface DispatchLog {
   policyNote: string;
 }
 
-const PODS: Pod[] = [
+const DEFAULT_PODS: Pod[] = [
   {
     id: 'w1',
     name: 'nginx-ha-prod-7d4f9b-w1',
     internalIp: '10.42.1.24',
-    node: 'k3s-worker-01',
+    node: 'worker-01',
   },
   {
     id: 'w2',
     name: 'nginx-ha-prod-8f2c1a-w2',
     internalIp: '10.42.2.18',
-    node: 'k3s-worker-02',
+    node: 'worker-02',
   },
   {
     id: 'w3',
     name: 'nginx-ha-prod-9a5e3d-w3',
     internalIp: '10.42.1.31',
-    node: 'k3s-worker-03',
+    node: 'worker-03',
   },
 ];
 
-export const NginxLoadBalancerDemo: React.FC = () => {
+interface NginxLoadBalancerDemoProps {
+  config?: LoadBalancerDemoConfig;
+}
+
+export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ config }) => {
+  const pods = useMemo(
+    () => (config?.pods && config.pods.length > 0 ? config.pods : DEFAULT_PODS),
+    [config]
+  );
+
+  const eyebrow = config?.eyebrow || 'Interactive Simulator · K8s + MetalLB + Ingress';
+  const title = config?.title || 'HA NGINX Load Balancer Request Routing';
+  const description =
+    config?.description ||
+    'Demonstrates how client sessions and separate browser tabs hit a cluster virtual IP and rotate across replica pods with distinct internal pod names and IPs.';
+  const vipAddress = config?.vipAddress || '192.168.1.180';
+  const protocol = config?.protocol || 'HTTP/2 TLS';
+  const controller = config?.controller || 'Ingress Proxy';
+  const endpointPath = config?.endpointPath || '/api/whoami';
+
   const [activePodIndex, setActivePodIndex] = useState<number>(0);
   const [clientTab, setClientTab] = useState<string>('browser-tab-alpha');
   const [tabCounter, setTabCounter] = useState<number>(1);
   const [pulseSeq, setPulseSeq] = useState<number>(0);
   const [podRequestCounts, setPodRequestCounts] = useState<{ [key: string]: number }>({
-    w1: 18,
-    w2: 19,
-    w3: 17,
+    [pods[0]?.id || 'w1']: 18,
+    [pods[1]?.id || 'w2']: 19,
+    [pods[2]?.id || 'w3']: 17,
   });
   const [dispatchLogs, setDispatchLogs] = useState<DispatchLog[]>([
     {
       id: 'log-3',
       timestamp: '16:04:12',
       clientTab: 'browser-tab-alpha',
-      podName: 'nginx-ha-prod-9a5e3d-w3',
-      internalIp: '10.42.1.31',
+      podName: pods[2]?.name || pods[0].name,
+      internalIp: pods[2]?.internalIp || pods[0].internalIp,
       policyNote: 'Round-Robin Hop',
     },
     {
       id: 'log-2',
       timestamp: '16:03:58',
       clientTab: 'browser-tab-beta',
-      podName: 'nginx-ha-prod-8f2c1a-w2',
-      internalIp: '10.42.2.18',
+      podName: pods[1]?.name || pods[0].name,
+      internalIp: pods[1]?.internalIp || pods[0].internalIp,
       policyNote: 'New Tab Session',
     },
     {
       id: 'log-1',
       timestamp: '16:03:40',
       clientTab: 'browser-tab-alpha',
-      podName: 'nginx-ha-prod-7d4f9b-w1',
-      internalIp: '10.42.1.24',
+      podName: pods[0].name,
+      internalIp: pods[0].internalIp,
       policyNote: 'Round-Robin Hop',
     },
   ]);
   const [isDispatching, setIsDispatching] = useState<boolean>(false);
   const prefersReduced = useReducedMotion();
 
-  const activePod = PODS[activePodIndex];
+  const activePod = pods[activePodIndex] || pods[0];
   const totalRequests = Object.values(podRequestCounts).reduce((a, b) => a + b, 0);
 
   const dispatchRequest = (specificTab?: string, reason = 'Round-Robin Hop') => {
     setIsDispatching(true);
     setPulseSeq((s) => s + 1);
     const targetTab = specificTab || clientTab;
-    const nextIndex = (activePodIndex + 1) % PODS.length;
-    const targetPod = PODS[nextIndex];
+    const nextIndex = (activePodIndex + 1) % pods.length;
+    const targetPod = pods[nextIndex];
     const now = new Date();
     const timeStr = now.toTimeString().split(' ')[0];
 
@@ -142,19 +162,19 @@ export const NginxLoadBalancerDemo: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 mb-1.5">
             <Network className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Interactive Simulator · Proxmox K3s + MetalLB + Traefik</span>
+            <span>{eyebrow}</span>
           </div>
           <h3 className="font-display font-bold text-xl text-zinc-50">
-            HA NGINX Load Balancer Request Routing
+            {title}
           </h3>
           <p className="text-xs sm:text-sm text-zinc-400 mt-1.5 max-w-2xl leading-relaxed">
-            Reproduces how client sessions and separate browser tabs hit the MetalLB VIP and get rotated across 3 NGINX pod replicas with distinct internal pod names and IPs.
+            {description}
           </p>
         </div>
 
         <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-200 whitespace-nowrap shrink-0">
           <Server className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
-          <span>3 / 3 Replicas Configured</span>
+          <span>{pods.length} / {pods.length} Replicas Configured</span>
         </div>
       </div>
 
@@ -198,9 +218,9 @@ export const NginxLoadBalancerDemo: React.FC = () => {
         </div>
       </div>
 
-      {/* Animated Conduit Transit Bus (VIP -> Traefik -> Active Worker Pod) */}
+      {/* Animated Conduit Transit Bus */}
       <div className="px-6 py-3 bg-[#050914]/60 border-b border-white/[0.08] flex items-center justify-between gap-3 text-[11px] font-mono text-zinc-400">
-        <span className="whitespace-nowrap text-zinc-300">VIP 192.168.1.180</span>
+        <span className="whitespace-nowrap text-zinc-300">VIP {vipAddress}</span>
         <div className="relative flex-1 h-4 flex items-center">
           <div className="w-full h-[1px] connector-dash-active" />
           {!prefersReduced && pulseSeq > 0 && (
@@ -225,25 +245,25 @@ export const NginxLoadBalancerDemo: React.FC = () => {
           <div>
             <div className="text-xs font-mono text-zinc-400 mb-1">01 · Ingress VIP</div>
             <div className="font-display text-sm font-bold text-zinc-100 mb-4">
-              MetalLB &amp; Traefik
+              {controller}
             </div>
             <dl className="space-y-2 text-xs font-mono">
               <div className="flex justify-between gap-2">
                 <dt className="text-zinc-400">VIP Address</dt>
-                <dd className="text-zinc-100 tabular-nums">192.168.1.180</dd>
+                <dd className="text-zinc-100 tabular-nums">{vipAddress}</dd>
               </div>
               <div className="flex justify-between gap-2">
                 <dt className="text-zinc-400">Protocol</dt>
-                <dd className="text-zinc-100">HTTP/2 TLS</dd>
+                <dd className="text-zinc-100">{protocol}</dd>
               </div>
               <div className="flex justify-between gap-2">
                 <dt className="text-zinc-400">Controller</dt>
-                <dd className="text-zinc-100">Traefik Ingress</dd>
+                <dd className="text-zinc-100">{controller}</dd>
               </div>
             </dl>
           </div>
           <div className="mt-5 pt-3 border-t border-white/[0.07] text-xs font-mono text-zinc-400">
-            Endpoint: <span className="text-zinc-200">/api/whoami</span>
+            Endpoint: <span className="text-zinc-200">{endpointPath}</span>
           </div>
         </div>
 
@@ -289,7 +309,7 @@ export const NginxLoadBalancerDemo: React.FC = () => {
             Replica Distribution
           </div>
           <div className="space-y-3">
-            {PODS.map((pod, idx) => {
+            {pods.map((pod, idx) => {
               const count = podRequestCounts[pod.id] || 0;
               const pct = totalRequests > 0 ? Math.round((count / totalRequests) * 100) : 33;
               const isActive = activePodIndex === idx;

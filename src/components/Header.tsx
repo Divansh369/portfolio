@@ -4,9 +4,13 @@ import {
   ArrowRight,
   ArrowUpRight,
   Briefcase,
+  Code2,
+  Database,
   FileText,
   Globe,
   GraduationCap,
+  HeartHandshake,
+  Layers,
   Server,
   Smartphone,
   Truck,
@@ -17,51 +21,91 @@ import SplitText from './motion/SplitText';
 import FloodButton from './motion/FloodButton';
 import CountUp from './motion/CountUp';
 import TextScramble from './motion/TextScramble';
-
-interface Social {
-  name: string;
-  url: string;
-  logos: string;
-}
+import RepoImage from './common/RepoImage';
+import BrandMark from './icons/BrandMarks';
+import { DossierLink, DossierRow, Social } from '../types';
 
 interface HeroMetric {
   value: string;
   label: string;
+  countTo?: number;
+  countSuffix?: string;
 }
 
 interface HeaderProps {
   name: string;
   title: string;
+  location?: string;
+  avatarUrl?: string;
   socials: Social[];
   kicker?: string[];
   headline?: string;
   lead?: string;
+  secondaryAction?: {
+    label: string;
+    href: string;
+  };
+  dossierSubtitle?: string;
+  dossierRows?: DossierRow[];
+  dossierLinks?: DossierLink[];
   metrics?: HeroMetric[];
   onOpenCvModal?: () => void;
 }
 
 const defaultMetrics: HeroMetric[] = [
-  { value: '70,000+', label: 'Trucks in Daily ETL' },
-  { value: 'FastAPI + Spark', label: 'Internal Databricks Apps' },
-  { value: 'Google Play', label: 'Live App for Udayan Care' },
-  { value: 'Proxmox + Linux', label: 'Self-Hosted Lab & K3s' },
+  { value: 'Full-Stack', label: 'Web & Backend Delivery' },
+  { value: 'Data Systems', label: 'Pipelines & Analytics' },
+  { value: 'Open Source', label: 'Shipped Applications' },
+  { value: 'Linux & Cloud', label: 'Self-Hosted Infrastructure' },
 ];
 
 const metricIcons = [Truck, Workflow, Smartphone, Server];
 
+const getDossierIcon = (key?: string) => {
+  switch ((key || '').toLowerCase()) {
+    case 'truck':
+      return Truck;
+    case 'briefcase':
+      return Briefcase;
+    case 'server':
+      return Server;
+    case 'graduation':
+      return GraduationCap;
+    case 'globe':
+      return Globe;
+    case 'database':
+      return Database;
+    case 'code':
+      return Code2;
+    case 'heart':
+      return HeartHandshake;
+    case 'layers':
+      return Layers;
+    case 'workflow':
+    default:
+      return Workflow;
+  }
+};
+
 export const Header: React.FC<HeaderProps> = ({
-  name = 'Divansh Prasad',
+  name = 'Developer Portfolio',
+  title = 'Software Engineer',
+  location,
+  avatarUrl = './images/profile.jpg',
   socials,
-  kicker = ['Software Engineer', 'Daimler Truck (DTICI)', 'Bengaluru'],
-  headline = 'Software Engineer building data systems and backend apps.',
-  lead = 'At Daimler Truck, I work on Databricks ETL for 70,000+ trucks, FastAPI web apps, and automated OTA data workflows. I also build Flutter apps for non-profits and run my own Proxmox and Linux lab.',
+  kicker = ['Software Engineer', 'Systems & Applications'],
+  headline = 'Software Engineer building scalable data systems and applications.',
+  lead = 'Designing production APIs, distributed data pipelines, cross-platform applications, and resilient Linux infrastructure.',
+  secondaryAction,
+  dossierSubtitle,
+  dossierRows,
+  dossierLinks = [],
   metrics = defaultMetrics,
   onOpenCvModal,
 }) => {
   const heroRef = useRef<HTMLElement>(null);
   const prefersReduced = useReducedMotion();
 
-  // Multi-layer 3D depth recede & subtle vertical parallax split as the hero leaves viewport
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
@@ -71,6 +115,29 @@ export const Header: React.FC<HeaderProps> = ({
   const depthOpacity = useTransform(scrollYProgress, [0, 0.85, 1], [1, 0.92, 0.5]);
   const leftParallaxY = useTransform(scrollYProgress, [0, 1], [0, -10]);
   const cardParallaxY = useTransform(scrollYProgress, [0, 1], [0, -28]);
+
+  const initials =
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((part) => part[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase() || 'PF';
+
+  const resolvedSubtitle =
+    dossierSubtitle || (location ? `${title} · ${location}` : title);
+
+  const effectiveDossierRows: DossierRow[] =
+    dossierRows && dossierRows.length > 0
+      ? dossierRows
+      : [
+          { label: 'Role', value: title, icon: 'briefcase' },
+          ...(location ? [{ label: 'Location', value: location, icon: 'globe' }] : []),
+          ...(kicker.length > 0
+            ? [{ label: 'Focus', value: kicker.join(' · '), icon: 'workflow' }]
+            : []),
+        ];
 
   return (
     <section
@@ -98,7 +165,7 @@ export const Header: React.FC<HeaderProps> = ({
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               >
                 {kicker.map((item, idx) => (
-                  <React.Fragment key={item}>
+                  <React.Fragment key={`${item}-${idx}`}>
                     {idx > 0 && (
                       <span className="text-zinc-600" aria-hidden="true">
                         ·
@@ -161,42 +228,53 @@ export const Header: React.FC<HeaderProps> = ({
                   />
                 </FloodButton>
 
-                <FloodButton
-                  href="#homelab"
-                  variant="ghost"
-                  className="px-5 py-2.5 min-h-[44px] text-sm font-medium"
-                >
-                  <Server
-                    className="w-3.5 h-3.5 text-zinc-400 group-hover:text-cyan-400 transition-colors"
-                    aria-hidden="true"
-                  />
-                  <span>Proxmox Story</span>
-                </FloodButton>
+                {secondaryAction && (
+                  <FloodButton
+                    href={secondaryAction.href}
+                    variant="ghost"
+                    className="px-5 py-2.5 min-h-[44px] text-sm font-medium"
+                  >
+                    <Server
+                      className="w-3.5 h-3.5 text-zinc-400 group-hover:text-cyan-400 transition-colors"
+                      aria-hidden="true"
+                    />
+                    <span>{secondaryAction.label}</span>
+                  </FloodButton>
+                )}
               </div>
 
-              {/* Unboxed Social Links */}
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-mono text-zinc-500">
-                {socials.map((social, idx) => (
-                  <React.Fragment key={social.name}>
-                    {idx > 0 && (
-                      <span className="text-zinc-700" aria-hidden="true">
-                        ·
-                      </span>
-                    )}
+              {/* Social Contact Links with Repo Icons & Brand SVG Fallbacks */}
+              <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono">
+                {socials.map((social) => {
+                  const isMail = social.url.startsWith('mailto:');
+                  return (
                     <a
+                      key={social.name}
                       href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group/link inline-flex items-center gap-1 text-zinc-400 hover:text-cyan-300 transition-colors py-1"
+                      target={isMail ? undefined : '_blank'}
+                      rel={isMail ? undefined : 'noopener noreferrer'}
+                      className="group/link inline-flex items-center gap-2 px-3 py-1.5 rounded-xl glass-panel-subtle glass-panel-hover text-zinc-300 hover:text-cyan-200 transition-all"
                     >
+                      <RepoImage
+                        src={social.logos}
+                        alt={social.name}
+                        className="w-4 h-4 rounded-[3px] shrink-0"
+                        imgClassName="w-full h-full object-contain rounded-[3px]"
+                        fallback={
+                          <BrandMark
+                            brand={social.name}
+                            className="w-4 h-4 text-zinc-300 group-hover/link:text-cyan-300 transition-colors"
+                          />
+                        }
+                      />
                       <span>{social.name}</span>
                       <ArrowUpRight
-                        className="w-3 h-3 text-zinc-600 group-hover/link:text-cyan-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform"
+                        className="w-3 h-3 text-zinc-500 group-hover/link:text-cyan-400 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform"
                         aria-hidden="true"
                       />
                     </a>
-                  </React.Fragment>
-                ))}
+                  );
+                })}
               </div>
             </motion.div>
           </motion.div>
@@ -218,100 +296,73 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <div>
                 <div className="flex items-center gap-4 pb-5 border-b border-white/[0.08]">
-                  <div
-                    className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/25 via-cyan-500/15 to-slate-900/80 border border-cyan-400/25 flex items-center justify-center font-display font-bold text-base text-cyan-300 shrink-0 tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
-                    aria-hidden="true"
-                  >
-                    DP
-                  </div>
+                  <RepoImage
+                    src={avatarUrl || './images/profile.jpg'}
+                    alt={name}
+                    loading="eager"
+                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/25 via-cyan-500/15 to-slate-900/80 border border-cyan-400/35 shrink-0 shadow-[0_10px_28px_-12px_rgba(34,211,238,0.45),inset_0_1px_0_rgba(255,255,255,0.2)]"
+                    imgClassName="w-full h-full object-cover"
+                    fallback={
+                      <span className="font-display font-bold text-lg text-cyan-300 tracking-tight">
+                        {initials}
+                      </span>
+                    }
+                  />
                   <div className="min-w-0">
                     <h2 className="font-display font-bold text-lg text-zinc-50 truncate">{name}</h2>
-                    <p className="text-xs text-zinc-400 truncate">
-                      Software Engineer · Daimler Truck, Bengaluru
-                    </p>
+                    <p className="text-xs text-zinc-400 truncate">{resolvedSubtitle}</p>
                   </div>
                 </div>
 
                 {/* Crisp Specification Rows with Functional Icons */}
                 <dl className="mt-4 divide-y divide-white/[0.07] text-xs">
-                  <div className="py-3 flex justify-between items-center gap-4">
-                    <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                      <Workflow className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                      <span>Focus</span>
-                    </dt>
-                    <dd className="font-mono text-zinc-100 text-right">
-                      Databricks ETL · FastAPI · Flutter
-                    </dd>
-                  </div>
-                  <div className="py-3 flex justify-between items-center gap-4">
-                    <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                      <Truck className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                      <span>Production Scale</span>
-                    </dt>
-                    <dd className="font-mono text-zinc-100 tabular-nums text-right">
-                      <CountUp to={70000} prefix="~" suffix=" Connected Trucks" duration={1.1} />
-                    </dd>
-                  </div>
-                  <div className="py-3 flex justify-between items-center gap-4">
-                    <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                      <Briefcase className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                      <span>Background</span>
-                    </dt>
-                    <dd className="font-mono text-zinc-100 text-right">
-                      1+ Yr Full-Time · 4 Internships
-                    </dd>
-                  </div>
-                  <div className="py-3 flex justify-between items-center gap-4">
-                    <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                      <Server className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                      <span>Infrastructure</span>
-                    </dt>
-                    <dd className="font-mono text-zinc-100 text-right">
-                      Proxmox VE · Linux · Docker · K3s
-                    </dd>
-                  </div>
-                  <div className="py-3 flex justify-between items-center gap-4">
-                    <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                      <GraduationCap className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                      <span>Education</span>
-                    </dt>
-                    <dd className="font-mono text-zinc-100 text-right">
-                      B.Tech Data Science · MIT Manipal
-                    </dd>
-                  </div>
-                  <div className="py-3 flex justify-between items-center gap-4">
-                    <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                      <Globe className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-                      <span>Live Apps &amp; Web</span>
-                    </dt>
-                    <dd className="font-mono text-zinc-200 text-right">
-                      diivvansh.com · fiorejoy.com
-                    </dd>
-                  </div>
+                  {effectiveDossierRows.map((row) => {
+                    const RowIcon = getDossierIcon(row.icon);
+                    return (
+                      <div key={row.label} className="py-3 flex justify-between items-center gap-4">
+                        <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
+                          <RowIcon className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
+                          <span>{row.label}</span>
+                        </dt>
+                        <dd className="font-mono text-zinc-100 text-right tabular-nums">
+                          {typeof row.countTo === 'number' ? (
+                            <CountUp
+                              to={row.countTo}
+                              prefix={row.countPrefix || ''}
+                              suffix={row.countSuffix || ''}
+                              duration={1.1}
+                            />
+                          ) : (
+                            row.value
+                          )}
+                        </dd>
+                      </div>
+                    );
+                  })}
                 </dl>
               </div>
 
               {/* Footer Action Links with Hover Scramble Resolve */}
-              <div className="mt-4 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono">
-                <a
-                  href="https://pve.diivvansh.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-zinc-400 hover:text-zinc-100 transition-colors inline-flex items-center gap-1"
-                >
-                  <TextScramble text="pve.diivvansh.com" trigger="hover" durationMs={320} />
-                  <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-                </a>
-                <a
-                  href="https://udayan.diivvansh.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1 pr-2"
-                >
-                  <TextScramble text="udayan.diivvansh.com" trigger="hover" durationMs={320} />
-                  <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-                </a>
-              </div>
+              {dossierLinks.length > 0 && (
+                <div className="mt-4 pt-4 border-t border-white/[0.08] flex items-center justify-between gap-2 text-xs font-mono">
+                  {dossierLinks.map((link, idx) => (
+                    <a
+                      key={link.label}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`transition-colors inline-flex items-center gap-1 ${
+                        idx === dossierLinks.length - 1
+                          ? 'text-cyan-400 hover:text-cyan-300 pr-2'
+                          : 'text-zinc-400 hover:text-zinc-100'
+                      }`}
+                    >
+                      <TextScramble text={link.label} trigger="hover" durationMs={320} />
+                      <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                    </a>
+                  ))}
+                </div>
+              )}
             </GlassCard>
           </motion.div>
         </div>
@@ -320,11 +371,10 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="mt-14 pt-8 border-t border-white/[0.08] grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
           {metrics.map((metric, idx) => {
             const Icon = metricIcons[idx % metricIcons.length];
-            const isTruckMetric = metric.value.trim().startsWith('70,000');
 
             return (
               <motion.div
-                key={idx}
+                key={`${metric.label}-${idx}`}
                 initial={prefersReduced ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -339,8 +389,12 @@ export const Header: React.FC<HeaderProps> = ({
                   <Icon className="w-4 h-4 text-cyan-400/80 shrink-0" aria-hidden="true" />
                 </div>
                 <div className="text-xl sm:text-2xl font-bold font-display text-zinc-50 tabular-nums tracking-tight">
-                  {isTruckMetric ? (
-                    <CountUp to={70000} suffix="+" duration={1.15} />
+                  {typeof metric.countTo === 'number' ? (
+                    <CountUp
+                      to={metric.countTo}
+                      suffix={metric.countSuffix || ''}
+                      duration={1.15}
+                    />
                   ) : (
                     metric.value
                   )}

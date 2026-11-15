@@ -48,17 +48,17 @@ const CAMERA_PRESETS: Record<CameraPreset, [number, number, number]> = {
 };
 
 const MODE_BASE_BLOOM: Record<MorphStateId, number> = {
-  proxmox: 0.06,
-  databricks: 0.38,
-  k3s: 0.72,
-  fituc: 1.0,
+  core: 0.06,
+  stream: 0.38,
+  cluster: 0.72,
+  mesh: 1.0,
 };
 
 const MODE_ACCENTS: Record<MorphStateId, string> = {
-  proxmox: '#f472b6', // Rose Pink
-  databricks: '#ec4899', // Magenta Pink
-  k3s: '#39ff14', // Neon Green accent
-  fituc: '#f9a8d4', // Baby Pink
+  core: '#f472b6', // Rose Pink
+  stream: '#ec4899', // Magenta Pink
+  cluster: '#39ff14', // Neon Green accent
+  mesh: '#f9a8d4', // Baby Pink
 };
 
 function detectSoftwareGl(): boolean {
@@ -108,7 +108,7 @@ export class MorphSceneController {
   private rayProxyMesh: THREE.Mesh;
   private disposables: Array<{ dispose: () => void }> = [];
 
-  private activeState: MorphStateId = 'proxmox';
+  private activeState: MorphStateId = 'core';
   private wireframeVisible = false;
   private autoCycle = true;
   private reducedMotion = false;
@@ -116,10 +116,10 @@ export class MorphSceneController {
   private disposed = false;
 
   // Unified Bloom / Unfold Slider State (0.0 = closed bud, 1.0 = full blossom)
-  private currentExploded = MODE_BASE_BLOOM.proxmox;
-  private targetExploded = MODE_BASE_BLOOM.proxmox;
+  private currentExploded = MODE_BASE_BLOOM.core;
+  private targetExploded = MODE_BASE_BLOOM.core;
 
-  // Architecture weights [databricks, k3s, fituc]
+  // Architecture weights [stream, cluster, mesh]
   private currentWeights = [0, 0, 0];
   private targetWeights = [0, 0, 0];
   private morphPulse = 0;

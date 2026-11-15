@@ -1,115 +1,128 @@
-# Holographic Cyber-Physical 3D Telemetry Models & Kinetic Portfolio Experience
+# Modular Media, Split Resume / CV Engine & Progress Gallery
 
-Elevate Divansh Prasad's developer portfolio from abstract geometric forms to distinctive **holographic cyber-physical telemetry nodes with floating stream ribbons**, paired with an **interactive exploded-view slider**, **cursor-driven 3D card tilt & magnetic hover**, and **scroll-driven kinetic timeline progress animations**.
-
----
+Upgrade the portfolio and PDF engine across three cohesive tracks: universal local/external media and icon interchangeability, splitting the single-document generator into an ATS-optimized 1-page Resume and full multi-page CV backed by a live ATS health checker, and adding an animated milestone progress gallery across all projects and work experience entries.
 
 ## User Review & Critical Decisions
 
 > [!IMPORTANT]
-> Based on your confirmed choices in the interactive interview:
-> - **3D Architecture Theme**: Holographic cyber-physical telemetry nodes featuring floating dynamic stream ribbons, glowing circuit traces, and architectural hardware frames (Server Quorum, Telemetry Flute, and Edge Pods) rather than smooth abstract white blobs.
-> - **Interactive Exploded-View Slider**: Added to the bottom control dock, allowing you to drag or slide to separate outer chassis, holographic core manifolds, optic rings, and floating telemetry ribbons into layered exploded tiers.
-> - **Card Motion & Depth**: High-performance CSS 3D perspective tilt (`rotateX`, `rotateY`, and pointer-following highlight glare) on hover across all project showcase cards with zero layout jitter.
-> - **Scroll-Driven Kinetic Timeline**: Continuous SVG timeline progress rail running through the Proxmox evolution and Career history sections with kinetic glow that advances as you scroll.
+> All four architectural choices below reflect your confirmed preferences from Phase 1 and will govern the build once approved.
+
+- **Progress Gallery Relational Linking**: Store all milestones in a flat top-level `progressGallery` collection (backed by both `portfolio.json` and `progress_gallery.csv`) linked to any project or experience entry via `itemId`, keeping core project and job definitions clean and scannable.
+- **Resume vs. CV Split**: Provide a segmented mode toggle inside the document modal switching between **Resume (1-Page)** and **Curriculum Vitae (Full)**, paired with dedicated `/api/resume.pdf` and `/api/cv.pdf` endpoints and distinct downloaded filenames.
+- **Enhancv ATS Remediation & Audit Panel**: Diversify repeated action verbs (eliminating 6x *"automated"* repetition), fix PDF linear text-stream extraction and LinkedIn link recognition (targeting ~100% ATS parse rate), annotate unquantified older bullets with clear metric prompts, and render a live **ATS Readability & Impact Check** drawer inside the modal.
+- **Gallery Placeholders Before Media Upload**: Render technical blueprint wireframe cards displaying the milestone date, phase classification, idea summary, and exact drop-in asset path / `itemId` hint whenever a screenshot URL is not yet populated.
 
 ---
 
 ## 1. Overview & Core Concept
 
-- **What It Does**: Replaces the abstract parametric superellipsoid with 4 custom multi-part cyber-physical holographic telemetry rigs representing Divansh's real work:
-  1. **Proxmox Hypervisor Core**: Machined rack chassis with hot-swap blade carriers, glowing Corosync heartbeat ribbon, and holographic LXC container nodes.
-  2. **Databricks Fleet Stream Pipeline**: High-throughput telemetry collector toroid with helical particle ribbons representing streaming OTA data from ~70,000 trucks.
-  3. **K3s HA Quorum Manifold**: Hexagonal staggered cluster ring with 3 master control-plane prisms and 3 worker ingress pods linked by dynamic bezier stream ribbons.
-  4. **FiT-UC Mobile Mesh**: Dual-concentric resonant harmonic rings with floating NGO notification relays and Gotify crisis signal pulses.
-- **Target Audience**: Technical recruiters, engineering managers, and distributed systems leads evaluating Divansh's deep hardware/software craftsmanship.
-- **Key Value**: Directly communicates systems architecture depth through interactive, physically responsive 3D WebGL without generic stock models or AI clichés.
+- **What It Delivers**:
+  1. **Interchangeable Media & Icons**: Every photo, project thumbnail, company emblem, college crest, hardware mark, and skill/tool icon accepts either a local asset path or an external `https://` URL via centralized config overrides, with resilient vector fallbacks.
+  2. **Dedicated Resume vs. CV Documents**: Visitors and recruiters can inspect, print, copy links for, and download either a concise **1-page Resume** (engineered for fast recruiter scans and high ATS score) or the full **Multi-Page CV** (including complete work history, open-source labs, homelab evolution, certifications, and interests).
+  3. **Live ATS Audit Inspector**: An interactive quality panel evaluates bullet impact quantification, verb variety, essential section detection, contact metadata completeness (including explicit LinkedIn URI), and PDF size/parseability.
+  4. **Project & Career Progress Gallery**: An animated darkroom timeline viewer attached to every project and work experience item, chronicling *when* each iteration happened and *what idea* drove the transition from prototype to production.
+- **Target Audience**: Hiring managers, technical recruiters, ATS parsers (Workday, Greenhouse, Lever, Enhancv), and fellow engineers reviewing architectural growth across projects—plus any developer who clones the template to swap data without touching application logic.
 
 ---
 
 ## 2. User Experience & Visual Design
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│  [ Minimal State Readout: K3S QUORUM · 3 MASTERS + 3 WORKERS ]         │
-│                                                                        │
-│                    3D CYBER-PHYSICAL VIEWPORT                          │
-│               Holographic Telemetry Core + Flow Ribbons                │
-│                                                                        │
-│               [ ▾ Collapse / Expand Controls (Hotkey: H) ]             │
-│  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │  [Proxmox] [Databricks] [K3s] [FiT-UC] │ Exploded: ──●── 45%     │  │
-│  │  Wireframe: ON │ Auto-Morph: OFF │ Views: [Iso] [Front] [Top]    │  │
-│  └──────────────────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────┘
-```
+### Key User Flows
 
-### Visual Identity & Holographic 3D Pipeline
-- **Material Realism**:
-  - Deep obsidian & titanium powdercoat chassis (`roughness: 0.72`, `metalness: 0.35`).
-  - Chamfered titanium armature rings (`metalness: 0.94`, `roughness: 0.38`).
-  - Holographic cyber-physical core manifold extended via `onBeforeCompile` with procedural circuit traces, cyan/blue Fresnel rim, and traveling scan lines.
-  - Floating Tube/Ribbon stream lines (`CatmullRomCurve3` with flowing UV offsets).
-- **Interactive Exploded-View Slider**:
-  - Sleek slider integrated into the collapsible bottom dock ($0\% \to 100\%$).
-  - As the slider advances, the outer housing moves outward along the Y/radial axis, revealing the internal silicon processor core, memory channels, optical bus, and floating ribbons.
-- **Cursor 3D Project Card Tilt**:
-  - Reusable `TiltGlassCard` component tracking local pointer position $(x, y) \in [-1, 1]$.
-  - Calculates subtle 3D rotational tilt (`rotateX`, `rotateY` up to $\pm 6^\circ$, `transformPerspective: 1000`) with dynamic glass sheen highlight glare that follows the mouse.
-- **Scroll-Driven Kinetic Timeline**:
-  - In `Homelab.tsx` and `Experience.tsx`, a continuous SVG spine illuminates and fills with a cyan/cobalt gradient linked to `useScroll({ target: containerRef })`.
-  - Step milestones pulse softly as the viewport scrolls past them.
+1. **Dual Resume / CV Workflow**:
+   - Clicking **Resume / CV** opens the document preview modal.
+   - A frosted segmented control switches instantly between **Resume (1-Page)** and **Curriculum Vitae (Full)** using a spring-animated active pill (`layoutId`), updating the live preview, download endpoint (`/api/resume.pdf` vs `/api/cv.pdf`), copyable URL, and filename.
+   - Clicking **ATS Health Check** toggles a compact audit panel showing verb repetition counts (flagging any verb used ≥ 3 times), bullets missing quantifiable scope/metrics, verified contact channels (Email, Phone, LinkedIn, GitHub, Portfolio), and document fit status.
+2. **Project & Career Progress Gallery Flow**:
+   - Project cards, the Project Details modal, and Experience timeline cards show a quiet typographic trigger (`Progress Gallery · N milestones`) when linked milestones exist (with clean seeded placeholders ready to populate).
+   - Clicking opens the full-screen **Animated Progress Gallery**:
+     - Top bar displays the parent project/role title, current phase indicator, milestone counter (`02 / 04`), and keyboard navigation (`←` / `→`, `ESC`).
+     - Center stage animates horizontally between milestones, displaying either the real high-resolution photo/video or a crisp **Blueprint Wireframe Placeholder** detailing the date, phase badge, idea note, and exact `itemId` / suggested local path or URL override.
+     - Bottom scrub rail renders chronological milestone nodes so users can jump non-linearly across ideation, architecture, field testing, and production releases.
+3. **Zero-Code Icon & Media Swapping Flow**:
+   - Portfolio owners drop a local file into public images or paste any `https://` CDN URL directly into the item's `logo` field, `mediaUrl`, or the global `media.icons` override dictionary (in JSON or `icon_overrides.csv`).
+
+### Visual Identity & Theme
+
+- **Aesthetic Direction**: Continues the deep cosmic slate canvas (`#040711`) and translucent frosted-glass surfaces (`glass-panel`), paired with clean unboxed metadata separated by typographic middots (`·`) and slashes (`/`) in keeping with editorial restraint.
+- **Color Budget (60-30-10)**:
+  - `60%` Dark obsidian/slate background (`#040711` / `#090d18`) or crisp ATS white paper inside Paper preview mode (`#ffffff` / `#0f172a`).
+  - `30%` Structural frosted borders (`border-white/[0.08]`), hairline dividers, and blueprint grid hairlines.
+  - `10%` Precision cyan/blue focal accents (`#22d3ee`, `#2563eb`) reserved for interactive CTAs, active tabs, and ATS pass/warning states (always paired with explicit text labels and icons, never color alone).
+- **Typography**: `Outfit` / display headers paired with readable geometric sans body and `tabular-nums` monospace exclusively for dates, milestone indices (`01 / 04`), byte sizes, and verb frequency counts.
+- **Interactive Feedback & Motion**:
+  - Smooth `AnimatePresence` horizontal directional slide (`≤ 220ms`) when scrubbing gallery milestones.
+  - Compositor-only transitions (`transform`, `opacity`) respecting `prefers-reduced-motion` and mobile touch targets `≥ 44px`.
 
 ---
 
 ## 3. Key Product Decisions & Trade-Offs
 
-- **Procedural Compound Assemblies vs External GLTF Models**:
-  - *Decision*: Build all holographic assemblies procedurally in code using Three.js compound primitives (`ExtrudeGeometry`, `LatheGeometry`, `TubeGeometry`, `BufferGeometry`) and procedural canvas textures.
-  - *Why*: Eliminates 404 network dependencies, avoids loading megabytes of unoptimized external assets, and ensures 100% reliable instantaneous load times across all deployment platforms (including GitHub Pages).
-- **Slider-Driven Tier Separation (Exploded View)**:
-  - *Decision*: Smoothly interpolate part positions via `THREE.MathUtils.damp` based on the slider state rather than abrupt steps.
-  - *Why*: Preserves physical weight and mechanical feel while allowing users to inspect internal components at their own pace.
-- **Pointer-Optimized Card Tilt**:
-  - *Decision*: Implement card tilt via CSS transforms (`rotateX`, `rotateY`, `scale`) with pointer events bound to local card boundaries; disable entirely when `prefers-reduced-motion: reduce` or on touch devices.
-  - *Why*: Keeps CPU usage at 0 during page scroll, avoids re-rendering React trees, and maintains smooth 60fps scrolling.
+- **Relational `itemId` Linking (`progressGallery` + `progress_gallery.csv`) vs. Nested Arrays**:
+  - *Chosen Approach*: Flat `progressGallery` list keyed by `itemId` (`project` or `experience`).
+  - *Why*: Keeps project and job entries readable in JSON and cleanly editable in spreadsheet tools via CSV without brittle multi-line escaped JSON columns inside CSV cells.
+  - *Trade-Off*: Requires deterministic ID resolution (`explicit id || slugify(name)`), which is handled cleanly in data normalization.
+
+- **Single-Column Linear PDF Stream vs. Dual-Baseline Right-Aligned PDF Layout**:
+  - *Chosen Approach*: Refactor PDF rendering to strictly linear, single-column text flow with explicit `https://` link annotations on contact lines and clear inline metadata formatting (`Role  ·  Company  ·  Location  ·  Duration`, or clean stacked subheader rows without floating right-hand X coordinates sharing the same Y).
+  - *Why*: Eliminates the ~10% missed text extraction and LinkedIn parsing drop seen in Enhancv/ATS scanners caused by split X/Y text columns and unlinked compact pipe strings.
+  - *Trade-Off*: Slightly more structured vertical rhythm, which is offset by tightened spacing and smart content selection in 1-page Resume mode.
+
+- **Genuine Action-Verb Diversification & Honest Metric Prompts vs. Fabricated Numbers**:
+  - *Chosen Approach*: Diversify repetitive verbs across JSON entries immediately, and flag unquantified bullets transparently with editable prompts in the ATS audit panel (never inventing synthetic percentages or fake revenue claims).
+  - *Why*: Ensures 100% factual accuracy while guiding the author straight to every line that weakens ATS impact score.
 
 ---
 
-## 4. Technical Architecture & System Flow
+## 4. Technical Architecture & Data Strategy
+
+### Architecture & Component Flow
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                          React Root (App.tsx)                          │
-├────────────────────┬───────────────────────────────────────────────────┤
-│ SpatialMorphView   │ Projects, Homelab, Experience                     │
-│ ┌────────────────┐ │ ┌───────────────────┐  ┌────────────────────────┐ │
-│ │ MorphSceneCtrl │ │ │ TiltGlassCard     │  │ KineticScrollTimeline  │ │
-│ │ • Telemetry    │ │ │ • Pointer tracking│  │ • useScroll() linked   │ │
-│ │   Nodes        │ │ │ • CSS 3D rotate   │  │ • SVG gradient stroke  │ │
-│ │ • Flow Ribbons │ │ │ • Dynamic sheen   │  │ • Milestone markers    │ │
-│ │ • Exploded Rig │ │ └───────────────────┘  └────────────────────────┘ │
-│ └────────────────┘ │                                                   │
-└────────────────────┴───────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────┐
+│                         MODULAR DATA & ASSETS                             │
+│  portfolio.json / *.csv  ──►  progressGallery (itemId + date + mediaUrl)  │
+│  media.icons map         ──►  local paths (/images/...) OR https:// URLs  │
+└──────────────┬─────────────────────────────────────────┬──────────────────┘
+               │                                         │
+               ▼                                         ▼
+┌──────────────────────────────┐        ┌───────────────────────────────────┐
+│   CLIENT STATE & RESOLVERS   │        │     EXPRESS PDF ENGINE            │
+│  • normalizePortfolioData()  │        │  • GET /api/resume.pdf (1-page)   │
+│  • resolveMediaAsset()       │        │  • GET /api/cv.pdf (full multi)   │
+│  • analyzeAtsReadiness()     │        │  • Linear single-column PDFKit    │
+└──────┬───────────────┬───────┘        │  • Explicit URI annotations       │
+       │               │                └────────────────┬──────────────────┘
+       ▼               ▼                                 │
+┌───────────────┐ ┌──────────────────────────────────────▼──────────────────┐
+│ GALLERY MODAL │ │            DOCUMENT PREVIEW & ATS AUDIT MODAL           │
+│ • Scrub rail  │ │  [ Resume (1-Page) | Curriculum Vitae (Full) ]          │
+│ • Real media  │ │  • Paper / Dark preview   • Download / Print / Copy URL │
+│ • Blueprint   │ │  • Collapsible ATS Readability & Metric Audit Panel     │
+│   wireframes  │ └─────────────────────────────────────────────────────────┘
 ```
 
-### Component & File Work Breakdown
-1. **`src/components/three/morphGeometries.ts`**:
-   - Add procedural cyber-physical telemetry parts: server rack blade chassis, helical stream ribbons (`TubeGeometry` / `CatmullRomCurve3`), hexagonal quorum bus, and concentric wave emitter rings.
-2. **`src/components/three/morphMaterials.ts`**:
-   - Add holographic circuit shader uniforms, dynamic stream flow offsets (`uFlowOffset`), and glowing cyber ribbon materials.
-3. **`src/components/three/MorphSceneController.ts`**:
-   - Implement exploded view kinematics: separate outer structural pods, inner core, optic collars, and stream ribbons based on an `explodedFactor` ($0.0 \to 1.0$).
-   - Integrate continuous flowing bezier stream ribbons connecting the satellite pods to the central core.
-4. **`src/components/three/SpatialMorphViewport.tsx`**:
-   - Add the Exploded View slider to the unified bottom control dock.
-   - Synchronize exploded factor state with the controller.
-5. **`src/components/motion/TiltGlassCard.tsx` (New Component)**:
-   - Create a reusable 3D tilt card wrapper with cursor tracking, spring physics, dynamic radial specular sheen, and reduced-motion fallback.
-6. **`src/components/Projects.tsx`**:
-   - Wrap project cards with `TiltGlassCard` for tactile depth and interactive hover.
-7. **`src/components/Homelab.tsx` & `src/components/Experience.tsx`**:
-   - Add scroll-linked kinetic SVG timeline tracks highlighting career progression and Proxmox infrastructure evolution.
-8. **Verification**:
-   - Co-execute `compile_applet` and `lint_applet` to ensure zero compilation or TypeScript errors.
-   - Verify dev server build on port 3000 and ensure zero regressions across GitHub Pages static build (`npm run build`).
+### Normalized Data Model
+
+1. **Global Icon & Media Overrides (`media.icons` + `iconOverrides`)**:
+   - Dictionary mapping any normalized skill, tool, company, school, social platform, or hardware key (e.g. `"nvidia"`, `"databricks"`, `"linkedin"`, `"custom-tool"`) to either a local path (`/images/logos/...`) or an external URL (`https://...`).
+   - Built-in asset resolver resolves override URLs first, then item-level `logo` paths, then inline vector `BrandMark` fallbacks, guaranteeing zero broken image frames (`referrerPolicy="no-referrer"`, `naturalWidth` guard).
+2. **Progress Milestone Entity (`ProgressMilestone`)**:
+   - Fields: `id`, `itemId` (matches project or experience `id` / slug), `itemType` (`"project" | "experience"`), `date`, `phase` (`"Ideation" | "Architecture" | "Prototype" | "Validation" | "Production" | "Iteration"`), `title`, `ideaNote`, `outcome`, `mediaUrl` (optional local path or external link), `mediaType` (`"image" | "video" | "link"`), `order`.
+3. **Resume vs. CV Config (`cv` & `resume` settings inside `portfolio.json`)**:
+   - Independent file names (`resumeFileName`, `cvFileName`), summary override (`resumeSummary` concise executive pitch vs `summary` full narrative), caps (`maxExperiencesInResume`, `maxProjectsInResume`), and section toggle (`includeCertsInResume`, `includeInterestsInResume`, `includeHomelabInResume`).
+
+### Interactive Component & State Mapping
+
+- **Document Modal (`Resume | CV` + ATS Checker)**:
+  - Segmented toggle switches `docMode` (`'resume' | 'cv'`), recalculating live HTML document preview, active PDF API URL (`/api/resume.pdf` vs `/api/cv.pdf`), filename download target, and copy-link string.
+  - Collapsible **ATS Audit** panel runs pure client-side analysis over the active document dataset (`analyzeAtsReadiness(portfolioData, docMode)`) reporting:
+    - Repeated action verbs (`≥ 3` occurrences, highlighting exact words to swap).
+    - Bullet lines lacking numbers/quantifiable scale/scope units so the user can enrich them cleanly.
+    - Essential section & contact completeness (`Email`, `Phone`, `LinkedIn`, `GitHub`, `Portfolio`, `Skills`, `Experience`, `Education`).
+- **Progress Gallery Viewer (`ProgressGalleryModal`)**:
+  - Opens from any Project card, Project Details modal, or Experience row carrying an active `itemId`.
+  - Maintains `activeIndex` synchronized with keyboard arrows, next/previous buttons, and clickable chronological timeline nodes.
+  - Automatically renders the **Blueprint Wireframe Placeholder** when `mediaUrl` is blank or fails to load, showing the exact `itemId` and target CSV/JSON field hint.
+- **Server & CLI Parity**:
+  - Startup server routine and CLI build script generate both static 1-page Resume PDF and comprehensive CV PDF cleanly into `public/`, while `/api/resume.pdf` and `/api/cv.pdf` dynamically stream up-to-the-second PDFs from `portfolio.json`.

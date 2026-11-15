@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion, AnimatePresence, LayoutGroup, useReducedMotion } from 'framer-motion';
 import {
   Activity,
@@ -13,14 +13,24 @@ import {
   ShieldCheck,
   Terminal,
 } from 'lucide-react';
-import { HomelabDevice, HomelabEvolutionStage, VM, Platform } from '../types';
+import {
+  HomelabDevice,
+  HomelabEvolutionStage,
+  HomelabLesson,
+  Platform,
+  SectionsConfig,
+  VM,
+} from '../types';
 import NginxLoadBalancerDemo from './NginxLoadBalancerDemo';
 import GlassCard from './motion/GlassCard';
 import SplitText from './motion/SplitText';
 import ArchitectureTraceDiagram from './motion/ArchitectureTraceDiagram';
 import TextScramble from './motion/TextScramble';
+import RepoImage from './common/RepoImage';
+import BrandMark from './icons/BrandMarks';
 
 interface HomelabProps {
+  config?: SectionsConfig['homelab'];
   evolution?: HomelabEvolutionStage[];
   devices: HomelabDevice[];
   vms: VM[];
@@ -36,81 +46,107 @@ interface HomelabProps {
 
 const defaultEvolution: HomelabEvolutionStage[] = [
   {
-    stage: 'Phase 01 · Bare-Metal Linux & Docker Compose',
-    title: 'Debian, Kali & Alpine on Repurposed Laptops',
+    stage: 'Phase 01 · Bare-Metal Linux & Containers',
+    title: 'Single-Node Linux & Docker Compose',
     summary:
-      'Started self-hosting on bare-metal Debian, Kali, and Alpine Linux across spare laptops, running containerized workloads directly through Docker Engine and Docker Compose.',
+      'Started self-hosting on bare-metal Linux hosts, orchestrating containerized services manually with Docker Engine and Docker Compose.',
     learnings: [
-      'Configured Linux networking, firewall rules, systemd daemons, and bind-mount volume permissions by hand.',
-      'Used Alpine for minimal containers, Debian for host stability, and Kali for local network diagnostics.',
+      'Configured Linux networking, firewall rules, systemd daemons, and persistent volume permissions.',
+      'Automated repeatable deployments and log rotation across local services.',
     ],
-    stack: 'Debian / Kali / Alpine Linux / Docker / Docker Compose',
+    stack: 'Linux / Docker / Docker Compose / systemd',
   },
   {
-    stage: 'Phase 02 · 3-Node HA Proxmox Cluster + 4th Laptop PBS',
-    title: 'Distributed Proxmox VE Quorum & Proxmox Backup Server',
+    stage: 'Phase 02 · Virtualization & Automated Backups',
+    title: 'Multi-Node Virtualization & Snapshots',
     summary:
-      'Discovered Proxmox VE and converted the 4 laptops into a 3-node High-Availability (HA) cluster with the 4th laptop running dedicated Proxmox Backup Server (PBS).',
+      'Evolved into structured virtualization with separated container and VM workloads plus automated incremental backups.',
     learnings: [
-      'Built Corosync quorum voting, HA failover groups, and live VM migration across nodes.',
-      'Managed incremental deduplicated snapshots and full restore drills using Proxmox Backup Server (PBS).',
-      'Configured Linux bridges (vmbr0), thin-LVM pools, and isolated LXC vs KVM workloads.',
+      'Configured quorum voting, failover groups, and live workload migration across nodes.',
+      'Verified disaster recovery restores with scheduled snapshot retention policies.',
     ],
-    stack: 'Proxmox VE / Proxmox Backup Server (PBS) / Corosync HA / LXC / KVM',
+    stack: 'Hypervisor / HA Quorum / LXC / KVM',
   },
   {
-    stage: 'Phase 03 · Consolidated PVE 8 Host & K3s Cluster',
-    title: 'Production NGO LXCs & 6-Node K3s Virtualization Lab',
+    stage: 'Phase 03 · Consolidated Host & Cluster Orchestration',
+    title: 'Production Containers & Kubernetes Cluster',
     summary:
-      'Consolidated the 4-laptop rack onto one dedicated 24/7 Proxmox VE 8 server for lower noise and unified memory, running production LXC services alongside a nested 6-node K3s cluster.',
+      'Unified workloads onto a primary low-power server hosting production containers alongside a multi-node Kubernetes cluster.',
     learnings: [
-      'Hosts production Udayan Care NGO containers (NocoDB LXC, Node.js Auth at udayan.diivvansh.com, Gotify).',
-      'Runs a 6-node K3s cluster (3 masters + 3 workers) with MetalLB VIPs and Traefik ingress over Cloudflare Tunnels and Tailscale.',
+      'Operates production backend APIs and databases inside isolated containers.',
+      'Runs ingress routing and load-balanced pods behind zero-trust tunnels and WireGuard meshes.',
     ],
-    stack: 'Proxmox VE 8 / 6-Node K3s / MetalLB / Traefik / Cloudflare Tunnels / Tailscale',
+    stack: 'Kubernetes / Reverse Proxy / Zero-Trust Ingress / WireGuard',
   },
 ];
 
 const stageIcons = [Terminal, Layers, Server];
 
-const proxmoxLessons = [
+const defaultLessons: HomelabLesson[] = [
   {
-    topic: 'Corosync HA & 3-Node Quorum',
-    icon: ShieldCheck,
+    topic: 'High Availability & Quorum',
+    icon: 'shield',
     detail:
-      'Understanding odd-node quorum voting, avoiding split-brain states, and migrating workloads safely when one laptop node goes offline.',
+      'Understanding odd-node quorum voting, avoiding split-brain states, and migrating workloads safely during maintenance.',
   },
   {
-    topic: 'Dedicated Proxmox Backup Server (PBS)',
-    icon: HardDrive,
+    topic: 'Deduplicated Snapshot Backups',
+    icon: 'harddrive',
     detail:
-      'Running a 4th laptop strictly for PBS taught chunk deduplication, snapshot pruning policies, and rapid restore verification.',
+      'Practicing chunk deduplication, snapshot pruning policies, and rapid bare-metal restore verification.',
   },
   {
-    topic: 'LXC vs KVM Trade-Offs',
-    icon: Boxes,
+    topic: 'Containers vs Virtual Machines',
+    icon: 'boxes',
     detail:
-      'Running stateless web services and NocoDB in lightweight Linux Containers (LXCs) while keeping K3s cluster nodes in KVM virtual machines.',
+      'Running lightweight system containers for web services and databases while isolating orchestration nodes inside VMs.',
   },
   {
     topic: 'Bridged Networking & Zero-Trust Ingress',
-    icon: Network,
+    icon: 'network',
     detail:
-      'Segmenting traffic on Linux bridges (vmbr0) behind WireGuard Tailscale meshes and Cloudflare Tunnels without exposing raw home ports.',
+      'Segmenting virtual bridge traffic behind WireGuard overlays and encrypted tunnels without exposing open ports.',
   },
 ];
 
-const tabItems: Array<{
-  id: 'evolution' | 'services' | 'loadbalancer';
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-}> = [
-  { id: 'evolution', label: 'Proxmox Evolution', icon: Layers },
-  { id: 'services', label: 'Services & Networking', icon: Server },
-  { id: 'loadbalancer', label: 'K3s Load Balancer Demo', icon: Activity },
-];
+const getLessonIcon = (key?: string) => {
+  switch ((key || '').toLowerCase()) {
+    case 'shield':
+      return ShieldCheck;
+    case 'harddrive':
+      return HardDrive;
+    case 'boxes':
+      return Boxes;
+    case 'network':
+      return Network;
+    default:
+      return ShieldCheck;
+  }
+};
+
+const getNodeVendorBrand = (hostname: string, type: string): string => {
+  const s = `${hostname} ${type}`.toLowerCase();
+  if (s.includes('asus') || s.includes('rog')) return 'asus';
+  if (s.includes('proxmox') || s.includes('pve')) return 'proxmox';
+  return 'linux';
+};
+
+const getCpuBrand = (cpu: string): string => {
+  const s = cpu.toLowerCase();
+  if (s.includes('amd') || s.includes('ryzen')) return 'amd';
+  if (s.includes('intel')) return 'intel';
+  return 'intel';
+};
+
+const getGpuBrand = (gpu: string): string => {
+  const s = gpu.toLowerCase();
+  if (s.includes('nvidia') || s.includes('rtx') || s.includes('geforce')) return 'nvidia';
+  if (s.includes('amd') || s.includes('radeon')) return 'amd';
+  return 'intel';
+};
 
 export const Homelab: React.FC<HomelabProps> = ({
+  config,
   evolution,
   devices,
   vms,
@@ -118,11 +154,50 @@ export const Homelab: React.FC<HomelabProps> = ({
   consolidationNote,
   network,
 }) => {
+  const showLoadBalancer = config?.loadBalancerDemo?.enabled !== false;
   const [activeTab, setActiveTab] = useState<'evolution' | 'services' | 'loadbalancer'>('evolution');
   const [hoveredStage, setHoveredStage] = useState<number | null>(null);
   const prefersReduced = useReducedMotion();
 
   const stages = evolution && evolution.length > 0 ? evolution : defaultEvolution;
+  const lessons = config?.lessons && config.lessons.length > 0 ? config.lessons : defaultLessons;
+
+  const tabItems = useMemo(() => {
+    const base: Array<{
+      id: 'evolution' | 'services' | 'loadbalancer';
+      label: string;
+      icon: React.ComponentType<{ className?: string }>;
+    }> = [
+      { id: 'evolution', label: 'Architecture Evolution', icon: Layers },
+      { id: 'services', label: 'Cluster Workloads & Network', icon: Server },
+    ];
+    if (showLoadBalancer) {
+      base.push({ id: 'loadbalancer', label: 'Load Balancer Demo', icon: Activity });
+    }
+    return base;
+  }, [showLoadBalancer]);
+
+  const eyebrow = config?.eyebrow || 'Infrastructure & Virtualization';
+  const title = config?.title || 'Self-Hosted Systems & Cluster Lab';
+  const subtitle =
+    config?.subtitle ||
+    'Progression from bare-metal Linux container hosts to structured virtualization, automated snapshot backups, and orchestrated Kubernetes clusters.';
+  const consolidationTitle = config?.consolidationTitle || 'Key Infrastructure Takeaways';
+  const consolidationUrl = config?.consolidationUrl || '';
+  const workloadsTitle = config?.workloadsTitle || 'Active Containers & Cluster Workloads';
+  const workloadsSubtitle =
+    config?.workloadsSubtitle || 'Production services and orchestrated cluster workloads running across nodes.';
+  const workloadsBadge = config?.workloadsBadge || 'Linux · Virtualization · Containers';
+  const hardwareTitle = config?.hardwareTitle || 'Hardware & Compute Nodes';
+  const hardwareSubtitle =
+    config?.hardwareSubtitle || 'Primary server hardware, workstations, and compute cluster inventory.';
+  const platformsTitle = config?.platformsTitle || 'FOSS Platforms & Cluster Tooling';
+  const platformsSubtitle =
+    config?.platformsSubtitle ||
+    'Container orchestrators, hypervisors, reverse proxies, and infrastructure management tools.';
+
+  const displayDomains =
+    network?.domains && network.domains.length > 0 ? network.domains.join(' · ') : 'Self-Hosted';
 
   return (
     <section id="homelab" className="py-20 border-b border-white/[0.08]">
@@ -130,22 +205,22 @@ export const Homelab: React.FC<HomelabProps> = ({
       <div className="mb-10">
         <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
           <Server className="w-3.5 h-3.5" aria-hidden="true" />
-          <span>Infrastructure &amp; Virtualization</span>
+          <span>{eyebrow}</span>
         </span>
         <SplitText
           as="h2"
-          text="From Bare-Metal Linux to Proxmox HA & K3s"
+          text={title}
           stagger={0.04}
           className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-zinc-50 mb-3 block"
         />
         <p className="text-sm sm:text-base text-zinc-400 max-w-2xl leading-relaxed">
-          My homelab evolved from running bare-metal Debian, Kali, and Alpine Linux with Docker Compose on spare laptops, to a 3-node Proxmox VE HA cluster backed up by a 4th PBS laptop, and finally consolidating onto one dedicated Proxmox VE 8 server.
+          {subtitle}
         </p>
       </div>
 
       {/* Interactive Signal & Telemetry Architecture Diagram */}
       <div className="mb-10">
-        <ArchitectureTraceDiagram />
+        <ArchitectureTraceDiagram traces={config?.architectureTraces} />
       </div>
 
       {/* Interactive Frosted Segmented Tabs with layoutId Spring */}
@@ -184,7 +259,7 @@ export const Homelab: React.FC<HomelabProps> = ({
       </LayoutGroup>
 
       <AnimatePresence mode="wait">
-        {/* TAB 1: Proxmox Evolution & Learnings */}
+        {/* TAB 1: Infrastructure Evolution & Learnings */}
         {activeTab === 'evolution' && (
           <motion.div
             key="evolution"
@@ -240,8 +315,20 @@ export const Homelab: React.FC<HomelabProps> = ({
                         </ul>
                       </div>
 
-                      <div className="mt-5 pt-4 border-t border-white/[0.08] text-xs font-mono text-zinc-400 pr-2">
-                        {item.stack}
+                      <div className="mt-5 pt-4 border-t border-white/[0.08] text-xs font-mono text-zinc-400 flex flex-wrap items-center gap-x-2 gap-y-1.5 pr-2">
+                        {item.stack.split(/[·/]/).map((tech, tIdx) => (
+                          <React.Fragment key={`${tech}-${tIdx}`}>
+                            {tIdx > 0 && (
+                              <span className="text-zinc-600" aria-hidden="true">
+                                /
+                              </span>
+                            )}
+                            <span className="inline-flex items-center gap-1">
+                              <BrandMark brand={tech} className="w-3.5 h-3.5 shrink-0" />
+                              <span>{tech.trim()}</span>
+                            </span>
+                          </React.Fragment>
+                        ))}
                       </div>
                     </GlassCard>
                   );
@@ -249,30 +336,36 @@ export const Homelab: React.FC<HomelabProps> = ({
               </div>
             </div>
 
-            {/* Core Proxmox Engineering Takeaways */}
+            {/* Core Infrastructure Engineering Takeaways */}
             <div className="pt-8 border-t border-white/[0.08] grid lg:grid-cols-12 gap-8 items-start">
               <div className="lg:col-span-4 space-y-4">
                 <h3 className="font-display text-lg font-bold text-zinc-50">
-                  What Managing Proxmox Taught Me
+                  {consolidationTitle}
                 </h3>
                 <p className="text-sm text-zinc-400 leading-relaxed">
                   {consolidationNote ||
-                    'Moving from 4 separate laptops (3 PVE HA nodes + 1 PBS backup laptop) onto a single unified Proxmox VE 8 server reduced power draw and maintenance overhead while keeping automated snapshots and LXC service isolation intact.'}
+                    'Consolidating distributed lab hardware onto unified compute nodes reduces operational complexity while preserving automated snapshots and workload isolation.'}
                 </p>
-                <a
-                  href="https://pve.diivvansh.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors pt-1"
-                >
-                  <TextScramble text="pve.diivvansh.com" trigger="hover" durationMs={320} />
-                  <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-                </a>
+                {consolidationUrl && (
+                  <a
+                    href={consolidationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors pt-1"
+                  >
+                    <TextScramble
+                      text={consolidationUrl.replace(/^https?:\/\//, '')}
+                      trigger="hover"
+                      durationMs={320}
+                    />
+                    <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  </a>
+                )}
               </div>
 
               <div className="lg:col-span-8 grid sm:grid-cols-2 gap-4">
-                {proxmoxLessons.map((lesson) => {
-                  const LessonIcon = lesson.icon;
+                {lessons.map((lesson) => {
+                  const LessonIcon = getLessonIcon(lesson.icon);
                   return (
                     <div
                       key={lesson.topic}
@@ -293,7 +386,7 @@ export const Homelab: React.FC<HomelabProps> = ({
           </motion.div>
         )}
 
-        {/* TAB 2: Production Services, Nodes & Networking */}
+        {/* TAB 2: Cluster Workloads & Networking */}
         {activeTab === 'services' && (
           <motion.div
             key="services"
@@ -303,77 +396,18 @@ export const Homelab: React.FC<HomelabProps> = ({
             transition={{ duration: 0.2 }}
             className="space-y-8"
           >
-            {devices.length > 0 && (
-              <div className="grid md:grid-cols-2 gap-5">
-                {devices.map((node) => (
-                  <GlassCard key={node.hostname} tilt={true} spotlight={true} className="p-6">
-                    <div>
-                      <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 mb-1.5">
-                        <Server className="w-3.5 h-3.5" aria-hidden="true" />
-                        <span>{node.type}</span>
-                      </div>
-                      <h3 className="font-display text-xl font-bold text-zinc-50 mb-2">
-                        {node.hostname}
-                      </h3>
-                      {node.notes && (
-                        <p className="text-sm text-zinc-300/90 leading-relaxed mb-5">
-                          {node.notes}
-                        </p>
-                      )}
-
-                      <dl className="divide-y divide-white/[0.07] text-xs font-mono">
-                        <div className="py-2.5 flex justify-between gap-4">
-                          <dt className="text-zinc-400">Compute</dt>
-                          <dd className="text-zinc-100 text-right">{node.cpu}</dd>
-                        </div>
-                        <div className="py-2.5 flex justify-between gap-4">
-                          <dt className="text-zinc-400">Memory</dt>
-                          <dd className="text-zinc-100 tabular-nums text-right">{node.ram}</dd>
-                        </div>
-                        <div className="py-2.5 flex justify-between gap-4">
-                          <dt className="text-zinc-400">Storage</dt>
-                          <dd className="text-zinc-100 tabular-nums text-right">{node.storage}</dd>
-                        </div>
-                      </dl>
-                    </div>
-
-                    {node.url && (
-                      <div className="mt-5 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono">
-                        <span className="text-zinc-400">Management Endpoint</span>
-                        <a
-                          href={node.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1"
-                        >
-                          <TextScramble
-                            text={node.url.replace(/^https?:\/\//, '')}
-                            trigger="hover"
-                            durationMs={320}
-                          />
-                          <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-                        </a>
-                      </div>
-                    )}
-                  </GlassCard>
-                ))}
-              </div>
-            )}
-
             {vms.length > 0 && (
               <div className="glass-panel rounded-2xl p-6 sm:p-8">
                 <div className="pb-5 mb-6 border-b border-white/[0.08] flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
                   <div>
                     <h3 className="font-display text-lg font-bold text-zinc-50 flex items-center gap-2">
                       <Cpu className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-                      <span>Active LXC Containers &amp; K3s Cluster Workloads</span>
+                      <span>{workloadsTitle}</span>
                     </h3>
-                    <p className="text-xs text-zinc-400 mt-1">
-                      Production containers serving Udayan Care alongside the nested 6-node Kubernetes lab.
-                    </p>
+                    <p className="text-xs text-zinc-400 mt-1">{workloadsSubtitle}</p>
                   </div>
                   <span className="text-xs font-mono text-zinc-400 whitespace-nowrap">
-                    Proxmox VE 8 · 3 Masters + 3 Workers
+                    {workloadsBadge}
                   </span>
                 </div>
 
@@ -400,26 +434,24 @@ export const Homelab: React.FC<HomelabProps> = ({
                   <div className="py-2.5 flex justify-between gap-4">
                     <dt className="text-zinc-400 shrink-0">Private Mesh</dt>
                     <dd className="text-zinc-100 font-mono text-right">
-                      {network?.overlay || 'Tailscale WireGuard mesh'}
+                      {network?.overlay || 'WireGuard private mesh'}
                     </dd>
                   </div>
                   <div className="py-2.5 flex justify-between gap-4">
                     <dt className="text-zinc-400 shrink-0">Public Ingress</dt>
                     <dd className="text-zinc-100 font-mono text-right">
-                      {network?.ingress || 'Cloudflare Zero-Trust Tunnels'}
+                      {network?.ingress || 'Zero-Trust Edge Tunnels'}
                     </dd>
                   </div>
                   <div className="py-2.5 flex justify-between gap-4">
-                    <dt className="text-zinc-400 shrink-0">K3s Routing</dt>
+                    <dt className="text-zinc-400 shrink-0">Cluster Routing</dt>
                     <dd className="text-zinc-100 font-mono text-right">
-                      {network?.loadBalancer || 'MetalLB Layer-2 VIP + Traefik'}
+                      {network?.loadBalancer || 'L2 Virtual IP + Reverse Proxy'}
                     </dd>
                   </div>
                   <div className="py-2.5 flex justify-between gap-4">
                     <dt className="text-zinc-400 shrink-0">Domains</dt>
-                    <dd className="text-cyan-400 font-mono text-right">
-                      diivvansh.com · fiorejoy.com
-                    </dd>
+                    <dd className="text-cyan-400 font-mono text-right">{displayDomains}</dd>
                   </div>
                 </dl>
               </div>
@@ -453,8 +485,8 @@ export const Homelab: React.FC<HomelabProps> = ({
           </motion.div>
         )}
 
-        {/* TAB 3: Interactive K3s NGINX Load Balancer Demo */}
-        {activeTab === 'loadbalancer' && (
+        {/* TAB 3: Interactive Load Balancer Demo */}
+        {showLoadBalancer && activeTab === 'loadbalancer' && (
           <motion.div
             key="loadbalancer"
             initial={prefersReduced ? false : { opacity: 0, y: 10 }}
@@ -462,10 +494,153 @@ export const Homelab: React.FC<HomelabProps> = ({
             exit={prefersReduced ? undefined : { opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
           >
-            <NginxLoadBalancerDemo />
+            <NginxLoadBalancerDemo config={config?.loadBalancerDemo} />
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Hardware Inventory & FOSS Self-Hosted Platforms Grid */}
+      {(devices.length > 0 || platforms.length > 0) && (
+        <div className="mt-12 pt-10 border-t border-white/[0.08] space-y-10">
+          {devices.length > 0 && (
+            <div>
+              <div className="mb-5 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+                <div>
+                  <h3 className="font-display text-lg font-bold text-zinc-50 flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+                    <span>{hardwareTitle}</span>
+                  </h3>
+                  <p className="text-xs text-zinc-400 mt-1">{hardwareSubtitle}</p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-5">
+                {devices.map((node) => {
+                  const vendorBrand = getNodeVendorBrand(node.hostname, node.type);
+                  const cpuBrand = getCpuBrand(node.cpu);
+                  const gpuBrand = getGpuBrand(node.gpu || '');
+                  const hasDualVendorCpu =
+                    node.cpu.toLowerCase().includes('intel') &&
+                    node.cpu.toLowerCase().includes('amd');
+
+                  return (
+                    <GlassCard key={node.hostname} tilt={true} spotlight={true} className="p-6">
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400">
+                            <RepoImage
+                              src={node.logo}
+                              alt={node.hostname}
+                              className="w-4 h-4 shrink-0"
+                              imgClassName="w-full h-full object-contain"
+                              fallback={<BrandMark brand={vendorBrand} className="w-4 h-4 shrink-0" />}
+                            />
+                            <span>{node.type}</span>
+                          </span>
+                        </div>
+                        <h4 className="font-display text-lg font-bold text-zinc-50 mb-2 flex items-center gap-2">
+                          <span>{node.hostname}</span>
+                        </h4>
+                        {node.notes && (
+                          <p className="text-xs sm:text-sm text-zinc-300/90 leading-relaxed mb-5">
+                            {node.notes}
+                          </p>
+                        )}
+
+                        <dl className="divide-y divide-white/[0.07] text-xs font-mono">
+                          <div className="py-2.5 flex justify-between items-center gap-3">
+                            <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
+                              <BrandMark brand={cpuBrand} className="w-4 h-4 shrink-0" />
+                              {hasDualVendorCpu && (
+                                <BrandMark brand="intel" className="w-4 h-4 shrink-0" />
+                              )}
+                              <span>CPU</span>
+                            </dt>
+                            <dd className="text-zinc-100 text-right">{node.cpu}</dd>
+                          </div>
+                          {node.gpu && (
+                            <div className="py-2.5 flex justify-between items-center gap-3">
+                              <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
+                                <BrandMark brand={gpuBrand} className="w-4 h-4 shrink-0" />
+                                <span>GPU</span>
+                              </dt>
+                              <dd className="text-zinc-100 text-right">{node.gpu}</dd>
+                            </div>
+                          )}
+                          <div className="py-2.5 flex justify-between items-center gap-3">
+                            <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
+                              <BrandMark brand="ram" className="w-4 h-4 shrink-0" />
+                              <span>Memory</span>
+                            </dt>
+                            <dd className="text-zinc-100 tabular-nums text-right">{node.ram}</dd>
+                          </div>
+                          <div className="py-2.5 flex justify-between items-center gap-3">
+                            <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
+                              <BrandMark brand="nvme" className="w-4 h-4 shrink-0" />
+                              <span>Storage</span>
+                            </dt>
+                            <dd className="text-zinc-100 tabular-nums text-right">{node.storage}</dd>
+                          </div>
+                        </dl>
+                      </div>
+
+                      {node.url && (
+                        <div className="mt-5 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono">
+                          <span className="text-zinc-400">Console</span>
+                          <a
+                            href={node.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1"
+                          >
+                            <TextScramble
+                              text={node.url.replace(/^https?:\/\//, '')}
+                              trigger="hover"
+                              durationMs={320}
+                            />
+                            <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                          </a>
+                        </div>
+                      )}
+                    </GlassCard>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {platforms.length > 0 && (
+            <div>
+              <div className="mb-5">
+                <h3 className="font-display text-lg font-bold text-zinc-50 flex items-center gap-2">
+                  <Boxes className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+                  <span>{platformsTitle}</span>
+                </h3>
+                <p className="text-xs text-zinc-400 mt-1">{platformsSubtitle}</p>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                {platforms.map((platform) => (
+                  <div
+                    key={platform.name}
+                    className="glass-panel-subtle glass-panel-hover rounded-xl px-3 py-4 flex flex-col items-center justify-center gap-2.5 text-center transition-all"
+                  >
+                    <RepoImage
+                      src={platform.logo}
+                      alt={platform.name}
+                      className="w-7 h-7 shrink-0"
+                      imgClassName="w-full h-full object-contain"
+                      fallback={<BrandMark brand={platform.name} className="w-7 h-7 shrink-0" />}
+                    />
+                    <span className="text-[11px] font-mono text-zinc-200 leading-tight">
+                      {platform.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </section>
   );
 };

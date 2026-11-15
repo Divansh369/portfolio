@@ -2,14 +2,29 @@ import React from 'react';
 import { ArrowUp, Braces, FileText } from 'lucide-react';
 import CornerBrackets from './motion/CornerBrackets';
 import TextScramble from './motion/TextScramble';
+import RepoImage from './common/RepoImage';
+import BrandMark from './icons/BrandMarks';
+import { Social } from '../types';
 
 interface FooterProps {
   name: string;
+  domains?: string[];
+  homelabLabel?: string;
+  showHomelab?: boolean;
+  socials?: Social[];
   onOpenDataModal?: () => void;
   onOpenCvModal?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ name, onOpenDataModal, onOpenCvModal }) => {
+export const Footer: React.FC<FooterProps> = ({
+  name,
+  domains = [],
+  homelabLabel = 'Infrastructure',
+  showHomelab = true,
+  socials = [],
+  onOpenDataModal,
+  onOpenCvModal,
+}) => {
   return (
     <footer className="pb-12 pt-4 text-xs font-mono text-zinc-500 print-hide">
       {/* Cyan-hairline inset frosted architectural footer plate */}
@@ -22,31 +37,57 @@ export const Footer: React.FC<FooterProps> = ({ name, onOpenDataModal, onOpenCvM
           <CornerBrackets />
 
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-2">
               <span className="text-zinc-200 font-medium">
                 © {new Date().getFullYear()} {name}
               </span>
-              <span className="text-zinc-700" aria-hidden="true">
-                ·
-              </span>
-              <span className="hover:text-cyan-300 transition-colors">
-                <TextScramble text="diivvansh.com" trigger="hover" durationMs={320} />
-              </span>
-              <span className="text-zinc-700" aria-hidden="true">
-                ·
-              </span>
-              <span className="hover:text-cyan-300 transition-colors">
-                <TextScramble text="fiorejoy.com" trigger="hover" durationMs={320} />
-              </span>
+              {domains.map((domain) => (
+                <React.Fragment key={domain}>
+                  <span className="text-zinc-700" aria-hidden="true">
+                    ·
+                  </span>
+                  <span className="hover:text-cyan-300 transition-colors">
+                    <TextScramble text={domain} trigger="hover" durationMs={320} />
+                  </span>
+                </React.Fragment>
+              ))}
+              {socials.length > 0 && (
+                <div className="flex items-center gap-2 pl-1">
+                  {socials.map((social) => {
+                    const isMail = social.url.startsWith('mailto:');
+                    return (
+                      <a
+                        key={social.name}
+                        href={social.url}
+                        target={isMail ? undefined : '_blank'}
+                        rel={isMail ? undefined : 'noopener noreferrer'}
+                        aria-label={social.name}
+                        title={social.name}
+                        className="w-7 h-7 rounded-lg glass-panel-subtle glass-panel-hover inline-flex items-center justify-center text-zinc-300 hover:text-cyan-300 transition-colors"
+                      >
+                        <RepoImage
+                          src={social.logos}
+                          alt={social.name}
+                          className="w-3.5 h-3.5 rounded-[2px]"
+                          imgClassName="w-full h-full object-contain rounded-[2px]"
+                          fallback={<BrandMark brand={social.name} className="w-3.5 h-3.5" />}
+                        />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
               <a href="#projects" className="hover:text-zinc-100 transition-colors py-1">
                 Projects
               </a>
-              <a href="#homelab" className="hover:text-zinc-100 transition-colors py-1">
-                Proxmox
-              </a>
+              {showHomelab && (
+                <a href="#homelab" className="hover:text-zinc-100 transition-colors py-1">
+                  {homelabLabel}
+                </a>
+              )}
               <a href="#experience" className="hover:text-zinc-100 transition-colors py-1">
                 Experience
               </a>

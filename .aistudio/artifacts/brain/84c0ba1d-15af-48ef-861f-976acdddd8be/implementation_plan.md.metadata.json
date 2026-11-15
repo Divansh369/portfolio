@@ -1,6 +1,6 @@
 {
-  "summary":  "Implementation plan for elevating the WebGL 3D architecture section with holographic cyber-physical telemetry models, floating stream ribbons, and an interactive exploded-view slider, alongside cursor-driven 3D tilt across project cards and scroll-driven kinetic timeline animations.",
-  "updatedAt":  "2026-11-12T16:43:49.798329561Z",
+  "summary":  "Architecture and UX implementation plan covering three areas: (1) unified modular media/icon resolution supporting local assets and external URLs, (2) splitting the single PDF system into a 1-page Resume and comprehensive CV with Enhancv ATS parseability fixes and a live ATS audit drawer, and (3) a relational ID-linked progress photo gallery across projects and work experience with animated timeline navigation and blueprint placeholders.",
+  "updatedAt":  "2026-11-15T14:20:35.658059290Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

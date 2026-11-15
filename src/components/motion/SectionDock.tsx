@@ -1,35 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-interface SectionStop {
+export interface SectionStop {
   id: string;
   label: string;
 }
 
-const SECTION_STOPS: SectionStop[] = [
-  { id: 'hero', label: 'Overview' },
-  { id: 'systems-3d', label: '3D Lotus' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'homelab', label: 'Proxmox' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'education', label: 'Education' },
-  { id: 'contact', label: 'Contact' },
-];
+interface SectionDockProps {
+  homelabLabel?: string;
+  showSystems3d?: boolean;
+  showHomelab?: boolean;
+  stops?: SectionStop[];
+}
 
 /**
  * Subtle right-edge glass section index dock on wide desktop screens (1360px+).
  * Keeps the top navbar cleanly 3-zone while allowing instant section scrubbing.
  */
-export const SectionDock: React.FC = () => {
+export const SectionDock: React.FC<SectionDockProps> = ({
+  homelabLabel = 'Infrastructure',
+  showSystems3d = true,
+  showHomelab = true,
+  stops,
+}) => {
   const [activeId, setActiveId] = useState<string>('hero');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const prefersReduced = useReducedMotion();
 
+  const sectionStops = useMemo<SectionStop[]>(() => {
+    if (stops && stops.length > 0) return stops;
+    return [
+      { id: 'hero', label: 'Overview' },
+      ...(showSystems3d ? [{ id: 'systems-3d', label: '3D View' }] : []),
+      { id: 'projects', label: 'Projects' },
+      ...(showHomelab ? [{ id: 'homelab', label: homelabLabel }] : []),
+      { id: 'experience', label: 'Experience' },
+      { id: 'skills', label: 'Skills' },
+      { id: 'education', label: 'Education' },
+      { id: 'contact', label: 'Contact' },
+    ];
+  }, [stops, showSystems3d, showHomelab, homelabLabel]);
+
   useEffect(() => {
-    const elements = SECTION_STOPS.map((stop) => document.getElementById(stop.id)).filter(
-      (el): el is HTMLElement => Boolean(el)
-    );
+    const elements = sectionStops
+      .map((stop) => document.getElementById(stop.id))
+      .filter((el): el is HTMLElement => Boolean(el));
     if (elements.length === 0) return;
 
     const observer = new IntersectionObserver(
@@ -45,7 +60,7 @@ export const SectionDock: React.FC = () => {
 
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [sectionStops]);
 
   const handleJump = (id: string) => {
     if (id === 'hero') {
@@ -63,7 +78,7 @@ export const SectionDock: React.FC = () => {
       aria-label="Section index"
       className="hidden min-[1360px]:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col items-end gap-1.5 glass-panel-subtle px-2 py-3 rounded-2xl print-hide"
     >
-      {SECTION_STOPS.map((stop) => {
+      {sectionStops.map((stop) => {
         const isActive = activeId === stop.id;
         const isHovered = hoveredId === stop.id;
         return (

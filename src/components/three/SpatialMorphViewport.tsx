@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   Boxes,
@@ -13,7 +13,7 @@ import {
   Pause,
   Server,
   Smartphone,
-  Truck,
+  Workflow,
 } from 'lucide-react';
 import CornerBrackets from '../motion/CornerBrackets';
 import SplitText from '../motion/SplitText';
@@ -23,59 +23,57 @@ import {
   MorphSceneController,
 } from './MorphSceneController';
 import { MorphStateId } from './morphGeometries';
+import { SectionsConfig, Systems3DModeConfig } from '../../types';
 
-interface MorphModeSpec {
-  id: MorphStateId;
-  shortLabel: string;
-  title: string;
-  domain: string;
-  caption: string;
-  stack: string;
+interface MorphModeSpec extends Systems3DModeConfig {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-const MORPH_SPECS: MorphModeSpec[] = [
+const DEFAULT_MODE_CONFIGS: Systems3DModeConfig[] = [
   {
-    id: 'proxmox',
-    shortLabel: 'Proxmox Core',
-    title: 'Proxmox VE 8 Hypervisor Core (Structured Bud)',
-    domain: 'Infrastructure · pve.diivvansh.com',
+    id: 'core',
+    shortLabel: 'Platform Core',
+    title: 'Compute Core Architecture (Structured Bud)',
+    domain: 'Infrastructure · Core Node',
     caption:
-      'Consolidated Proxmox VE 8 host with Linux bridge networking, PBS snapshots, and isolated LXC workloads represented in an upright structured bud.',
-    stack: 'Proxmox VE 8 / Debian & Alpine LXCs / PBS Backups',
-    icon: Server,
+      'Consolidated server host with virtual bridge networking, automated snapshots, and isolated workloads represented in an upright structured bud.',
+    stack: 'Linux / Containers / Virtualization / Backups',
   },
   {
-    id: 'databricks',
-    shortLabel: 'Fleet Stream',
-    title: 'Databricks Fleet Stream Topology (Flowing Bloom)',
-    domain: 'Big Data ETL · ~70,000 Trucks',
+    id: 'stream',
+    shortLabel: 'Data Stream',
+    title: 'Telemetry Stream Topology (Flowing Bloom)',
+    domain: 'Streaming ETL · Data Pipelines',
     caption:
-      'Continuous Apache Spark & Delta Lake telemetry stream ribbons weaving through unfolding petals to feed live internal apps.',
-    stack: 'Databricks / Apache Spark / Delta Lake / FastAPI',
-    icon: Truck,
+      'Continuous distributed stream ribbons weaving through unfolding petals to feed live internal applications.',
+    stack: 'Apache Spark / Streaming ETL / FastAPI',
   },
   {
-    id: 'k3s',
-    shortLabel: 'K3s Quorum',
-    title: '6-Node K3s Cluster Manifold (Hexagonal Blossom)',
-    domain: 'Kubernetes · 3 Masters + 3 Workers',
+    id: 'cluster',
+    shortLabel: 'Cluster Mesh',
+    title: 'Distributed Cluster Manifold (Hexagonal Blossom)',
+    domain: 'Orchestration · Multi-Node Quorum',
     caption:
-      'Hexagonal 6-symmetry bloom separating control-plane masters and NGINX worker pods behind MetalLB VIP & Traefik ingress.',
-    stack: 'K3s (3+3) / MetalLB VIP / Traefik Ingress / CoreDNS',
-    icon: Boxes,
+      'Hexagonal 6-symmetry bloom separating control-plane nodes and worker pods behind L2 VIP & ingress routing.',
+    stack: 'Kubernetes / Load Balancer / Ingress / CoreDNS',
   },
   {
-    id: 'fituc',
-    shortLabel: 'FiT-UC Blossom',
-    title: 'FiT-UC Mobile Harmonic Network (Full Open Bloom)',
-    domain: 'Production NGO · Google Play Live',
+    id: 'mesh',
+    shortLabel: 'App Blossom',
+    title: 'Client & API Harmonic Network (Full Open Bloom)',
+    domain: 'Production Web & Mobile Apps',
     caption:
-      'Radiant full open blossom with luminous stamen core, connecting Care Leavers with self-hosted NocoDB APIs and Gotify alerts.',
-    stack: 'Flutter / Dart / NocoDB LXC / Node Auth / Gotify',
-    icon: Smartphone,
+      'Radiant full open blossom with luminous stamen core, connecting users to self-hosted REST APIs and real-time notifications.',
+    stack: 'Mobile / Web Client / REST APIs / Real-Time',
   },
 ];
+
+const MODE_ICONS: Record<MorphStateId, React.ComponentType<{ className?: string }>> = {
+  core: Server,
+  stream: Workflow,
+  cluster: Boxes,
+  mesh: Smartphone,
+};
 
 const CAMERA_OPTIONS: Array<{ id: CameraPreset; label: string }> = [
   { id: 'top', label: 'Top' },
@@ -83,13 +81,17 @@ const CAMERA_OPTIONS: Array<{ id: CameraPreset; label: string }> = [
   { id: 'front', label: 'Front' },
 ];
 
-export const SpatialMorphViewport: React.FC = () => {
+interface SpatialMorphViewportProps {
+  config?: SectionsConfig['systems3d'];
+}
+
+export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ config }) => {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasMountRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<MorphSceneController | null>(null);
 
   const prefersReduced = useReducedMotion();
-  const [activeState, setActiveState] = useState<MorphStateId>('proxmox');
+  const [activeState, setActiveState] = useState<MorphStateId>('core');
   const [wireframe, setWireframe] = useState<boolean>(false);
   const [autoCycle, setAutoCycle] = useState<boolean>(!prefersReduced);
   const [explodedFactor, setExplodedFactor] = useState<number>(0.06);
@@ -97,8 +99,22 @@ export const SpatialMorphViewport: React.FC = () => {
   const [controlsCollapsed, setControlsCollapsed] = useState<boolean>(false);
   const [webglFailed, setWebglFailed] = useState<boolean>(false);
 
+  const modeSpecs = useMemo<MorphModeSpec[]>(() => {
+    const source = config?.modes && config.modes.length > 0 ? config.modes : DEFAULT_MODE_CONFIGS;
+    return source.map((m) => ({
+      ...m,
+      icon: MODE_ICONS[m.id] || Server,
+    }));
+  }, [config]);
+
   const activeSpec =
-    MORPH_SPECS.find((s) => s.id === activeState) || MORPH_SPECS[0];
+    modeSpecs.find((s) => s.id === activeState) || modeSpecs[0];
+
+  const eyebrow = config?.eyebrow || '3D Blooming Lotus · Systems Architecture';
+  const title = config?.title || 'Interactive 3D Blooming Lotus Architecture';
+  const subtitle =
+    config?.subtitle ||
+    'Procedural 3D blooming pink lotus with emerald calyx leaves and swirling cherry blossoms — mapping core compute topology, streaming data pipelines, cluster symmetry, and client-API delivery.';
 
   // Mount Three.js controller once inside dedicated empty container ref
   useEffect(() => {
@@ -195,16 +211,16 @@ export const SpatialMorphViewport: React.FC = () => {
         <div>
           <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
             <Flower2 className="w-3.5 h-3.5 text-[#39FF14]" aria-hidden="true" />
-            <span>3D Blooming Lotus · Systems Architecture</span>
+            <span>{eyebrow}</span>
           </span>
           <SplitText
             as="h2"
-            text="Interactive 3D Blooming Lotus Architecture"
+            text={title}
             stagger={0.04}
             className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-zinc-50 block"
           />
           <p className="text-sm text-zinc-400 mt-2 max-w-2xl leading-relaxed">
-            Procedural 3D blooming pink lotus with emerald calyx leaves and swirling cherry blossoms — mapping Proxmox hypervisor topology, Databricks Spark pipelines, 6-node K3s cluster geometry, and FiT-UC mobile mesh.
+            {subtitle}
           </p>
         </div>
 
@@ -291,7 +307,7 @@ export const SpatialMorphViewport: React.FC = () => {
           >
             {/* 4 Architecture States */}
             <div className="flex items-center gap-1" role="group" aria-label="Select 3D architecture state">
-              {MORPH_SPECS.map((spec) => {
+              {modeSpecs.map((spec) => {
                 const selected = activeState === spec.id;
                 const Icon = spec.icon;
                 return (

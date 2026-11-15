@@ -1,33 +1,33 @@
-# Modern Developer Portfolio & Automated ATS CV Engine
+# Modular Developer Portfolio & Automated ATS Resume / CV Engine
 
-A high-performance personal developer portfolio and automated ATS-compliant PDF curriculum vitae engine for **Divansh Prasad** (Software Engineer at Daimler Truck DTICI, Maintainer of FiT-UC for Udayan Care NGO, Self-Hosted Proxmox & K3s Lab Architect).
+A clone-and-customize developer portfolio, animated project progress gallery, and dual ATS-compliant PDF document generator built with **React 19**, **Vite 8**, **Tailwind CSS v4**, **Framer Motion**, and **Three.js WebGL**, backed by a **single-source-of-truth data layer** (`public/data/portfolio.json`, with CSV fallbacks in `public/data/*.csv`).
 
-Built with **React 19**, **Vite 8**, **Tailwind CSS v4**, **Framer Motion**, and **Three.js WebGL (Interactive 3D Systems Morph)**, backed by a **single source of truth data architecture** (`public/data/portfolio.json`).
+Anyone can clone this repository, edit JSON or CSV files in `public/data/`, swap local or external image URLs, and deploy without modifying React or server code.
 
 ---
 
-## Highlights & Features
+## Key Capabilities
 
-- **Single Source of Truth (`portfolio.json`)**: Update projects, work history, homelab specs, or education once in `public/data/portfolio.json`. Both the website UI and the generated PDF CV update automatically.
-- **Automated ATS-Compliant PDF Engine (`pdfkit`)**:
-  - Direct server endpoint: `GET /api/cv.pdf` compiles a high-density, parser-friendly, single/two-page ATS document.
-  - Offline / Static Build script: `npm run generate-cv` outputs `public/Divansh_Prasad_CV.pdf` for GitHub Pages and static CDNs.
-  - In-app interactive preview modal with paper/dark inspection modes, print styles (`Ctrl+P`), and direct download.
-- **Interactive 3D Systems Morph (Three.js WebGL)**:
-  - Shared-topology parametric morph target core geometry blending across 4 production architectures:
-    1. **Proxmox Core** (Superellipsoid hypervisor monolith with machined channels)
-    2. **Fleet Torus** (Helical streaming toroid for ~70,000 truck telemetry)
-    3. **K3s Quorum** (Hexagonal 6-node cluster manifold)
-    4. **FiT-UC Field** (Harmonic network wave field)
-  - Custom GLSL shader wavefront scan (`onBeforeCompile`), procedural IBL studio reflections (`RoomEnvironment`), titanium gimbal rings, 6 composite satellite pods, 220 orbital instanced shards, and zero-viewport-occlusion collapsible bottom control dock.
-  - Full `prefers-reduced-motion` compliance and software-WebGL pacing.
-- **Frosted Dark-Glass UI & Dynamic Halftone**:
-  - Real-time topographic contour canvas background with cursor ray lean.
-  - Smooth 3-zone sticky navigation bar, desktop right-edge section index dock, text scramble badges, and interactive NGINX Layer-2 load balancing visualizer.
-  - Zero AI-slop design: No fake telemetry, no animated pulsing dots, no pill badge clutter, and no broken external URLs.
-- **GitHub Pages & Static Hosting Ready**:
-  - Configured relative base path (`./`) in `vite.config.ts`.
-  - Automatic fallback between dynamic backend endpoints and static assets.
+- **100% Data-Driven UI & Zero Hardcoded Personal Details**:
+  - Zero personal identity, company names, domains, or project descriptions live inside `src/`, `server/`, or `scripts/`.
+  - All copy, experience timelines, skill tiles, homelab clusters, and academics load dynamically from `public/data/portfolio.json` (with CSV fallback via `public/data/*.csv`).
+  - Browser `<title>` and meta description sync automatically from `profile.name` and `hero.lead`.
+- **Universal Modular Media & Icon Resolution (`media.icons` & `icon_overrides.csv`)**:
+  - Override any technology, hardware, social, company, or school icon globally using either local assets (`/images/...`) or remote CDN URLs (`https://...`) via `portfolio.json -> media.icons` or `public/data/icon_overrides.csv`.
+  - Automatic graceful fallback to built-in crisp geometric SVG brand marks when no custom image is supplied.
+- **Split 1-Page ATS Resume vs. Comprehensive CV + Live ATS Health Audit**:
+  - **1-Page Executive Resume (`GET /api/resume.pdf`)**: Linear left-to-right PDF stream (`pdfkit`) with explicit clickable `LinkedIn:`, `GitHub:`, and `Portfolio:` links, configurable entry limits (`maxExperiencesInResume`, `maxProjectsInResume`), and unified single-string bullets for high ATS parse accuracy.
+  - **Full Curriculum Vitae (`GET /api/cv.pdf`)**: Complete career ledger, homelab architecture evolution, all active projects, academics, certifications, and interests.
+  - **Built-In ATS Health Check Drawer**: Flags repeated action verbs, checks essential sections and contact links, highlights unquantified bullets for optional review, and verifies 1-page resume density in real time.
+- **Animated Project & Career Progress Gallery (`progressGallery` / `progress_gallery.csv`)**:
+  - Link multi-stage chronological milestones (`date`, `phase`, `title`, `ideaNote`, `outcome`, `mediaUrl`) to any project or experience role using its `itemId`.
+  - Opens a keyboard-navigable (`←`/`→`/`ESC`), animated timeline gallery from project cards, project detail modals, and work experience entries.
+  - Renders stylized Blueprint Wireframe placeholder cards (showing phase metadata and suggested asset path `/images/gallery/<itemId>/01.webp`) until real photos or diagram URLs are added.
+- **Project Lifecycle, Priority & Visibility Controls**:
+  - `status`: `'live' | 'active' | 'wip' | 'archived' | 'unmaintained' | 'hidden'`
+  - `priority`, `featured`, `cardStyle` (`'banner' | 'compact'`), and `filterGroup` control ordering, spotlight sizing, and dynamic filter tabs cleanly from JSON/CSV.
+- **Interactive 3D Blooming Lotus Architecture Viewport (Three.js WebGL)**:
+  - Morphs across 4 configurable geometric presets (`core`, `stream`, `cluster`, `mesh`) driven by `sections.systems3d`.
 
 ---
 
@@ -36,274 +36,53 @@ Built with **React 19**, **Vite 8**, **Tailwind CSS v4**, **Framer Motion**, and
 ```
 ├── public/
 │   ├── data/
-│   │   └── portfolio.json       # MASTER DATA SOURCE: Edit this file to update everything
-│   ├── images/                  # Project logos, company marks, and platform avatars
-│   ├── favicon.svg              # Brand SVG favicon
-│   └── Divansh_Prasad_CV.pdf    # Pre-compiled static ATS PDF (generated by script)
+│   │   ├── portfolio.json          # Primary config: edit this to customize site, gallery & PDFs
+│   │   ├── portfolio.example.json  # Clean starter template with placeholder examples
+│   │   ├── progress_gallery.csv    # CSV mirror/fallback for project & work ideation milestones
+│   │   ├── icon_overrides.csv      # CSV mirror/fallback for custom icon paths / CDN URLs
+│   │   └── *.csv                   # Fallback CSV tables (experience, projects, skills, etc.)
+│   ├── images/                     # Local profile, project, logo, and gallery assets
+│   └── favicon.svg
 ├── scripts/
-│   └── generate-cv.ts           # Standalone CLI script to build public/Divansh_Prasad_CV.pdf
+│   └── generate-cv.ts              # Builds both static Resume and CV PDFs into public/
 ├── server/
-│   └── cvPdfGenerator.ts        # PDFKit ATS layout engine (typography, margins, sections)
-├── server.ts                    # Express dev/production server (serves /api/cv.pdf & Vite app)
-├── src/
-│   ├── components/
-│   │   ├── three/               # Three.js 3D WebGL morph scene controller, geometries & shaders
-│   │   ├── motion/              # GlassCard, ContourCanvas, SectionDock, SplitText, FloodButton
-│   │   ├── Header.tsx           # Hero section, impact metrics, and CTA buttons
-│   │   ├── Projects.tsx         # Enterprise & open-source project showcases with modal views
-│   │   ├── Homelab.tsx          # 3-phase Proxmox evolution timeline & cluster specs
-│   │   ├── Experience.tsx       # Career ledger (Daimler Truck, STMicroelectronics, IIT Delhi)
-│   │   ├── Skills.tsx           # Categorized technical competencies & engineering principles
-│   │   ├── Education.tsx        # B.Tech Data Science & academic milestones
-│   │   ├── Contact.tsx          # Direct communication & collaboration channels
-│   │   ├── CvModal.tsx          # In-app ATS resume preview, print trigger & download
-│   │   └── DataConfigModal.tsx  # In-app schema viewer explaining how to edit portfolio.json
-│   ├── constants.ts             # SWR data loader reading from /data/portfolio.json
-│   ├── App.tsx                  # Root React application
-│   └── index.css                # Tailwind CSS v4 design tokens and glassmorphism styling
-├── package.json
-├── tsconfig.json
-└── vite.config.ts
+│   └── cvPdfGenerator.ts           # Modular PDFKit ATS linear layout engine ('resume' & 'cv')
+├── server.ts                       # Express server serving Vite + /api/portfolio + /api/resume.pdf + /api/cv.pdf
+└── src/
+    ├── components/                 # Modular UI sections, 3D scene, ProgressGalleryModal & CvModal
+    ├── context/MediaRegistryContext.tsx # Global icon override lookup across local & HTTPS URLs
+    ├── utils/atsAnalyzer.ts        # Live ATS verb-repetition & quantification checker
+    ├── utils/itemId.ts             # Deterministic slugification matching CSV/JSON milestones
+    ├── constants.ts                # SWR loader reading portfolio.json with CSV fallback
+    └── types.ts                    # Full TypeScript schema
 ```
 
 ---
 
-## Quick Start (Running Locally)
+## Quick Start
 
-### Prerequisites
-- **Node.js** `>= 18.0.0` (Node 20+ recommended)
-- **pnpm**, **npm**, or **bun**
+### 1. Clone & Customize Data
 
-### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/Divansh369/portfolio.git
+git clone <your-repo-url>
 cd portfolio
 npm install
-# or: pnpm install
 ```
 
-### 2. Run Local Development Server
+To start fresh with the starter template:
+
 ```bash
-npm run dev
-# or: pnpm dev
+cp public/data/portfolio.example.json public/data/portfolio.json
 ```
-Open **[http://localhost:3000](http://localhost:3000)** in your browser. This starts the Express server with Vite middlewares, serving both the React frontend and live backend API endpoints (`/api/portfolio`, `/api/cv.pdf`).
 
-### 3. Build for Production
-```bash
-npm run build
-# or: pnpm build
-```
-Builds the static client bundle into `dist/`. The output uses relative asset paths (`./assets/...`), allowing it to be served from any root domain or repository subpath (such as `https://<username>.github.io/<repo>/`).
+Update `public/data/portfolio.json` with your details, optionally add screenshots into `public/images/gallery/<itemId>/01.webp` (or HTTPS URLs), and regenerate your static Resume + CV PDFs:
 
-### 4. Regenerate ATS CV PDF Manually
-Whenever you update `public/data/portfolio.json`, run:
 ```bash
 npm run generate-cv
-# or: pnpm generate-cv
-```
-This reads `public/data/portfolio.json` and writes a refreshed `public/Divansh_Prasad_CV.pdf` directly.
-
----
-
-## How to Customize With Your Own Data
-
-All content on the website and within the generated CV is controlled by **`public/data/portfolio.json`**. You do not need to rewrite UI components to change copy, jobs, or links.
-
-### Data Schema Overview (`public/data/portfolio.json`)
-
-#### 1. Personal Profile (`profile`)
-```json
-"profile": {
-  "name": "Your Name",
-  "title": "Software Engineer · Distributed Systems",
-  "company": "Your Company",
-  "location": "City, Country",
-  "email": "you@example.com",
-  "phone": "+1 555-0199",
-  "domains": ["yourdomain.com"],
-  "githubUrl": "https://github.com/yourusername",
-  "linkedinUrl": "https://www.linkedin.com/in/yourusername/"
-}
+npm run dev
 ```
 
-#### 2. Hero Section & Quantified Metrics (`hero`)
-```json
-"hero": {
-  "kicker": ["Software Engineer", "Systems Architect", "City"],
-  "headline": "One-line headline describing what you build.",
-  "lead": "Two to three sentences summarizing your primary engineering strengths.",
-  "metrics": [
-    { "value": "70,000+", "label": "Connected Devices in Daily ETL" },
-    { "value": "FastAPI + React", "label": "Production Microservices" },
-    { "value": "Google Play", "label": "Live Production Mobile App" },
-    { "value": "Proxmox + K3s", "label": "Self-Hosted HA Infrastructure" }
-  ]
-}
-```
-
-#### 3. Experience & Bullet Points (`experience`)
-*Tip: Keep bullet points clear and metric-driven. These are used verbatim by the ATS resume engine.*
-```json
-"experience": [
-  {
-    "role": "Software Engineer",
-    "company": "Your Company",
-    "location": "City, Country",
-    "duration": "July 2025 - Present",
-    "logo": "/images/your_company.jpeg",
-    "bulletPoints": [
-      "Optimized ETL pipelines processing daily telemetry across 70,000+ connected devices.",
-      "Engineered full-stack internal tooling in FastAPI and React to replace legacy dashboards."
-    ],
-    "skills": ["Python", "Spark", "FastAPI", "React", "Docker"]
-  }
-]
-```
-
-#### 4. Projects (`realWorldProjects` & `otherProjects`)
-```json
-"realWorldProjects": [
-  {
-    "name": "FiT-UC Mobile Platform",
-    "category": "Mobile & Systems",
-    "badge": "Google Play Live",
-    "description": "Short 1-2 sentence overview shown on the card.",
-    "url": "https://play.google.com/store/apps/details?id=...",
-    "logo": "/images/project_logo.svg",
-    "stack": "Flutter|Dart|Node.js|Proxmox|REST APIs",
-    "details": "Bullet point 1 detailing architecture.|Bullet point 2 detailing outcome."
-  }
-]
-```
-
-#### 5. Homelab Evolution & Systems (`homelab`)
-```json
-"homelab": {
-  "evolution": [
-    {
-      "stage": "Phase 01 · Bare-Metal Linux",
-      "title": "Debian & Alpine on Repurposed Laptops",
-      "summary": "Hands-on experience running Docker and systemd services.",
-      "learnings": ["Configured manual firewalling and persistence."],
-      "stack": "Debian · Alpine · Docker Compose"
-    }
-  ],
-  "nodes": [
-    {
-      "hostname": "Primary Proxmox Server",
-      "type": "Proxmox VE 8 Host",
-      "cpu": "6C / 12T",
-      "ram": "64 GB DDR4",
-      "storage": "512 GB NVMe",
-      "notes": "Hosts production LXCs and 6-node K3s cluster."
-    }
-  ]
-}
-```
-
-#### 6. Technical Skills & Spoken Languages (`skills`)
-```json
-"skills": {
-  "categories": [
-    {
-      "name": "Languages & App Development",
-      "desc": "Backend APIs, systems code, and mobile applications.",
-      "items": ["Python", "C++", "Go", "TypeScript", "Dart & Flutter", "SQL"]
-    }
-  ],
-  "principles": [
-    "High-Throughput Stream Processing",
-    "Bare-Metal to Virtualized Migrations",
-    "End-to-End Delivery"
-  ],
-  "languages": ["English (Fluent)", "Hindi (Fluent)"]
-}
-```
-
-#### 7. Education & Certificates (`education`, `certificates`)
-```json
-"education": [
-  {
-    "institution": "Manipal Institute of Technology (MIT)",
-    "degree": "B.Tech in Data Science",
-    "duration": "2021 - 2025",
-    "gpa": "CGPA: 7.3 / 10.0"
-  }
-],
-"certificates": [
-  { "name": "Number Theory & Cryptography", "date": "Nov 2023" }
-]
-```
-
----
-
-## Deploying to GitHub Pages
-
-1. **Verify `vite.config.ts` Base**:
-   The repository already includes `base: process.env.VITE_BASE_URL || './'`, which generates relative links so assets load cleanly at `https://<username>.github.io/<repo>/`.
-
-2. **Generate Static CV & Build**:
-   ```bash
-   npm run generate-cv
-   npm run build
-   ```
-
-3. **Deploy via GitHub Actions** (Recommended):
-   Create `.github/workflows/deploy.yml`:
-   ```yaml
-   name: Deploy to GitHub Pages
-
-   on:
-     push:
-       branches: [ main ]
-
-   permissions:
-     contents: read
-     pages: write
-     id-token: write
-
-   concurrency:
-     group: "pages"
-     cancel-in-progress: false
-
-   jobs:
-     deploy:
-       environment:
-         name: github-pages
-         url: ${{ steps.deployment.outputs.page_url }}
-       runs-on: ubuntu-latest
-       steps:
-         - name: Checkout
-           uses: actions/checkout@v4
-
-         - name: Setup Node
-           uses: actions/setup-node@v4
-           with:
-            node-version: 20
-            cache: 'npm'
-
-         - name: Install dependencies
-           run: npm ci
-
-         - name: Generate static ATS CV
-           run: npm run generate-cv
-
-         - name: Build site
-           run: npm run build
-
-         - name: Setup Pages
-           uses: actions/configure-pages@v5
-
-         - name: Upload artifact
-           uses: actions/upload-pages-artifact@v3
-           with:
-             path: './dist'
-
-         - name: Deploy to GitHub Pages
-           id: deployment
-           uses: actions/deploy-pages@v4
-   ```
+Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
@@ -311,14 +90,14 @@ All content on the website and within the generated CV is controlled by **`publi
 
 | Command | Action |
 | :--- | :--- |
-| `npm run dev` | Runs the full-stack server on port `3000` with live API proxying and hot asset compilation. |
-| `npm run build` | Builds the optimized production static web app into `dist/`. |
-| `npm run generate-cv` | Compiles the ATS PDF CV directly from `public/data/portfolio.json` into `public/Divansh_Prasad_CV.pdf`. |
-| `npm run lint` | Runs TypeScript type checking (`tsc --noEmit`). |
-| `npm run clean` | Removes build artifacts (`dist/`). |
+| `npm run dev` | Starts Express + Vite on port `3000` with live `/api/resume.pdf` and `/api/cv.pdf`. |
+| `npm run generate-cv` | Compiles static `<Name>_Resume.pdf` and `<Name>_CV.pdf` into `public/`. |
+| `npm run build` | Builds the static production site into `dist/`. |
+| `npm run lint` | Runs TypeScript checks (`tsc --noEmit`). |
+| `npm run clean` | Removes `dist/`. |
 
 ---
 
 ## License
 
-MIT © [Divansh Prasad](https://github.com/Divansh369)
+MIT
