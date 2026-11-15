@@ -1,0 +1,736 @@
+
+Repetition
+
+Repeating the same words signals a limited vocabulary and makes your resume read flat and unpolished.
+
+Instead, use synonyms and stronger action verbs to sharpen each achievement.
+
+1
+Oh, no!
+We found that the following words are repeated frequently in your resume:
+6 times: automated
+try replacing with
+systematized
+mechanized
+computerized
+Job-Winning Resume In Minutes
+
+Create an Enhancv Resume
+FAQs
+Is repetition necessarily a bad thing?
+
+It's normal to repeat yourself throughout your resume, but over-repeating is something you want to avoid. It makes a resume less compelling and it creates an impression of a low vocabulary level. Try using synonyms when you repeat words frequently.
+
+Spelling & Grammar
+
+Typos kill first impressions. Enhancv's Content Checker catches the spelling and grammar slips your eye skips.
+
+It catches more than typos. Weak verbs, repeated words, tense inconsistencies, and vague phrasing all get flagged before you hit send.
+
+9
+Oh, no!
+We found the following spelling mistakes in your resume:
+Fix my spelling & grammar mistakes with Enhancv PRO
+
+Fix Mistakes
+With Enhancv's PRO report, you get:
+A complete professional-grade resume checker report
+Ready to use suggestions for improving your resume
+Over 1000 industry-leading resume templates and samples
+Enhancv's resume and cover letter builder
+Resume tailoring based on a job ad you provide
+
+FAQs
+Is incorrect spelling unprofessional?
+
+With modern technology and all the spellcheckers out there, having a spelling mistake on your resume can be interpreted as an unprofessional and sometimes disrespectful thing. Make sure you use a real-time content analyzer to prevent making mistakes on your resume. Enhancv's resume builder analyzes and shows your mistakes at the moment of their appearance to avoid you sending an unprofessional resume.
+
+How many spelling errors are acceptable on a resume?
+
+
+Bullets Consistency
+PREMIUM
+
+This insight is available with PRO
+
+Upgrade to unlock the full analysis and see what recruiters and ATS see in your resume.
+
+
+Upgrade to PRO
+
+SECTIONS
+3 issues found
+Essential Sections
+
+
+We’ve found the following essential sections in your resume:
+Experience
+Education
+Summary
+With Enhancv's PRO report, you get:
+A complete professional-grade resume checker report
+Ready to use suggestions for improving your resume
+Over 1000 industry-leading resume templates and samples
+Enhancv's resume and cover letter builder
+Resume tailoring based on a job ad you provide
+
+FAQs
+What are the essential sections in a resume?
+
+It's important to include those three required sections — Experience, Education, and Skills in your resume.
+Ensure that they are properly formatted and every single element is clearly outlined (degree, institution, education dates, company names, job titles, employment dates, bullets with responsibilities and achievements, and skills).
+
+Contact Information
+
+
+We’ve found the following contact information in your resume:
+Phone number:
++91 9873354637
+Email address:
+divanshthebest@gmail.com
+You are missing essential contact information:
+LinkedIn
+You are either not using an ATS friendly template, or you are missing your linkedin in your resume
+FAQs
+What contact information should I include?
+
+It's important that potential employers and recruiters can easily reach you, so ensure you've included your email address at the bare minimum. You can optionally include a mobile number too.
+
+If you have a portfolio website or LinkedIn it makes sense to add it to your resume, so recruiters can see more information about your experience.
+
+
+ATS Essentials
+1 issue found
+File Format & Size
+
+When you're uploading your resume in platforms like Indeed, you're likely to meet a file size limit. Ideally, your resume should be less than 2MB in size. Anything larger will most likely not be accepted on the majority of platforms.
+
+Your file type also plays an important role in ATS screening. PDF files are preferred as the text can be easily read by the applicant tracking system. Avoid DOCX, PNG or JPG files.
+
+
+Good job!
+Your resume file is 11 KB and your file type is PDF.
+Job-Winning Resume In Minutes
+
+Create an Enhancv Resume
+FAQs
+What's the maximum size I can use for my resume file?
+
+The common file size limit for website uploads is under 2MB. If your resume is too large, we recommend using a platform like Enhancv that will compress the visual elements and produce a low-size, high-quality result.
+
+Why is PDF the preferred format?
+
+
+Design
+
+The design of your resume is crucial. Well-designed resume templates give you the opportunity to communicate information in different ways - graphs, bullets, achievements, and more.
+
+Enhancv resume templates are made with ATS in mind, allowing you to use visually impressive sections that are easily read by applicant tracking systems.
+
+
+Oh, no!
+Your resume is using a generic layout and has little chance of standing out.
+
+Continue With This Template
+Create a resume that stands out with Enhancv
+Divansh Prasad
+Software Engineer
++91 9873354637
+divanshthebest@gmail.com
+diivvansh.com
+github.com/Divansh369
+Bengaluru, India
+DP
+Summary
+Software Engineer at Daimler Truck Innovation Center India (DTICI) working on Databricks ETL pipelines for ~70,000 connected trucks, internal FastAPI and React web apps, and automated Over-The-Air (OTA) fleet data collection scripts validated on test rigs. Lead volunteer developer for Udayan Care NGO, shipping the bilingual FiT-UC mobile app on Google Play Store backed by self-hosted Proxmox LXC containers. Experienced advancing from bare-metal Debian, Kali, and Alpine Linux with Docker Compose to a 3-node Proxmox VE HA cluster with Proxmox Backup Server (PBS) and K3s routing
+Experience
+Software Engineer
+Daimler Truck Innovation Center India (DTICI)
+
+07/2026 - Present 
+
+Bengaluru, India
+Maintain and tune Databricks Spark ETL pipelines processing daily telemetry across ~70,000 connected commercial trucks
+Built a FastAPI + React/Node.js internal web application hosted inside Databricks to replace legacy Power BI dashboards on multi-million-row tables
+Write and validate automated daily Over-The-Air (OTA) fleet data collection scripts on hardware test rigs prior to fleet rollout
+Tools: Python, Databricks, Apache Spark, FastAPI, Node.js, React, OTA Data Collection, C++, Test Rig Validation
+Lead Volunteer Developer
+Udayan Care (NGO)
+
+2025 - Present 
+
+Bengaluru / Remote
+Built and shipped FiT-UC, an aftercare mobile platform for Care Leavers at Udayan Care NGO, live on Google Play Store (20–30 monthly active users)
+Developed the bilingual (English & Hindi) Flutter client using AI-assisted UI iteration paired with a self-hosted NocoDB LXC REST backend and Node.js auth server at udayan.diivvansh.com
+Worked closely with the NGO team and field Care Leavers through Google Play closed testing to ship skilling courses, mentor booking, and Red Alert notifications via Gotify
+Tools: Flutter, Dart, NocoDB (LXC), Node.js, Proxmox VE, REST APIs, Gotify, Google Play Console
+Data Analyst (Graduate Engineer Trainee)
+Daimler Truck Innovation Center India (DTICI)
+
+07/2025 - 07/2026 
+
+Bengaluru, India
+Automated daily fleet data extraction jobs and reporting workflows across connected commercial vehicles
+Delivered Power BI dashboards and internal cloud data views before transitioning full-time into software engineering
+Tools: Power BI, Python, SQL, Data Pipelines, Automation
+Digital Verification and Automation Intern
+STMicroelectronics
+
+01/2025 - 07/2025 
+
+Greater Noida, India
+Automated digital verification test workflows using Python scripts
+Studied SAT solver algorithms for automated problem-solving and explored hardware acceleration models
+Tools: Python, Automation, SAT Solvers, Digital Verification, VHDL
+Data Science Intern
+Multiplier
+
+05/2024 - 07/2024 
+
+Delhi, India
+Built workforce analytics dashboards in Microsoft Power BI and trained Python forecasting models to analyze workforce trends
+Tools: Microsoft Power BI, Python, Machine Learning, Forecasting, Microsoft Excel
+Skills
+Languages & App Development
+Python
+C++
+CUDA
+SQL
+PostgreSQL
+Dart
+Flutter
+TypeScript
+JavaScript
+FastAPI
+Node.js
+React
+Go
+Java
+Big Data, ML & Analytics
+Databricks
+Apache Spark
+Delta Lake
+OTA Fleet Data Collection
+Pandas
+NumPy
+Scikit-learn
+TensorFlow
+Power BI
+Apache Superset
+Kobo Toolbox
+Glide Apps
+Infrastructure, Linux & Virtualization
+Proxmox VE
+PBS Backups
+Debian
+Kali
+Alpine Linux
+Docker
+Docker Compose
+Kubernetes
+K3s
+NGINX
+MetalLB
+Traefik
+Tailscale
+Cloudflare Tunnels
+NocoDB
+Redis
+MinIO
+AWS
+Git
+Projects
+FiT - Udayan Care (NGO Platform)
+
+play.google.com/store/apps/dev?id=8541457488243382905
+Mobile & Production
+Built the Flutter mobile client with AI-assisted iteration and shipped open-source code at github.com/FioreJoy/FiT-UC
+Self-hosted backend running in a Proxmox LXC (NocoDB REST API) alongside a Node.js auth server at udayan.diivvansh.com
+Passed Google Play field testing with Care Leavers to serve 3 core workflows: TTS skilling lessons, mentor scheduling, and Red Alert crisis dispatch
+Stack: Flutter, Dart, NocoDB (LXC), Node.js, Proxmox VE, Gotify, REST APIs
+DTICI Connected Truck Databricks App & ETL
+
+www.daimlertruck.com
+Big Data & Enterprise
+Replaced slow legacy Power BI dashboards on multi-million-row tables with a custom FastAPI and React/Node.js app inside Databricks
+Optimized Spark ETL jobs handling daily operational telemetry from ~70,000 connected commercial trucks
+Automated daily OTA fleet data collection scripts and validated script safety and throughput on hardware test rigs
+Stack: Databricks, Apache Spark, FastAPI, React, Node.js, Python, Delta Lake
+HA NGINX Load Balancer on Proxmox K3s
+
+pve.diivvansh.com
+Infrastructure & Systems
+Allocated bare-metal Layer-2 VIPs with MetalLB paired with Traefik ingress routing traffic across replica pods
+Configured per-session distribution so serving pod hostnames and internal cluster IPs rotate cleanly across concurrent users and browser tabs
+Built as an extension of my multi-node Proxmox lab behind Cloudflare Tunnels and Tailscale
+Stack: Proxmox VE, Kubernetes (K3s), MetalLB, Traefik, NGINX, Docker, Linux
+Fiorejoy
+
+fiorejoy.com
+Full-Stack Platform
+Modeled user-event recommendations using PostgreSQL with the Apache AGE graph extension
+Built real-time group messaging over WebSockets with MinIO S3-compatible media storage
+Stack: Flutter, FastAPI, PostgreSQL, Apache AGE, MinIO, WebSockets
+www.enhancv.com
+Experience
+IoT Intern
+IIT Delhi
+
+12/2023 - 01/2024 
+
+Delhi, India
+Built a voice-interactive smart mirror by integrating a Raspberry Pi with the Alexa SDK, handling hardware setup, coding, and testing
+Tools: Linux, AWS, Raspberry Pi, Alexa SDK, IoT
+Data Science Intern
+Goalkeep
+
+06/2023 - 08/2023 
+
+Remote
+Built survey analytics dashboards in Apache Superset and handled data migration across SQL databases, Kobo Toolbox, Glide Apps, Google Sheets, and AppSheet
+Tools: Python, SQL, Apache Superset, Kobo Toolbox, Glide Apps, Google AppSheet
+Education
+B.Tech in Data Science
+Manipal Institute of Technology (MIT)
+
+10/2021 - 07/2025 
+CGPA
+7.3
+ / 
+10.0
+Senior Secondary (Class XII)
+ITL Public School (CBSE)
+
+04/2020 - 10/2021 
+%
+94
+ / 
+100
+Secondary School (Class X)
+ITL Public School (CBSE)
+
+04/2017 - 04/2018 
+%
+95
+ / 
+100
+Interests
+Chess
+Quantum Physics
+Fitness
+Fiction Novels
+Open Source
+Gaming
+Projects
+Proxmox VE HA Cluster & Linux Infrastructure
+
+pve.diivvansh.com
+Bare-Metal Linux -> Proxmox VE + PBS -> Consolidated PVE 8 & K3s
+Started bare-metal on Debian, Kali, and Alpine Linux across spare laptops managed with Docker and Docker Compose
+Upgraded into a 3-node High-Availability (HA) Proxmox VE cluster with Corosync quorum plus a 4th laptop dedicated to Proxmox Backup Server (PBS) incremental snapshots
+Consolidated onto a primary Proxmox VE 8 server running production Udayan Care LXCs and a nested 6-node K3s cluster behind Tailscale and Cloudflare Tunnels
+Certifications
+Number Theory & Cryptography
+Natural Language Processing in Microsoft Azure
+Build Your First GUI App With Java
+Writing Java Application Code
+Data Science using Python
+Languages
+English
+Fluent
+Hindi
+Fluent
+Find me online
+LinkedIn
+linkedin.com/in/divansh-prasad-893b05230
+www.enhancv.com
+Double column
+DP
+Divansh Prasad
+Software Engineer
++91 9873354637
+divanshthebest@gmail.com
+diivvansh.com
+github.com/Divansh369
+Bengaluru, India
+Summary
+Software Engineer at Daimler Truck Innovation Center India (DTICI) working on Databricks ETL pipelines for ~70,000 connected trucks, internal FastAPI and React web apps, and automated Over-The-Air (OTA) fleet data collection scripts validated on test rigs. Lead volunteer developer for Udayan Care NGO, shipping the bilingual FiT-UC mobile app on Google Play Store backed by self-hosted Proxmox LXC containers. Experienced advancing from bare-metal Debian, Kali, and Alpine Linux with Docker Compose to a 3-node Proxmox VE HA cluster with Proxmox Backup Server (PBS) and K3s routing
+Experience
+Daimler Truck Innovation Center India (DTICI)
+Bengaluru, India
+Software Engineer
+07/2026 - Present
+Maintain and tune Databricks Spark ETL pipelines processing daily telemetry across ~70,000 connected commercial trucks
+Built a FastAPI + React/Node.js internal web application hosted inside Databricks to replace legacy Power BI dashboards on multi-million-row tables
+Write and validate automated daily Over-The-Air (OTA) fleet data collection scripts on hardware test rigs prior to fleet rollout
+Tools: Python, Databricks, Apache Spark, FastAPI, Node.js, React, OTA Data Collection, C++, Test Rig Validation
+Udayan Care (NGO)
+Bengaluru / Remote
+Lead Volunteer Developer
+2025 - Present
+Built and shipped FiT-UC, an aftercare mobile platform for Care Leavers at Udayan Care NGO, live on Google Play Store (20–30 monthly active users)
+Developed the bilingual (English & Hindi) Flutter client using AI-assisted UI iteration paired with a self-hosted NocoDB LXC REST backend and Node.js auth server at udayan.diivvansh.com
+Worked closely with the NGO team and field Care Leavers through Google Play closed testing to ship skilling courses, mentor booking, and Red Alert notifications via Gotify
+Tools: Flutter, Dart, NocoDB (LXC), Node.js, Proxmox VE, REST APIs, Gotify, Google Play Console
+Daimler Truck Innovation Center India (DTICI)
+Bengaluru, India
+Data Analyst (Graduate Engineer Trainee)
+07/2025 - 07/2026
+Automated daily fleet data extraction jobs and reporting workflows across connected commercial vehicles
+Delivered Power BI dashboards and internal cloud data views before transitioning full-time into software engineering
+Tools: Power BI, Python, SQL, Data Pipelines, Automation
+STMicroelectronics
+Greater Noida, India
+Digital Verification and Automation Intern
+01/2025 - 07/2025
+Automated digital verification test workflows using Python scripts
+Studied SAT solver algorithms for automated problem-solving and explored hardware acceleration models
+Tools: Python, Automation, SAT Solvers, Digital Verification, VHDL
+Multiplier
+Delhi, India
+Data Science Intern
+05/2024 - 07/2024
+Built workforce analytics dashboards in Microsoft Power BI and trained Python forecasting models to analyze workforce trends
+Tools: Microsoft Power BI, Python, Machine Learning, Forecasting, Microsoft Excel
+Skills
+Languages & App Development
+:
+Python
+C++
+CUDA
+SQL
+PostgreSQL
+Dart
+Flutter
+TypeScript
+JavaScript
+FastAPI
+Node.js
+React
+Go
+Java
+Big Data, ML & Analytics
+:
+Databricks
+Apache Spark
+Delta Lake
+OTA Fleet Data Collection
+Pandas
+NumPy
+Scikit-learn
+TensorFlow
+Power BI
+Apache Superset
+Kobo Toolbox
+Glide Apps
+Infrastructure, Linux & Virtualization
+:
+Proxmox VE
+PBS Backups
+Debian
+Kali
+Alpine Linux
+Docker
+Docker Compose
+Kubernetes
+K3s
+NGINX
+MetalLB
+Traefik
+Tailscale
+Cloudflare Tunnels
+NocoDB
+Redis
+MinIO
+AWS
+Git
+Projects
+FiT - Udayan Care (NGO Platform)
+play.google.com/store/apps/dev?id=8541457488243382905
+Mobile & Production
+Built the Flutter mobile client with AI-assisted iteration and shipped open-source code at github.com/FioreJoy/FiT-UC
+Self-hosted backend running in a Proxmox LXC (NocoDB REST API) alongside a Node.js auth server at udayan.diivvansh.com
+Passed Google Play field testing with Care Leavers to serve 3 core workflows: TTS skilling lessons, mentor scheduling, and Red Alert crisis dispatch
+Stack: Flutter, Dart, NocoDB (LXC), Node.js, Proxmox VE, Gotify, REST APIs
+DTICI Connected Truck Databricks App & ETL
+www.daimlertruck.com
+Big Data & Enterprise
+Replaced slow legacy Power BI dashboards on multi-million-row tables with a custom FastAPI and React/Node.js app inside Databricks
+Optimized Spark ETL jobs handling daily operational telemetry from ~70,000 connected commercial trucks
+Automated daily OTA fleet data collection scripts and validated script safety and throughput on hardware test rigs
+Stack: Databricks, Apache Spark, FastAPI, React, Node.js, Python, Delta Lake
+HA NGINX Load Balancer on Proxmox K3s
+pve.diivvansh.com
+Infrastructure & Systems
+Allocated bare-metal Layer-2 VIPs with MetalLB paired with Traefik ingress routing traffic across replica pods
+Configured per-session distribution so serving pod hostnames and internal cluster IPs rotate cleanly across concurrent users and browser tabs
+Built as an extension of my multi-node Proxmox lab behind Cloudflare Tunnels and Tailscale
+Stack: Proxmox VE, Kubernetes (K3s), MetalLB, Traefik, NGINX, Docker, Linux
+Fiorejoy
+fiorejoy.com
+Full-Stack Platform
+Modeled user-event recommendations using PostgreSQL with the Apache AGE graph extension
+Built real-time group messaging over WebSockets with MinIO S3-compatible media storage
+Stack: Flutter, FastAPI, PostgreSQL, Apache AGE, MinIO, WebSockets
+www.enhancv.com
+Experience
+IIT Delhi
+Delhi, India
+IoT Intern
+12/2023 - 01/2024
+Built a voice-interactive smart mirror by integrating a Raspberry Pi with the Alexa SDK, handling hardware setup, coding, and testing
+Tools: Linux, AWS, Raspberry Pi, Alexa SDK, IoT
+Goalkeep
+Remote
+Data Science Intern
+06/2023 - 08/2023
+Built survey analytics dashboards in Apache Superset and handled data migration across SQL databases, Kobo Toolbox, Glide Apps, Google Sheets, and AppSheet
+Tools: Python, SQL, Apache Superset, Kobo Toolbox, Glide Apps, Google AppSheet
+Education
+Manipal Institute of Technology (MIT)
+10/2021 - 07/2025
+B.Tech in Data Science
+|
+CGPA
+:
+7.3
+ / 
+10.0
+ITL Public School (CBSE)
+04/2020 - 10/2021
+Senior Secondary (Class XII)
+|
+%
+:
+94
+ / 
+100
+ITL Public School (CBSE)
+04/2017 - 04/2018
+Secondary School (Class X)
+|
+%
+:
+95
+ / 
+100
+Interests
+Chess
+Quantum Physics
+Fitness
+Fiction Novels
+Open Source
+Gaming
+Projects
+Proxmox VE HA Cluster & Linux Infrastructure
+pve.diivvansh.com
+Bare-Metal Linux -> Proxmox VE + PBS -> Consolidated PVE 8 & K3s
+Started bare-metal on Debian, Kali, and Alpine Linux across spare laptops managed with Docker and Docker Compose
+Upgraded into a 3-node High-Availability (HA) Proxmox VE cluster with Corosync quorum plus a 4th laptop dedicated to Proxmox Backup Server (PBS) incremental snapshots
+Consolidated onto a primary Proxmox VE 8 server running production Udayan Care LXCs and a nested 6-node K3s cluster behind Tailscale and Cloudflare Tunnels
+Certifications
+Number Theory & Cryptography
+Natural Language Processing in Microsoft Azure
+Build Your First GUI App With Java
+Writing Java Application Code
+Data Science using Python
+Languages
+English
+Fluent
+Hindi
+Fluent
+Find me online
+LinkedIn
+linkedin.com/in/divansh-prasad-893b05230
+www.enhancv.com
+Ivy League
+Divansh Prasad
+Software Engineer
++91 9873354637
+divanshthebest@gmail.com
+diivvansh.com
+github.com/Divansh369
+Bengaluru, India
+DP
+Summary
+Software Engineer at Daimler Truck Innovation Center India (DTICI) working on Databricks ETL pipelines for ~70,000 connected trucks, internal FastAPI and React web apps, and automated Over-The-Air (OTA) fleet data collection scripts validated on test rigs. Lead volunteer developer for Udayan Care NGO, shipping the bilingual FiT-UC mobile app on Google Play Store backed by self-hosted Proxmox LXC containers. Experienced advancing from bare-metal Debian, Kali, and Alpine Linux with Docker Compose to a 3-node Proxmox VE HA cluster with Proxmox Backup Server (PBS) and K3s routing
+Experience
+Software Engineer
+07/2026 - Present
+Daimler Truck Innovation Center India (DTICI)
+Bengaluru, India
+Maintain and tune Databricks Spark ETL pipelines processing daily telemetry across ~70,000 connected commercial trucks
+Built a FastAPI + React/Node.js internal web application hosted inside Databricks to replace legacy Power BI dashboards on multi-million-row tables
+Write and validate automated daily Over-The-Air (OTA) fleet data collection scripts on hardware test rigs prior to fleet rollout
+Tools: Python, Databricks, Apache Spark, FastAPI, Node.js, React, OTA Data Collection, C++, Test Rig Validation
+Lead Volunteer Developer
+2025 - Present
+Udayan Care (NGO)
+Bengaluru / Remote
+Built and shipped FiT-UC, an aftercare mobile platform for Care Leavers at Udayan Care NGO, live on Google Play Store (20–30 monthly active users)
+Developed the bilingual (English & Hindi) Flutter client using AI-assisted UI iteration paired with a self-hosted NocoDB LXC REST backend and Node.js auth server at udayan.diivvansh.com
+Worked closely with the NGO team and field Care Leavers through Google Play closed testing to ship skilling courses, mentor booking, and Red Alert notifications via Gotify
+Tools: Flutter, Dart, NocoDB (LXC), Node.js, Proxmox VE, REST APIs, Gotify, Google Play Console
+Data Analyst (Graduate Engineer Trainee)
+07/2025 - 07/2026
+Daimler Truck Innovation Center India (DTICI)
+Bengaluru, India
+Automated daily fleet data extraction jobs and reporting workflows across connected commercial vehicles
+Delivered Power BI dashboards and internal cloud data views before transitioning full-time into software engineering
+Tools: Power BI, Python, SQL, Data Pipelines, Automation
+Digital Verification and Automation Intern
+01/2025 - 07/2025
+STMicroelectronics
+Greater Noida, India
+Automated digital verification test workflows using Python scripts
+Studied SAT solver algorithms for automated problem-solving and explored hardware acceleration models
+Tools: Python, Automation, SAT Solvers, Digital Verification, VHDL
+Data Science Intern
+05/2024 - 07/2024
+Multiplier
+Delhi, India
+Built workforce analytics dashboards in Microsoft Power BI and trained Python forecasting models to analyze workforce trends
+Tools: Microsoft Power BI, Python, Machine Learning, Forecasting, Microsoft Excel
+Skills
+Languages & App Development
+Python
+C++
+CUDA
+SQL
+PostgreSQL
+Dart
+Flutter
+TypeScript
+JavaScript
+FastAPI
+Node.js
+React
+Go
+Java
+Big Data, ML & Analytics
+Databricks
+Apache Spark
+Delta Lake
+OTA Fleet Data Collection
+Pandas
+NumPy
+Scikit-learn
+TensorFlow
+Power BI
+Apache Superset
+Kobo Toolbox
+Glide Apps
+Infrastructure, Linux & Virtualization
+Proxmox VE
+PBS Backups
+Debian
+Kali
+Alpine Linux
+Docker
+Docker Compose
+Kubernetes
+K3s
+NGINX
+MetalLB
+Traefik
+Tailscale
+Cloudflare Tunnels
+NocoDB
+Redis
+MinIO
+AWS
+Git
+Projects
+FiT - Udayan Care (NGO Platform)
+Mobile & Production
+Built the Flutter mobile client with AI-assisted iteration and shipped open-source code at github.com/FioreJoy/FiT-UC
+Self-hosted backend running in a Proxmox LXC (NocoDB REST API) alongside a Node.js auth server at udayan.diivvansh.com
+Passed Google Play field testing with Care Leavers to serve 3 core workflows: TTS skilling lessons, mentor scheduling, and Red Alert crisis dispatch
+Stack: Flutter, Dart, NocoDB (LXC), Node.js, Proxmox VE, Gotify, REST APIs
+play.google.com/store/apps/dev?id=8541457488243382905
+DTICI Connected Truck Databricks App & ETL
+Big Data & Enterprise
+Replaced slow legacy Power BI dashboards on multi-million-row tables with a custom FastAPI and React/Node.js app inside Databricks
+Optimized Spark ETL jobs handling daily operational telemetry from ~70,000 connected commercial trucks
+Automated daily OTA fleet data collection scripts and validated script safety and throughput on hardware test rigs
+Stack: Databricks, Apache Spark, FastAPI, React, Node.js, Python, Delta Lake
+www.daimlertruck.com
+HA NGINX Load Balancer on Proxmox K3s
+Infrastructure & Systems
+Allocated bare-metal Layer-2 VIPs with MetalLB paired with Traefik ingress routing traffic across replica pods
+Configured per-session distribution so serving pod hostnames and internal cluster IPs rotate cleanly across concurrent users and browser tabs
+Built as an extension of my multi-node Proxmox lab behind Cloudflare Tunnels and Tailscale
+Stack: Proxmox VE, Kubernetes (K3s), MetalLB, Traefik, NGINX, Docker, Linux
+pve.diivvansh.com
+Fiorejoy
+Full-Stack Platform
+Modeled user-event recommendations using PostgreSQL with the Apache AGE graph extension
+Built real-time group messaging over WebSockets with MinIO S3-compatible media storage
+Stack: Flutter, FastAPI, PostgreSQL, Apache AGE, MinIO, WebSockets
+fiorejoy.com
+www.enhancv.com
+Experience
+IoT Intern
+12/2023 - 01/2024
+IIT Delhi
+Delhi, India
+Built a voice-interactive smart mirror by integrating a Raspberry Pi with the Alexa SDK, handling hardware setup, coding, and testing
+Tools: Linux, AWS, Raspberry Pi, Alexa SDK, IoT
+Data Science Intern
+06/2023 - 08/2023
+Goalkeep
+Remote
+Built survey analytics dashboards in Apache Superset and handled data migration across SQL databases, Kobo Toolbox, Glide Apps, Google Sheets, and AppSheet
+Tools: Python, SQL, Apache Superset, Kobo Toolbox, Glide Apps, Google AppSheet
+Education
+B.Tech in Data Science
+10/2021 - 07/2025
+Manipal Institute of Technology (MIT)
+CGPA
+7.3
+ / 
+10.0
+Senior Secondary (Class XII)
+04/2020 - 10/2021
+ITL Public School (CBSE)
+%
+94
+ / 
+100
+Secondary School (Class X)
+04/2017 - 04/2018
+ITL Public School (CBSE)
+%
+95
+ / 
+100
+Interests
+Chess
+Quantum Physics
+Fitness
+Fiction Novels
+Open Source
+Gaming
+Projects
+Proxmox VE HA Cluster & Linux Infrastructure
+Bare-Metal Linux -> Proxmox VE + PBS -> Consolidated PVE 8 & K3s
+Started bare-metal on Debian, Kali, and Alpine Linux across spare laptops managed with Docker and Docker Compose
+Upgraded into a 3-node High-Availability (HA) Proxmox VE cluster with Corosync quorum plus a 4th laptop dedicated to Proxmox Backup Server (PBS) incremental snapshots
+Consolidated onto a primary Proxmox VE 8 server running production Udayan Care LXCs and a nested 6-node K3s cluster behind Tailscale and Cloudflare Tunnels
+pve.diivvansh.com
+Certifications
+Number Theory & Cryptography
+Natural Language Processing in Microsoft Azure
+Build Your First GUI App With Java
+Writing Java Application Code
+Data Science using Python
+Languages
+English
+Fluent
+Hindi
+Fluent
+Find me online
+LinkedIn
+linkedin.com/in/divansh-prasad-893b05230
+www.enhancv.com
+Elegant
