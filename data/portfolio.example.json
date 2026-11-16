@@ -1,0 +1,400 @@
+{
+  "profile": {
+    "name": "Alex Rivera",
+    "title": "Software Engineer · Distributed Systems",
+    "resumeHeadline": "Software Engineer  |  Backend APIs & Cloud Infrastructure",
+    "company": "Acme Cloud Systems",
+    "location": "Austin, TX",
+    "email": "alex.rivera@example.com",
+    "phone": "+1 512-555-0148",
+    "avatarUrl": "/images/profile.jpg",
+    "resumeFileName": "Alex_Rivera_Resume.pdf",
+    "cvFileName": "Alex_Rivera_CV.pdf",
+    "resumeSummary": "Software engineer specializing in high-throughput Go and TypeScript APIs, streaming ETL pipelines, and automated Kubernetes deployments.",
+    "summary": "Full-stack software engineer focused on reliable backend APIs, streaming data pipelines, and automated container infrastructure. Experienced shipping production web platforms, open-source developer tooling, and fault-tolerant Linux clusters.",
+    "domains": [
+      "alexrivera.dev",
+      "projects.alexrivera.dev"
+    ],
+    "primaryConsoleUrl": "https://alexrivera.dev",
+    "githubUrl": "https://github.com/example-user",
+    "linkedinUrl": "https://www.linkedin.com/in/example-user/"
+  },
+  "media": {
+    "icons": {
+      "docker": "/images/logos/docker.svg",
+      "git": "/images/logos/git.svg",
+      "react": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+    }
+  },
+  "hero": {
+    "kicker": [
+      "Software Engineer",
+      "Distributed Systems",
+      "Austin, TX"
+    ],
+    "headline": "Building resilient backend systems and clean developer tools.",
+    "lead": "Designing event-driven APIs, data processing pipelines, and self-hosted infrastructure with an emphasis on observability, performance, and maintainability.",
+    "secondaryAction": {
+      "label": "Infrastructure",
+      "href": "#homelab"
+    },
+    "dossier": {
+      "subtitle": "Software Engineer · Acme Cloud Systems",
+      "rows": [
+        {
+          "label": "Focus",
+          "value": "TypeScript · Go · Python · Kubernetes",
+          "icon": "workflow"
+        },
+        {
+          "label": "Production Throughput",
+          "value": "50,000+ Events / Min",
+          "icon": "database"
+        },
+        {
+          "label": "Infrastructure",
+          "value": "Linux · Docker · Kubernetes",
+          "icon": "server"
+        },
+        {
+          "label": "Education",
+          "value": "B.S. Computer Science",
+          "icon": "graduation"
+        }
+      ],
+      "links": [
+        {
+          "label": "alexrivera.dev",
+          "url": "https://alexrivera.dev"
+        }
+      ]
+    },
+    "metrics": [
+      {
+        "value": "99.95%",
+        "label": "API Uptime SLA"
+      },
+      {
+        "value": "Go + Python",
+        "label": "Core Backend Services"
+      },
+      {
+        "value": "Open Source",
+        "label": "Maintained Libraries"
+      },
+      {
+        "value": "Kubernetes",
+        "label": "Multi-Node Lab"
+      }
+    ]
+  },
+  "sections": {
+    "systems3d": {
+      "enabled": true,
+      "eyebrow": "3D Systems Viewport",
+      "title": "Interactive 3D Systems Architecture",
+      "subtitle": "Visualizing core service topology, data streams, cluster symmetry, and edge application delivery.",
+      "modes": [
+        {
+          "id": "core",
+          "shortLabel": "Platform Core",
+          "title": "Compute & Hypervisor Core",
+          "domain": "Infrastructure · Core",
+          "caption": "Consolidated compute node hosting isolated containers and automated snapshots.",
+          "stack": "Linux / Docker / Automation"
+        },
+        {
+          "id": "stream",
+          "shortLabel": "Data Stream",
+          "title": "Event Ingestion Pipeline",
+          "domain": "Streaming ETL",
+          "caption": "High-throughput stream processing and analytical storage layer.",
+          "stack": "Python / Spark / PostgreSQL"
+        },
+        {
+          "id": "cluster",
+          "shortLabel": "Cluster Mesh",
+          "title": "Container Orchestration Cluster",
+          "domain": "Kubernetes Cluster",
+          "caption": "Multi-node worker pool with load-balanced ingress routing.",
+          "stack": "Kubernetes / NGINX / Traefik"
+        },
+        {
+          "id": "mesh",
+          "shortLabel": "App Delivery",
+          "title": "Full-Stack Client & API Network",
+          "domain": "Production Web & Mobile",
+          "caption": "End-to-end user applications backed by stateless REST & WebSocket APIs.",
+          "stack": "TypeScript / React / FastAPI"
+        }
+      ]
+    },
+    "projects": {
+      "eyebrow": "Selected Works",
+      "title": "Projects & Systems",
+      "subtitle": "Production applications, active open-source builds, and archived experiments controlled directly via status and priority.",
+      "showArchivedByDefault": false
+    },
+    "homelab": {
+      "enabled": true,
+      "navLabel": "Infrastructure",
+      "eyebrow": "Systems & Homelab",
+      "title": "Self-Hosted Linux & Cluster Architecture",
+      "subtitle": "Progressive infrastructure setups spanning bare-metal Linux servers, container orchestration, and reverse-proxy routing.",
+      "workloadsTitle": "Active Containers & Cluster Workloads",
+      "workloadsSubtitle": "Services running across the self-hosted compute nodes.",
+      "workloadsBadge": "Linux · Docker · K3s",
+      "consolidationTitle": "Key Engineering Takeaways",
+      "consolidationUrl": "https://alexrivera.dev",
+      "hardwareTitle": "Compute Nodes",
+      "hardwareSubtitle": "Primary server nodes and development workstation specs.",
+      "platformsTitle": "Platforms & Tooling",
+      "platformsSubtitle": "Self-hosted software and orchestration tools.",
+      "loadBalancerDemo": {
+        "enabled": true
+      }
+    },
+    "experience": {
+      "eyebrow": "Career History",
+      "title": "Experience",
+      "subtitle": "Engineering roles, internships, and technical leadership."
+    },
+    "skills": {
+      "eyebrow": "Capabilities & Tools",
+      "title": "Technical Stack",
+      "subtitle": "Core programming languages, frameworks, and operational tooling."
+    },
+    "about": {
+      "eyebrow": "Background",
+      "title": "Engineering Summary",
+      "subtitle": "Focused on dependable backend systems, automation, and developer ergonomics."
+    },
+    "education": {
+      "eyebrow": "Academics & Credentials",
+      "title": "Education & Certifications",
+      "subtitle": "Formal degrees and verified technical credentials."
+    },
+    "contact": {
+      "eyebrow": "Direct Contact",
+      "locationLabel": "Austin, TX"
+    }
+  },
+  "about": [
+    "I am a software engineer focused on building scalable backend APIs, reliable data pipelines, and clean user interfaces.",
+    "You can customize every paragraph, project, skill, and resume field in public/data/portfolio.json without editing React or server code."
+  ],
+  "experience": [
+    {
+      "id": "software-engineer-acme",
+      "role": "Software Engineer",
+      "company": "Acme Cloud Systems",
+      "location": "Austin, TX",
+      "duration": "2024 - Present",
+      "bulletPoints": [
+        "Engineered high-throughput TypeScript and Go services handling 50k+ events per minute.",
+        "Orchestrated container deployments and CI/CD pipelines across 3 staging and production clusters."
+      ],
+      "skills": ["Go", "TypeScript", "PostgreSQL", "Docker", "Kubernetes"]
+    }
+  ],
+  "realWorldProjects": [
+    {
+      "id": "streampulse",
+      "name": "StreamPulse Telemetry Engine",
+      "category": "Production Backend",
+      "filterGroup": "Production & Apps",
+      "status": "live",
+      "priority": 1,
+      "featured": true,
+      "cardStyle": "compact",
+      "badge": "Production · v2.1",
+      "description": "Real-time event ingestion and metrics aggregation engine built with Go and PostgreSQL.",
+      "url": "https://github.com/example-user/streampulse",
+      "stack": "Go|PostgreSQL|Docker|Redis",
+      "details": "Processes 50k+ concurrent webhook events/min with backpressure queuing.|Exposes Prometheus-compatible metrics endpoints with sub-15ms p99 latency."
+    },
+    {
+      "id": "cloudnote",
+      "name": "CloudNote Collaborative Editor",
+      "category": "Full-Stack Web",
+      "filterGroup": "Production & Apps",
+      "status": "wip",
+      "priority": 2,
+      "cardStyle": "compact",
+      "badge": "Work in Progress",
+      "description": "Offline-first markdown workspace with CRDT syncing.",
+      "url": "https://github.com/example-user/cloudnote",
+      "stack": "React|TypeScript|FastAPI|PostgreSQL",
+      "details": "Implementing WebSocket delta synchronization across multi-tab sessions."
+    }
+  ],
+  "otherProjects": [
+    {
+      "id": "cli-runner",
+      "name": "CLI Task Runner (Legacy)",
+      "category": "Open Source",
+      "filterGroup": "Archived & Experiments",
+      "status": "archived",
+      "priority": 10,
+      "cardStyle": "compact",
+      "description": "Archived terminal task runner kept for reference.",
+      "url": "https://github.com/example-user/cli-runner",
+      "stack": "Python|Bash",
+      "details": "Replaced by modern workspace task automation."
+    },
+    {
+      "id": "draft-experiment",
+      "name": "Draft Experiment (Hidden Example)",
+      "category": "Internal",
+      "filterGroup": "Archived & Experiments",
+      "status": "hidden",
+      "priority": 99,
+      "description": "Any project with status: hidden is automatically omitted from both the website and generated PDF."
+    }
+  ],
+  "progressGallery": [
+    {
+      "id": "sp-01",
+      "itemId": "streampulse",
+      "itemType": "project",
+      "date": "2024-03",
+      "phase": "Ideation & Benchmarks",
+      "title": "Bounded Channel Backpressure Design",
+      "ideaNote": "Prototyped Redis streams vs Go worker pools to sustain 50k events/min without memory spikes.",
+      "outcome": "Selected ring-buffered Go workers writing batched inserts to PostgreSQL.",
+      "mediaUrl": "",
+      "order": 1
+    },
+    {
+      "id": "exp-acme-01",
+      "itemId": "software-engineer-acme",
+      "itemType": "experience",
+      "date": "2024-06",
+      "phase": "Production Rollout",
+      "title": "Zero-Downtime Cluster Migration",
+      "ideaNote": "Migrated legacy monolith webhook consumers into autoscaling Kubernetes pods.",
+      "outcome": "Cut p99 queue lag by 40% during peak traffic windows.",
+      "mediaUrl": "",
+      "order": 1
+    }
+  ],
+  "homelab": {
+    "evolution": [
+      {
+        "stage": "Phase 01 · Single Linux Box",
+        "title": "Docker Compose Services",
+        "summary": "Automated personal services on Ubuntu Server using Docker Compose and cron backups.",
+        "learnings": [
+          "Set up reverse proxies with automatic TLS certificates."
+        ],
+        "stack": "Linux · Docker · NGINX"
+      }
+    ],
+    "nodes": [
+      {
+        "hostname": "lab-node-01",
+        "type": "Linux Server",
+        "cpu": "AMD Ryzen 7",
+        "ram": "32 GB DDR4",
+        "gpu": "Integrated",
+        "storage": "1 TB NVMe",
+        "notes": "Runs primary container stack."
+      }
+    ],
+    "consolidationNote": "Unified container workloads onto a single silent mini-server for low power draw.",
+    "k3sTopology": [
+      {
+        "os": "Traefik Proxy (Container)",
+        "description": "Terminates TLS and routes traffic across internal services."
+      }
+    ],
+    "network": {
+      "domains": ["alexrivera.dev"],
+      "overlay": "WireGuard / Tailscale",
+      "ingress": "Zero-Trust Tunnel",
+      "loadBalancer": "Traefik Ingress"
+    },
+    "tooling": ["Docker", "Linux", "NGINX", "Traefik", "Tailscale"]
+  },
+  "skills": {
+    "iconTiles": [
+      { "label": "TypeScript", "logoPath": "/images/logos/javascript.svg", "brandKey": "javascript" },
+      { "label": "Python", "logoPath": "/images/logos/python.svg", "brandKey": "python" },
+      { "label": "PostgreSQL", "logoPath": "/images/logos/sql_postgresql.svg", "brandKey": "postgresql" },
+      { "label": "React", "logoPath": "/images/logos/react.svg", "brandKey": "react" },
+      { "label": "Docker", "logoPath": "/images/logos/docker.svg", "brandKey": "docker" },
+      { "label": "Linux", "logoPath": "/images/logos/linux.svg", "brandKey": "linux" },
+      { "label": "Git", "logoPath": "/images/logos/git.svg", "brandKey": "git" },
+      { "label": "FastAPI", "brandKey": "fastapi" },
+      { "label": "Kubernetes", "brandKey": "kubernetes" }
+    ],
+    "categories": [
+      {
+        "name": "Languages & Frameworks",
+        "desc": "Core backend, frontend, and scripting languages.",
+        "items": ["Go", "TypeScript", "Python", "React", "FastAPI", "PostgreSQL"]
+      },
+      {
+        "name": "Infrastructure & DevOps",
+        "desc": "Containers, orchestration, and networking.",
+        "items": ["Linux", "Docker", "Kubernetes", "Traefik", "Git"]
+      }
+    ],
+    "principles": [
+      "Clean API Contracts",
+      "Automated Testing & CI/CD",
+      "Pragmatic Observability"
+    ],
+    "languages": ["English (Fluent)"],
+    "interests": ["Open Source", "Systems Design"]
+  },
+  "education": [
+    {
+      "institution": "State University",
+      "degree": "B.S. in Computer Science",
+      "duration": "2020 - 2024",
+      "gpa": "GPA: 3.8 / 4.0"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Certified Kubernetes Administrator",
+      "date": "2024"
+    }
+  ],
+  "socials": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/example-user",
+      "logos": "/images/socials/github.webp"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/example-user/",
+      "logos": "/images/socials/linkedin.webp"
+    },
+    {
+      "name": "Email",
+      "url": "mailto:alex.rivera@example.com",
+      "logos": "/images/socials/gmail.webp"
+    }
+  ],
+  "contact": {
+    "heading": "Get In Touch",
+    "message": "Open to software engineering opportunities and technical collaborations.",
+    "email": "alex.rivera@example.com",
+    "phone": "+1 512-555-0148",
+    "location": "Austin, TX"
+  },
+  "cv": {
+    "projectsSectionTitle": "Selected Projects",
+    "maxProjectsInCv": 4,
+    "maxProjectsInResume": 2,
+    "maxExperiencesInResume": 4,
+    "includeHomelabInCv": true,
+    "includeHomelabInResume": false,
+    "includeCertsInResume": true,
+    "includeInterestsInResume": false
+  }
+}
