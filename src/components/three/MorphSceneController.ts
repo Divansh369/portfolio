@@ -16,19 +16,32 @@ import {
   MorphStateId,
 } from './morphGeometries';
 import { createMorphMaterials, MorphMaterialsBundle } from './morphMaterials';
+import {
+  CelestialPhaseId,
+  CelestialWaterEnvironment,
+  createCelestialWaterEnvironment,
+} from './celestialEnvironment';
 
 export type CameraPreset = 'iso' | 'front' | 'top';
+export type { CelestialPhaseId };
+
+export interface CelestialPhaseInfo {
+  id: CelestialPhaseId;
+  label: string;
+  windowLabel: string;
+}
 
 export interface MorphSceneCallbacks {
   onStateChange?: (state: MorphStateId) => void;
   onBloomChange?: (bloom: number) => void;
+  onPhaseChange?: (phase: CelestialPhaseInfo) => void;
   onWebglError?: (reason: string) => void;
 }
 
 // Module-scoped zero-GC scratch math objects
 const _v1 = new THREE.Vector3();
 const _targetCamPos = new THREE.Vector3();
-const _targetCtrlTarget = new THREE.Vector3(0, 0.28, 0);
+const _targetCtrlTarget = new THREE.Vector3(0, 0.24, 0);
 const _quat = new THREE.Quaternion();
 const _euler = new THREE.Euler();
 const _scale = new THREE.Vector3();
@@ -42,9 +55,9 @@ const SAKURA_PETAL_COUNT = 110;
 const BABY_PINK_PALETTE = ['#fce7f3', '#fbcfe8', '#f9a8d4', '#fda4af'];
 
 const CAMERA_PRESETS: Record<CameraPreset, [number, number, number]> = {
-  top: [0.0, 5.15, 1.35],
-  iso: [3.2, 2.25, 4.45],
-  front: [0.0, 1.05, 5.1],
+  top: [0.0, 4.95, 1.85],
+  iso: [3.45, 1.5, 4.65],
+  front: [0.0, 0.72, 5.15],
 };
 
 const MODE_BASE_BLOOM: Record<MorphStateId, number> = {
@@ -106,6 +119,13 @@ export class MorphSceneController {
   private sakuraPetalSeeds: Float32Array;
 
   private rayProxyMesh: THREE.Mesh;
+  private celestialEnv: CelestialWaterEnvironment;
+  private hemiLight: THREE.HemisphereLight;
+  private keyLight: THREE.DirectionalLight;
+  private rimLight: THREE.DirectionalLight;
+  private fillLight: THREE.DirectionalLight;
+  private sceneFog: THREE.FogExp2;
+  private lastPhaseId: CelestialPhaseId | null = null;
   private disposables: Array<{ dispose: () => void }> = [];
 
   private activeState: MorphStateId = 'core';
@@ -186,10 +206,11 @@ export class MorphSceneController {
 
     container.appendChild(this.renderer.domElement);
 
-    // Pure black cinematic canvas background
+    // Dynamic Atmospheric Horizon Sky & Fog (Evening -> Night -> Morning -> Afternoon)
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color('#000000');
-    this.scene.fog = new THREE.FogExp2(0x000000, 0.042);
+    this.scene.background = new THREE.Color('#13112c');
+    this.sceneFog = new THREE.FogExp2(0xf97316, 0.015);
+    this.scene.fog = this.sceneFog;
 
     // Studio IBL Environment Map
     const pmrem = new THREE.PMREMGenerator(this.renderer);
@@ -199,12 +220,12 @@ export class MorphSceneController {
     roomEnv.dispose();
     pmrem.dispose();
 
-    // Camera — Default overhead Top view showcasing full lotus mandala & swirling cherry blossoms
-    this.camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 80);
+    // Camera — Default overhead Top view showcasing full lotus mandala, water ripples & celestial reflection shimmer
+    this.camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 140);
     this.camera.position.set(...CAMERA_PRESETS.top);
     _targetCamPos.copy(this.camera.position);
 
-    // OrbitControls (allow full overhead Top polar angle cleanly)
+    // OrbitControls (allows looking across horizon without dipping below water surface)
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.target.copy(_targetCtrlTarget);
     this.controls.enableZoom = false;
@@ -212,68 +233,55 @@ export class MorphSceneController {
     this.controls.enableDamping = !this.isSoftwareGl;
     this.controls.dampingFactor = 0.06;
     this.controls.minPolarAngle = Math.PI * 0.04;
-    this.controls.maxPolarAngle = Math.PI * 0.56;
+    this.controls.maxPolarAngle = Math.PI * 0.482;
     this.controls.autoRotate = false;
     this.controls.update();
 
     this.controls.addEventListener('start', this.onControlStart);
     this.controls.addEventListener('change', this.onControlChange);
 
-    // Balanced Botanical Lighting Rig (Preserves rich rose pink & emerald green, zero white blowout!)
-    const hemi = new THREE.HemisphereLight(0xfbcfe8, 0x062c1b, 0.58);
-    this.scene.add(hemi);
+    // Synchronized Botanical & Celestial Lighting Rig (colors/intensities smoothly modulated by time of day)
+    this.hemiLight = new THREE.HemisphereLight(0xc084fc, 0x09202e, 0.56);
+    this.scene.add(this.hemiLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfff0f5, 1.38);
-    keyLight.position.set(4.2, 5.8, 4.0);
-    keyLight.castShadow = !this.isSoftwareGl;
-    keyLight.shadow.mapSize.width = 1024;
-    keyLight.shadow.mapSize.height = 1024;
-    keyLight.shadow.camera.near = 1;
-    keyLight.shadow.camera.far = 20;
+    this.keyLight = new THREE.DirectionalLight(0xffb482, 1.2);
+    this.keyLight.position.set(-4.2, 5.2, -3.5);
+    this.keyLight.castShadow = !this.isSoftwareGl;
+    this.keyLight.shadow.mapSize.width = 1024;
+    this.keyLight.shadow.mapSize.height = 1024;
+    this.keyLight.shadow.camera.near = 1;
+    this.keyLight.shadow.camera.far = 20;
     const d = 3.8;
-    keyLight.shadow.camera.left = -d;
-    keyLight.shadow.camera.right = d;
-    keyLight.shadow.camera.top = d;
-    keyLight.shadow.camera.bottom = -d;
-    keyLight.shadow.bias = -0.0005;
-    keyLight.shadow.normalBias = 0.02;
-    this.scene.add(keyLight);
+    this.keyLight.shadow.camera.left = -d;
+    this.keyLight.shadow.camera.right = d;
+    this.keyLight.shadow.camera.top = d;
+    this.keyLight.shadow.camera.bottom = -d;
+    this.keyLight.shadow.bias = -0.0005;
+    this.keyLight.shadow.normalBias = 0.02;
+    this.scene.add(this.keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0xf472b6, 1.15);
-    rimLight.position.set(-4.5, 3.2, -4.2);
-    this.scene.add(rimLight);
+    this.rimLight = new THREE.DirectionalLight(0xf472b6, 1.15);
+    this.rimLight.position.set(-4.5, 3.2, -4.2);
+    this.scene.add(this.rimLight);
 
-    const fillLight = new THREE.DirectionalLight(0x22c55e, 0.55);
-    fillLight.position.set(3.2, -1.0, -3.4);
-    this.scene.add(fillLight);
+    this.fillLight = new THREE.DirectionalLight(0x38bdf8, 0.55);
+    this.fillLight.position.set(3.2, -0.6, -3.4);
+    this.scene.add(this.fillLight);
 
     // Materials
     const maxAnisotropy = Math.min(8, this.renderer.capabilities.getMaxAnisotropy() || 1);
     this.materials = createMorphMaterials(this.isSoftwareGl, maxAnisotropy);
 
-    // Grounded Dark Pond Calibration Pedestal
-    const pedestalCylGeo = new THREE.CylinderGeometry(2.65, 2.95, 0.22, 64);
-    const pedestalBody = new THREE.Mesh(pedestalCylGeo, this.materials.pedestalSideMaterial);
-    pedestalBody.position.set(0, -1.96, 0);
-    pedestalBody.receiveShadow = true;
-    this.scene.add(pedestalBody);
+    // Procedural Sky Dome, Sun & Moon Arcs, Companion Lily Pads & Rippling Reflective Water
+    this.celestialEnv = createCelestialWaterEnvironment(
+      this.materials.lilyPadMaterial,
+      maxAnisotropy
+    );
+    this.scene.add(this.celestialEnv.rootGroup);
 
-    const pedestalTopGeo = new THREE.CircleGeometry(2.64, 64);
-    const pedestalTop = new THREE.Mesh(pedestalTopGeo, this.materials.pedestalTopMaterial);
-    pedestalTop.rotation.x = -Math.PI / 2;
-    pedestalTop.position.set(0, -1.83, 0);
-    pedestalTop.receiveShadow = true;
-    this.scene.add(pedestalTop);
-
-    const contactGeo = new THREE.PlaneGeometry(4.4, 4.4);
-    const contactPlane = new THREE.Mesh(contactGeo, this.materials.contactShadowMaterial);
-    contactPlane.rotation.x = -Math.PI / 2;
-    contactPlane.position.set(0, -1.805, 0);
-    this.scene.add(contactPlane);
-
-    // Hero Multi-Part Assembly Group
+    // Hero Multi-Part Assembly Group anchored right on water level (lilyPad rests flush on pond surface)
     this.heroGroup = new THREE.Group();
-    this.heroGroup.position.set(0, 0.18, 0);
+    this.heroGroup.position.set(0, 0.14, 0);
     this.scene.add(this.heroGroup);
 
     // 1. Procedural 3D Blooming Pink Lotus with Green Calyx Petals & Lily Pad
@@ -296,10 +304,10 @@ export class MorphSceneController {
     this.heroGroup.add(this.siliconCrystalMesh);
     this.disposables.push(siliconGeo);
 
-    // 1c. Blue Water-Silk Ribbon Halo below the lily pad
+    // 1c. Blue Water-Silk Ribbon Halo hovering delicately above lily pad & water surface
     const busRingGeo = createOpticalBusRingGeometry();
     this.busRingMesh = new THREE.Mesh(busRingGeo, this.materials.busRingMaterial);
-    this.busRingMesh.position.y = -0.82;
+    this.busRingMesh.position.y = -0.44;
     this.heroGroup.add(this.busRingMesh);
     this.disposables.push(busRingGeo);
 
@@ -387,7 +395,7 @@ export class MorphSceneController {
     this.sakuraBlossomSeeds = new Float32Array(SAKURA_BLOSSOM_COUNT * 4);
     for (let i = 0; i < SAKURA_BLOSSOM_COUNT; i++) {
       const phi = (i / SAKURA_BLOSSOM_COUNT) * Math.PI * 2 + (i % 3) * 0.25;
-      const yBase = -0.85 + ((i * 7) % 24) / 24 * 2.25; // Vertical helical height band
+      const yBase = -0.52 + ((i * 7) % 24) / 24 * 2.15; // Vertical helical band above water surface
       const rad = 1.48 + ((i * 13) % 19) / 19 * 1.15;
       const scaleJitter = 0.85 + ((i * 11) % 10) / 33; // ±15% scale variation
 
@@ -416,7 +424,7 @@ export class MorphSceneController {
     this.sakuraPetalSeeds = new Float32Array(SAKURA_PETAL_COUNT * 4);
     for (let i = 0; i < SAKURA_PETAL_COUNT; i++) {
       const phi = (i * 2.399963229728653) % (Math.PI * 2);
-      const yBase = -0.95 + ((i * 17) % 31) / 31 * 2.55;
+      const yBase = -0.56 + ((i * 17) % 31) / 31 * 2.35;
       const rad = 1.32 + ((i * 23) % 29) / 29 * 1.45;
       const scaleJitter = 0.82 + ((i * 7) % 12) / 34;
 
@@ -797,7 +805,7 @@ export class MorphSceneController {
       const s = THREE.MathUtils.damp(this.heroGroup.scale.x, hoverScale, 6, dt);
       this.heroGroup.scale.setScalar(s);
     }
-    this.heroGroup.position.y = 0.16 + (this.reducedMotion ? 0 : Math.sin(t * 1.1) * 0.04);
+    this.heroGroup.position.y = 0.14 + (this.reducedMotion ? 0 : Math.sin(t * 1.15) * 0.025);
     this.lotusAssembly.lotusGroup.rotation.y = this.reducedMotion
       ? 0.35
       : t * 0.2 + this.pointerX * 0.15;
@@ -832,6 +840,51 @@ export class MorphSceneController {
       }
     }
 
+    // Update Evening -> Night -> Morning -> Afternoon Celestial Sky, Sun/Moon Arcs & Water Pond
+    const celestial = this.celestialEnv.update(
+      bloom,
+      this.elapsed,
+      this.currentHoverMix,
+      this.pointerFlowX,
+      this.pointerFlowY,
+      this.reducedMotion
+    );
+
+    if (this.lastPhaseId !== celestial.id) {
+      this.lastPhaseId = celestial.id;
+      this.callbacks.onPhaseChange?.({
+        id: celestial.id,
+        label: celestial.label,
+        windowLabel: celestial.windowLabel,
+      });
+    }
+
+    // Sync scene atmosphere, fog & directional/hemisphere lights with celestial transition
+    (this.scene.background as THREE.Color).copy(celestial.skyHorizon);
+    this.sceneFog.color.copy(celestial.skyHorizon);
+    this.sceneFog.density = celestial.fogDensity;
+    this.renderer.toneMappingExposure = celestial.exposure;
+
+    this.hemiLight.color.copy(celestial.hemiSky);
+    this.hemiLight.groundColor.copy(celestial.hemiGround);
+    this.hemiLight.intensity = celestial.hemiIntensity;
+
+    const activeOrbDir =
+      celestial.sunIntensity >= celestial.moonIntensity ? celestial.sunDir : celestial.moonDir;
+    this.keyLight.position.set(
+      activeOrbDir.x * 7.5,
+      Math.max(2.2, Math.abs(activeOrbDir.y) * 9.0 + 1.8),
+      activeOrbDir.z * 7.5
+    );
+    this.keyLight.color.copy(celestial.keyLightColor);
+    this.keyLight.intensity = celestial.keyLightIntensity;
+
+    this.rimLight.color.copy(celestial.rimLightColor);
+    this.rimLight.intensity = celestial.rimLightIntensity;
+
+    this.fillLight.color.copy(celestial.fillLightColor);
+    this.fillLight.intensity = celestial.fillLightIntensity;
+
     this.materials.ribbonUniforms.uWavePhase.value = this.ribbonWavePhase;
     this.materials.ribbonUniforms.uHoverMix.value = this.currentHoverMix;
     this.materials.ribbonUniforms.uPointerFlow.value.set(this.pointerFlowX, this.pointerFlowY);
@@ -839,8 +892,8 @@ export class MorphSceneController {
 
     const hoverFlowMul = 1.0 + this.currentHoverMix * 0.65;
 
-    // Lower blue silk ribbon halo beneath lily pad
-    this.busRingMesh.position.y = -0.82;
+    // Lower blue silk ribbon halo skimming smoothly above the lily pad & water surface
+    this.busRingMesh.position.y = -0.44;
     this.busRingMesh.rotation.y = this.reducedMotion ? 0 : this.ribbonWavePhase * 0.11;
 
     // Sweeping Sky-Blue Stream Ribbons
@@ -1021,6 +1074,7 @@ export class MorphSceneController {
     this.controls.removeEventListener('change', this.onControlChange);
     this.controls.dispose();
 
+    this.celestialEnv.dispose();
     this.materials.dispose();
     this.envRT.dispose();
     for (const d of this.disposables) {

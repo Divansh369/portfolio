@@ -8,11 +8,15 @@ import {
   Eye,
   Flower2,
   Grid,
+  MoonStar,
   Orbit,
   Play,
   Pause,
   Server,
   Smartphone,
+  Sun,
+  Sunrise,
+  Sunset,
   Workflow,
 } from 'lucide-react';
 import CornerBrackets from '../motion/CornerBrackets';
@@ -20,6 +24,8 @@ import SplitText from '../motion/SplitText';
 import TextScramble from '../motion/TextScramble';
 import {
   CameraPreset,
+  CelestialPhaseId,
+  CelestialPhaseInfo,
   MorphSceneController,
 } from './MorphSceneController';
 import { MorphStateId } from './morphGeometries';
@@ -78,8 +84,22 @@ const MODE_ICONS: Record<MorphStateId, React.ComponentType<{ className?: string 
 const CAMERA_OPTIONS: Array<{ id: CameraPreset; label: string }> = [
   { id: 'top', label: 'Top' },
   { id: 'iso', label: 'Iso' },
-  { id: 'front', label: 'Front' },
+  { id: 'front', label: 'Horizon' },
 ];
+
+const PHASE_ICONS: Record<CelestialPhaseId, React.ComponentType<{ className?: string }>> = {
+  evening: Sunset,
+  night: MoonStar,
+  morning: Sunrise,
+  afternoon: Sun,
+};
+
+const PHASE_ACCENTS: Record<CelestialPhaseId, string> = {
+  evening: 'text-amber-300',
+  night: 'text-sky-200',
+  morning: 'text-amber-200',
+  afternoon: 'text-yellow-300',
+};
 
 interface SpatialMorphViewportProps {
   config?: SectionsConfig['systems3d'];
@@ -95,6 +115,11 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
   const [wireframe, setWireframe] = useState<boolean>(false);
   const [autoCycle, setAutoCycle] = useState<boolean>(!prefersReduced);
   const [explodedFactor, setExplodedFactor] = useState<number>(0.06);
+  const [celestialPhase, setCelestialPhase] = useState<CelestialPhaseInfo>({
+    id: 'evening',
+    label: 'Evening',
+    windowLabel: 'Dusk -> Night',
+  });
   const [activeCamera, setActiveCamera] = useState<CameraPreset>('top');
   const [controlsCollapsed, setControlsCollapsed] = useState<boolean>(false);
   const [webglFailed, setWebglFailed] = useState<boolean>(false);
@@ -114,7 +139,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
   const title = config?.title || 'Interactive 3D Blooming Lotus Architecture';
   const subtitle =
     config?.subtitle ||
-    'Procedural 3D blooming pink lotus with emerald calyx leaves and swirling cherry blossoms — mapping core compute topology, streaming data pipelines, cluster symmetry, and client-API delivery.';
+    'Procedural 3D blooming pink lotus floating on a reflective water pond across an Evening -> Night -> Morning -> Afternoon celestial sky & Sun/Moon horizon transition.';
 
   // Mount Three.js controller once inside dedicated empty container ref
   useEffect(() => {
@@ -128,6 +153,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         {
           onStateChange: (nextState) => setActiveState(nextState),
           onBloomChange: (nextBloom) => setExplodedFactor(nextBloom),
+          onPhaseChange: (nextPhase) => setCelestialPhase(nextPhase),
           onWebglError: () => setWebglFailed(true),
         },
         Boolean(prefersReduced)
@@ -203,6 +229,8 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
   };
 
   const ActiveIcon = activeSpec.icon;
+  const PhaseIcon = PHASE_ICONS[celestialPhase.id] || Sunset;
+  const phaseAccent = PHASE_ACCENTS[celestialPhase.id] || 'text-amber-300';
 
   return (
     <section id="systems-3d" className="py-20 border-b border-white/[0.08]">
@@ -226,7 +254,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
 
         <div className="text-xs font-mono text-zinc-400 flex items-center gap-2 whitespace-nowrap shrink-0">
           <Orbit className="w-3.5 h-3.5 text-pink-400" aria-hidden="true" />
-          <span>Drag to Orbit · Click Lotus to Morph</span>
+          <span>Drag to Orbit · Switch to Horizon for Sun &amp; Moon</span>
         </div>
       </div>
 
@@ -235,7 +263,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         ref={stageRef}
         tabIndex={0}
         onKeyDown={handleStageKeyDown}
-        className="group relative h-[440px] sm:h-[510px] lg:h-[560px] w-full rounded-2xl overflow-hidden border border-white/[0.14] bg-[#000000] shadow-[0_28px_72px_-28px_rgba(0,0,0,0.95)] focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+        className="group relative h-[440px] sm:h-[510px] lg:h-[560px] w-full rounded-2xl overflow-hidden border border-white/[0.14] bg-[#071124] shadow-[0_28px_72px_-28px_rgba(0,0,0,0.95)] focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
       >
         <CornerBrackets className="text-white/30 group-hover:text-pink-400/80 z-20" />
 
@@ -243,7 +271,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         {!webglFailed ? (
           <div ref={canvasMountRef} className="absolute inset-0 w-full h-full z-0" />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#000000]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#071124]">
             <Cpu className="w-10 h-10 text-pink-400 mb-3" aria-hidden="true" />
             <h3 className="font-display text-lg font-bold text-zinc-100 mb-1">
               {activeSpec.title}
@@ -257,13 +285,21 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         {/* Minimal Top-Left Readout (solid rgba backing) */}
         <div className="pointer-events-none absolute top-4 left-4 right-4 sm:right-auto z-10 max-w-md">
           <div className="rounded-xl bg-black/85 border border-white/[0.14] px-4 py-3 shadow-lg">
-            <div className="flex items-center gap-2 text-[11px] font-mono text-pink-400 mb-1">
-              <ActiveIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-              <TextScramble
-                text={activeSpec.domain}
-                trigger="change"
-                durationMs={260}
-              />
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono mb-1">
+              <span className="inline-flex items-center gap-2 text-pink-400">
+                <ActiveIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                <TextScramble
+                  text={activeSpec.domain}
+                  trigger="change"
+                  durationMs={260}
+                />
+              </span>
+              <span className={`inline-flex items-center gap-1.5 ${phaseAccent}`}>
+                <PhaseIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                <span>
+                  {celestialPhase.label} · {celestialPhase.windowLabel}
+                </span>
+              </span>
             </div>
             <h3 className="font-display text-sm sm:text-base font-bold text-zinc-50 leading-snug">
               {activeSpec.title}

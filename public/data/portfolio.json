@@ -26,7 +26,7 @@
   "media": {
     "icons": {
       "daimler": "/images/daimler.jpeg",
-      "udayan": "/images/udayan-care.webp",
+      "udayan": "/images/udayan.svg",
       "goalkeep": "/images/goalkeep.jpeg",
       "iitd": "/images/iitd.jpeg",
       "stmicro": "/images/st.jpeg",
@@ -127,7 +127,7 @@
       "enabled": true,
       "eyebrow": "3D Blooming Lotus · Systems Architecture",
       "title": "Interactive 3D Blooming Lotus Architecture",
-      "subtitle": "Procedural 3D blooming pink lotus with emerald calyx leaves and swirling cherry blossoms — mapping Proxmox hypervisor topology, Databricks Spark pipelines, 6-node K3s cluster geometry, and FiT-UC mobile mesh.",
+      "subtitle": "Procedural 3D blooming pink lotus floating on a reflective water pond across an Evening -> Night -> Morning -> Afternoon Sun & Moon horizon — mapping Proxmox hypervisor topology, Databricks Spark pipelines, 6-node K3s cluster geometry, and FiT-UC mobile mesh.",
       "modes": [
         {
           "id": "core",
@@ -441,7 +441,7 @@
       "company": "Udayan Care (NGO)",
       "location": "Bengaluru / Remote",
       "duration": "2025 - Present",
-      "logo": "/images/udayan-care.webp",
+      "logo": "/images/udayan.svg",
       "bulletPoints": [
         "Architected and shipped FiT-UC, an aftercare mobile platform for Care Leavers at Udayan Care NGO, live on Google Play Store (20–30 monthly active users).",
         "Developed the bilingual (English & Hindi) Flutter client using AI-assisted UI iteration paired with a self-hosted NocoDB LXC REST backend and Node.js auth server at udayan.diivvansh.com.",
@@ -564,7 +564,7 @@
       "cardStyle": "compact",
       "description": "End-to-end bilingual (English & Hindi) mobile app for Care Leavers at Udayan Care NGO, live on Google Play Store with self-hosted Proxmox backend.",
       "url": "https://play.google.com/store/apps/dev?id=8541457488243382905",
-      "logo": "/images/udayan-care.webp",
+      "logo": "/images/udayan.svg",
       "badge": "Google Play · 20–30 MAU",
       "stack": "Flutter|Dart|NocoDB (LXC)|Node.js|Proxmox VE|Gotify|REST APIs",
       "details": "Authored the bilingual Flutter mobile client with AI-assisted UI iteration and published open-source code at github.com/FioreJoy/FiT-UC.|Hosted REST backend inside a Proxmox LXC container (NocoDB) paired with a Node.js auth server at udayan.diivvansh.com.|Passed Google Play field testing with Care Leavers to serve 3 core workflows: TTS skilling lessons, mentor scheduling, and Red Alert crisis dispatch."
