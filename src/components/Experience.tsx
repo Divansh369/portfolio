@@ -119,9 +119,9 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
         dimmed={dimmed}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        className="p-6 sm:p-7"
+        className="p-5 sm:p-7"
       >
-        <div className="grid md:grid-cols-12 gap-6 items-start">
+        <div className="grid md:grid-cols-12 gap-4 md:gap-6 items-start">
           {/* Left Metadata Column (foreground scroll layer) */}
           <motion.div
             style={prefersReduced ? undefined : { y: metaY }}
@@ -207,7 +207,7 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
                         milestones,
                       })
                     }
-                    className="inline-flex items-center gap-1.5 text-cyan-300 hover:text-cyan-200 transition-colors cursor-pointer shrink-0 tabular-nums"
+                    className="inline-flex items-center gap-1.5 min-h-[40px] py-1 text-cyan-300 hover:text-cyan-200 transition-colors cursor-pointer shrink-0 tabular-nums"
                   >
                     <Images className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span>Work Timeline ({milestones.length})</span>
@@ -243,7 +243,7 @@ export const Experience: React.FC<ExperienceProps> = ({
   const markerRotate = useTransform(scrollYProgress, [0, 1], [0, 720]);
 
   return (
-    <section id="experience" className="py-20 border-b border-white/[0.08]">
+    <section id="experience" className="py-16 sm:py-20 border-b border-white/[0.08]">
       {/* Section Header */}
       <div className="mb-12">
         <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">

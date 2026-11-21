@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Code2, Database, Globe, Server, Workflow } from 'lucide-react';
 import GlassCard from './motion/GlassCard';
 import SplitText from './motion/SplitText';
-import RepoImage from './common/RepoImage';
+import TechStackGraph from './motion/TechStackGraph';
 import BrandMark from './icons/BrandMarks';
 import { SkillIconTile } from '../types';
 
@@ -71,7 +71,7 @@ export const Skills: React.FC<SkillsProps> = ({
   }, [categories, skills]);
 
   return (
-    <section id="skills" className="py-20 border-b border-white/[0.08]">
+    <section id="skills" className="py-16 sm:py-20 border-b border-white/[0.08]">
       {/* Section Header */}
       <div className="mb-12">
         <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
@@ -89,28 +89,8 @@ export const Skills: React.FC<SkillsProps> = ({
         </p>
       </div>
 
-      {/* Technical Stack Visual Icon Grid */}
-      {effectiveIconTiles.length > 0 && (
-        <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-3 mb-10">
-          {effectiveIconTiles.map((tile) => (
-            <div
-              key={tile.label}
-              className="glass-panel-subtle glass-panel-hover rounded-xl px-2.5 py-4 flex flex-col items-center justify-center gap-2.5 text-center transition-all group"
-            >
-              <RepoImage
-                src={tile.logoPath}
-                alt={tile.label}
-                className="w-8 h-8 shrink-0"
-                imgClassName="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
-                fallback={<BrandMark brand={tile.brandKey} className="w-7 h-7 shrink-0" />}
-              />
-              <span className="text-[11px] font-mono text-zinc-200 leading-tight">
-                {tile.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Interactive Connected Tech Stack Architecture Graph */}
+      {effectiveIconTiles.length > 0 && <TechStackGraph tiles={effectiveIconTiles} />}
 
       {/* Categorized Frosted Glass Stack Cards */}
       {activeCategories.length > 0 && (

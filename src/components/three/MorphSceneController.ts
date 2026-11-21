@@ -74,6 +74,23 @@ const MODE_ACCENTS: Record<MorphStateId, string> = {
   mesh: '#f9a8d4', // Baby Pink
 };
 
+function computeResponsiveFov(aspect: number): number {
+  if (aspect < 1.0) {
+    // Expand vertical FOV gently on narrow portrait phones so wide lotus & ribbons stay unclipped
+    return Math.min(58, Math.max(40, 40 / Math.max(0.66, aspect)));
+  }
+  if (aspect > 2.0) {
+    return 38;
+  }
+  return 40;
+}
+
+function getResponsivePixelRatio(width: number, isSoftwareGl: boolean): number {
+  if (isSoftwareGl) return 1;
+  const maxDpr = width < 640 ? 1.5 : 2;
+  return Math.min(window.devicePixelRatio || 1, maxDpr);
+}
+
 function detectSoftwareGl(): boolean {
   try {
     const probeCanvas = document.createElement('canvas');
@@ -190,9 +207,7 @@ export class MorphSceneController {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.02;
-    this.renderer.setPixelRatio(
-      this.isSoftwareGl ? 1 : Math.min(window.devicePixelRatio || 1, 2)
-    );
+    this.renderer.setPixelRatio(getResponsivePixelRatio(width, this.isSoftwareGl));
     this.renderer.setSize(width, height);
     this.renderer.shadowMap.enabled = !this.isSoftwareGl;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -220,8 +235,14 @@ export class MorphSceneController {
     roomEnv.dispose();
     pmrem.dispose();
 
-    // Camera — Default overhead Top view showcasing full lotus mandala, water ripples & celestial reflection shimmer
-    this.camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 140);
+    // Camera — Default overhead Top view with aspect-responsive FOV for phones, tablets & desktops
+    const initAspect = width / height;
+    this.camera = new THREE.PerspectiveCamera(
+      computeResponsiveFov(initAspect),
+      initAspect,
+      0.1,
+      140
+    );
     this.camera.position.set(...CAMERA_PRESETS.top);
     _targetCamPos.copy(this.camera.position);
 
@@ -230,6 +251,10 @@ export class MorphSceneController {
     this.controls.target.copy(_targetCtrlTarget);
     this.controls.enableZoom = false;
     this.controls.enablePan = false;
+    this.controls.touches = {
+      ONE: THREE.TOUCH.ROTATE,
+      TWO: THREE.TOUCH.DOLLY_ROTATE,
+    };
     this.controls.enableDamping = !this.isSoftwareGl;
     this.controls.dampingFactor = 0.06;
     this.controls.minPolarAngle = Math.PI * 0.04;
@@ -576,8 +601,11 @@ export class MorphSceneController {
     if (this.disposed) return;
     const width = Math.max(1, this.container.clientWidth);
     const height = Math.max(1, this.container.clientHeight);
-    this.camera.aspect = width / height;
+    const aspect = width / height;
+    this.camera.aspect = aspect;
+    this.camera.fov = computeResponsiveFov(aspect);
     this.camera.updateProjectionMatrix();
+    this.renderer.setPixelRatio(getResponsivePixelRatio(width, this.isSoftwareGl));
     this.renderer.setSize(width, height);
     this.requestSingleRender();
   }
@@ -629,6 +657,16 @@ export class MorphSceneController {
   private onPointerDown = (e: PointerEvent) => {
     this.downPos.x = e.clientX;
     this.downPos.y = e.clientY;
+    if (e.pointerType !== 'mouse') {
+      const rect = this.renderer.domElement.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        _pointerNdc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        _pointerNdc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        this.raycaster.setFromCamera(_pointerNdc, this.camera);
+        this.hoveredCore = this.raycaster.intersectObject(this.rayProxyMesh, false).length > 0;
+        this.pointerSpeed = Math.min(6.0, this.pointerSpeed + 2.5);
+      }
+    }
     if (!this.hoveredCore) {
       this.renderer.domElement.style.cursor = 'grabbing';
     }
@@ -637,9 +675,14 @@ export class MorphSceneController {
   private onPointerUp = (e: PointerEvent) => {
     this.renderer.domElement.style.cursor = this.hoveredCore ? 'pointer' : 'grab';
     const dist = Math.hypot(e.clientX - this.downPos.x, e.clientY - this.downPos.y);
-    if (dist <= 6 && this.hoveredCore) {
+    const tapTolerance = e.pointerType === 'touch' ? 12 : 6;
+    if (dist <= tapTolerance && this.hoveredCore) {
       const nextIdx = (MORPH_STATES.indexOf(this.activeState) + 1) % MORPH_STATES.length;
       this.setState(MORPH_STATES[nextIdx], true);
+    }
+    if (e.pointerType !== 'mouse') {
+      this.viewportHovered = false;
+      this.hoveredCore = false;
     }
   };
 

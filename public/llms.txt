@@ -1,0 +1,34 @@
+# Divansh Prasad — Software Engineer · Daimler Truck (DTICI)
+
+> Software Engineer at Daimler Truck Innovation Center India (DTICI) architecting Databricks Spark ETL pipelines for ~70,000 connected trucks, FastAPI + React internal web apps, and scheduled OTA collection scripts verified on test rigs. Lead volunteer developer for Udayan Care NGO shipping the bilingual FiT-UC Flutter app on Google Play backed by self-hosted Proxmox LXC and K3s infrastructure.
+
+## Key Links & Machine-Readable Endpoints
+- [Portfolio Home](https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/): Main interactive portfolio with 3D architecture viewport
+- [Full Structured Knowledge File](https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/llms-full.txt): Complete markdown dossier of roles, projects, labs, and skills
+- [Schema.org JSON-LD](https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/api/schema.jsonld): Verified Person, ProfilePage, SoftwareApplication, and FAQPage graph
+- [ATS 1-Page Resume PDF](https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/api/resume.pdf): Linear single-column ATS resume
+- [Comprehensive ATS CV PDF](https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/api/cv.pdf): Full curriculum vitae PDF
+- [Canonical Data JSON](https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/data/portfolio.json): Authoritative portfolio dataset
+- [GitHub](https://github.com/Divansh369): Source repositories and code
+- [LinkedIn](https://www.linkedin.com/in/divansh-prasad-893b05230/): Verified professional profile
+- [Google Play Developer](https://play.google.com/store/apps/dev?id=8541457488243382905): Published mobile apps
+
+## Experience Summary
+- **Software Engineer** at Daimler Truck Innovation Center India (DTICI) (July 2026 - Present, Bengaluru, India)
+- **Lead Volunteer Developer** at Udayan Care (NGO) (2025 - Present, Bengaluru / Remote)
+- **Data Analyst (Graduate Engineer Trainee)** at Daimler Truck Innovation Center India (DTICI) (July 2025 - July 2026, Bengaluru, India)
+- **Digital Verification and Automation Intern** at STMicroelectronics (Jan 2025 - July 2025, Greater Noida, India)
+- **Data Science Intern** at Multiplier (May 2024 - July 2024, Delhi, India)
+
+## Selected Projects & Systems
+- **FiT - Udayan Care (NGO Platform)** [Mobile & Production]: End-to-end bilingual (English & Hindi) mobile app for Care Leavers at Udayan Care NGO, live on Google Play Store with self-hosted Proxmox backend. — https://play.google.com/store/apps/dev?id=8541457488243382905
+- **DTICI Connected Truck Databricks App & ETL** [Big Data & Enterprise]: Custom FastAPI + React internal web application built inside Databricks alongside ETL pipelines processing daily telemetry for ~70,000 trucks. — https://www.daimlertruck.com
+- **HA NGINX Load Balancer on Proxmox K3s** [Infrastructure & Systems]: Multi-replica NGINX load balancer running inside a 6-node K3s cluster on Proxmox VE, using MetalLB Layer-2 VIPs and Traefik ingress. — https://pve.diivvansh.com
+- **Fiorejoy** [Full-Stack Platform]: Community event-discovery app combining social graph queries with real-time chat and media sharing. — https://fiorejoy.com
+- **AvignaTattva** [Full-Stack Web]: Consultation and scheduling web platform connecting users with verified wellness practitioners. — https://avignatattva.com
+- **PokeRoyale** [Real-Time Multiplayer Game]: Work-in-progress real-time lane-combat multiplayer game built with Godot Engine and a Go/Redis server.
+
+## Direct Q&A Reference (GEO / AIEO)
+- **Who is Divansh Prasad and what does he build?** Divansh Prasad is a Software Engineer at Daimler Truck Innovation Center India (DTICI) in Bengaluru working on Databricks Apache Spark ETL pipelines across ~70,000 connected commercial trucks, FastAPI and React internal web applications, and Over-The-Air (OTA) vehicle telemetry workflows validated on hardware test rigs.
+- **What volunteer software and mobile apps has Divansh Prasad shipped?** Outside work, Divansh volunteers as Lead Developer for Udayan Care NGO, where he built and shipped the bilingual (English and Hindi) FiT-UC Flutter mobile app live on Google Play Store backed by self-hosted NocoDB and Node.js authentication containers on Proxmox VE.
+- **How is Divansh Prasad's self-hosted Proxmox and K3s infrastructure designed?** His homelab evolved from bare-metal Debian, Kali, and Alpine Linux hosts running Docker Compose to a 3-node Proxmox VE HA cluster with a dedicated 4th Proxmox Backup Server (PBS) laptop, and consolidated onto a Proxmox VE 8 host running production LXC containers and a 6-node K3s cluster with MetalLB Layer-2 VIP, Traefik ingress, Tailscale, and Cloudflare Tunnels.

@@ -34,7 +34,7 @@ export const Education: React.FC<EducationProps> = ({
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="education" className="py-20 border-b border-white/[0.08]">
+    <section id="education" className="py-16 sm:py-20 border-b border-white/[0.08]">
       {/* Section Header */}
       <div className="mb-12">
         <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
@@ -74,7 +74,7 @@ export const Education: React.FC<EducationProps> = ({
                 className="p-6 w-full"
               >
                 <div>
-                  <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2.5 mb-4">
                     <RepoImage
                       src={edu.logo}
                       alt={edu.institution}
@@ -118,7 +118,7 @@ export const Education: React.FC<EducationProps> = ({
             {certificates.map((cert, idx) => (
               <div
                 key={`${cert.name}-${idx}`}
-                className="glass-panel-subtle glass-panel-hover rounded-xl px-4 py-3.5 flex items-center justify-between gap-4 text-sm transition-colors"
+                className="glass-panel-subtle glass-panel-hover rounded-xl px-4 py-3.5 min-h-[48px] flex items-center justify-between gap-3 text-sm transition-colors"
               >
                 <span className="inline-flex items-center gap-2.5 text-zinc-200 font-medium min-w-0">
                   <RepoImage
@@ -128,7 +128,7 @@ export const Education: React.FC<EducationProps> = ({
                     imgClassName="w-full h-full object-contain"
                     fallback={<BrandMark brand={cert.name} className="w-4 h-4 shrink-0" />}
                   />
-                  <span className="truncate">{cert.name}</span>
+                  <span className="line-clamp-2 sm:truncate">{cert.name}</span>
                 </span>
                 <span className="text-xs font-mono text-cyan-400/90 whitespace-nowrap shrink-0 tabular-nums">
                   {cert.date}

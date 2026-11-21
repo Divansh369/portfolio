@@ -61,7 +61,7 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
       {isOpen && (
         <motion.div
           id="data-config-modal"
-          className="fixed inset-0 bg-[#02040a]/80 z-[95] flex justify-center items-center p-4 backdrop-blur-md"
+          className="fixed inset-0 bg-[#02040a]/80 z-[95] flex justify-center items-center p-3 sm:p-4 backdrop-blur-md"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
@@ -71,7 +71,7 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
           transition={{ duration: 0.18 }}
         >
           <motion.div
-            className="glass-panel rounded-2xl p-6 sm:p-8 max-w-4xl w-full relative flex flex-col max-h-[88vh] overflow-hidden"
+            className="glass-panel rounded-2xl p-5 sm:p-8 max-w-4xl w-full relative flex flex-col max-h-[92dvh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
             initial={
               prefersReduced
@@ -114,7 +114,7 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
               <button
                 type="button"
                 onClick={onClose}
-                className="text-zinc-400 hover:text-white p-2 min-w-[40px] min-h-[40px] rounded-xl glass-panel-subtle transition-colors cursor-pointer flex items-center justify-center relative z-20"
+                className="text-zinc-400 hover:text-white p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle transition-colors cursor-pointer flex items-center justify-center shrink-0 relative z-20"
                 aria-label="Close data configuration modal"
               >
                 <X className="w-5 h-5" />
@@ -126,7 +126,7 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
               <LayoutGroup id="schema-modal-tabs">
                 <div
                   role="tablist"
-                  className="flex items-center gap-1 p-1 glass-panel-subtle rounded-xl"
+                  className="flex items-center gap-1 p-1 glass-panel-subtle rounded-xl overflow-x-auto scrollbar-none max-w-full"
                 >
                   {schemaTabs.map(({ id, label, icon: Icon }) => {
                     const selected = activeTab === id;
@@ -137,7 +137,7 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
                         role="tab"
                         aria-selected={selected}
                         onClick={() => setActiveTab(id)}
-                        className={`relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer whitespace-nowrap inline-flex items-center gap-1.5 ${
+                        className={`relative px-3 py-1.5 min-h-[38px] text-xs font-medium rounded-lg transition-colors cursor-pointer whitespace-nowrap inline-flex items-center gap-1.5 shrink-0 ${
                           selected ? 'text-white' : 'text-zinc-400 hover:text-zinc-100'
                         }`}
                       >
@@ -274,7 +274,7 @@ export const DataConfigModal: React.FC<DataConfigModalProps> = ({ isOpen, onClos
               <button
                 type="button"
                 onClick={onClose}
-                className="text-cyan-400 hover:text-cyan-300 font-medium cursor-pointer"
+                className="text-cyan-400 hover:text-cyan-300 font-medium min-h-[40px] px-2 cursor-pointer"
               >
                 Close
               </button>

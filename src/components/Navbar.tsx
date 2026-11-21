@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import FloodButton from './motion/FloodButton';
 import ScrollProgressRail from './motion/ScrollProgressRail';
+import { PWAInstallButton } from './common/PWAInstallButton';
 
 interface NavbarProps {
   brandName?: string;
@@ -117,13 +118,13 @@ export const Navbar: React.FC<NavbarProps> = ({
       <ScrollProgressRail />
 
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 print-hide ${
+        className={`fixed top-0 left-0 right-0 z-50 pt-safe transition-all duration-300 print-hide ${
           scrolled
             ? 'glass-nav'
             : 'bg-[#040711]/35 backdrop-blur-md border-b border-white/[0.06]'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
+        <div className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 sm:gap-5 lg:gap-8">
           {/* Zone 1: Brand Wordmark */}
           <a
             href="#"
@@ -133,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               setActiveId('');
               window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
             }}
-            className="font-display text-lg font-bold tracking-tight text-zinc-50 hover:text-cyan-300 transition-colors whitespace-nowrap shrink-0"
+            className="font-display text-base sm:text-lg font-bold tracking-tight text-zinc-50 hover:text-cyan-300 transition-colors whitespace-nowrap truncate max-w-[155px] sm:max-w-none shrink-0"
           >
             {brandName}
           </a>
@@ -141,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Zone 2: Clean Single-Line Navigation Links with layoutId indicator */}
           <nav
             aria-label="Primary Navigation"
-            className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400"
+            className="hidden md:flex items-center gap-3.5 lg:gap-6 text-xs lg:text-sm font-medium text-zinc-400"
           >
             {navLinks.map((link) => {
               const isActive = activeId === link.id;
@@ -167,13 +168,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Zone 3: Single Primary Action + Mobile Menu Trigger */}
+          {/* Zone 3: Primary Action + PWA Install + Mobile Menu Trigger */}
           <div className="flex items-center gap-2 shrink-0">
+            <PWAInstallButton compact={true} />
+
             {onOpenCvModal && (
               <FloodButton
                 onClick={onOpenCvModal}
                 variant="primary"
-                className="px-4 py-2 min-h-[40px] text-xs"
+                className="px-3 sm:px-4 py-2 min-h-[40px] text-xs"
               >
                 <FileText className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Resume / CV</span>
@@ -201,7 +204,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[60] md:hidden bg-[#040711]/92 backdrop-blur-2xl flex flex-col justify-between p-6 print-hide"
+            className="fixed inset-0 z-[60] md:hidden bg-[#040711]/94 backdrop-blur-2xl flex flex-col justify-between gap-6 p-6 pt-safe pb-safe overflow-y-auto print-hide"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile Navigation Menu"
@@ -257,19 +260,22 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </nav>
 
-            {onOpenCvModal && (
-              <FloodButton
-                onClick={() => {
-                  setMobileOpen(false);
-                  onOpenCvModal();
-                }}
-                variant="primary"
-                className="w-full py-3 min-h-[46px] text-sm"
-              >
-                <FileText className="w-4 h-4" aria-hidden="true" />
-                <span>Open ATS Resume / CV</span>
-              </FloodButton>
-            )}
+            <div className="flex flex-col gap-2.5">
+              <PWAInstallButton className="w-full min-h-[44px]" />
+              {onOpenCvModal && (
+                <FloodButton
+                  onClick={() => {
+                    setMobileOpen(false);
+                    onOpenCvModal();
+                  }}
+                  variant="primary"
+                  className="w-full py-3 min-h-[46px] text-sm"
+                >
+                  <FileText className="w-4 h-4" aria-hidden="true" />
+                  <span>Open ATS Resume / CV</span>
+                </FloodButton>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

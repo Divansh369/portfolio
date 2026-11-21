@@ -18,6 +18,8 @@ import ProgressGalleryModal from './components/ProgressGalleryModal';
 import ContourFieldCanvas from './components/motion/ContourFieldCanvas';
 import SectionDock from './components/motion/SectionDock';
 import { MediaRegistryProvider } from './context/MediaRegistryContext';
+import { OfflineIndicator } from './components/common/PWAInstallButton';
+import { syncSeoMetadata } from './utils/seoManager';
 import fetchData, { getCachedPortfolioData, getRawPortfolioJson } from './constants';
 import { Data, ProgressMilestone, SectionsConfig } from './types';
 
@@ -76,19 +78,9 @@ export const App: React.FC = () => {
     loadFreshData();
   }, []);
 
-  // Keep browser document title & meta description synchronized with portfolio data
+  // Keep browser document title, SEO meta tags, OpenGraph, and JSON-LD synchronized with portfolio data
   useEffect(() => {
-    const profileName = rawJson?.profile?.name || processedConfig.name;
-    const profileTitle = rawJson?.profile?.title || processedConfig.title;
-    const heroLead = rawJson?.hero?.lead;
-
-    if (profileName) {
-      document.title = profileTitle ? `${profileName} — ${profileTitle}` : profileName;
-    }
-    if (heroLead) {
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', heroLead);
-    }
+    syncSeoMetadata(rawJson, processedConfig);
   }, [rawJson, processedConfig]);
 
   const handleViewProject = (project: Project) => setSelectedProject(project);
@@ -231,7 +223,7 @@ export const App: React.FC = () => {
           />
 
           {/* Main Content Container */}
-          <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <main className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-clip">
             {/* Split Hero & Quantitative Proof Row */}
             <Header
               name={displayName}
@@ -312,7 +304,32 @@ export const App: React.FC = () => {
               subtitle={sections.skills?.subtitle}
               skills={techSkills}
               softSkills={softSkills}
-              iconTiles={rawJson?.skills?.iconTiles}
+              iconTiles={(() => {
+                const baseTiles = Array.isArray(rawJson?.skills?.iconTiles)
+                  ? [...rawJson.skills.iconTiles]
+                  : [];
+                const seen = new Set(
+                  baseTiles.map((t: any) =>
+                    String(t?.label || t?.brandKey || '')
+                      .toLowerCase()
+                      .replace(/[^a-z0-9]+/g, '')
+                  )
+                );
+                (platforms || []).forEach((p) => {
+                  const token = p.name.toLowerCase().replace(/[^a-z0-9]+/g, '');
+                  const pveAlias = token === 'proxmoxve8' && seen.has('proxmoxve');
+                  if (!seen.has(token) && !pveAlias) {
+                    seen.add(token);
+                    baseTiles.push({
+                      label: p.name,
+                      logoPath: p.logo || undefined,
+                      brandKey: p.name,
+                      category: 'infra',
+                    });
+                  }
+                });
+                return baseTiles;
+              })()}
               categories={rawJson?.skills?.categories}
               languages={rawJson?.skills?.languages}
             />
@@ -400,6 +417,7 @@ export const App: React.FC = () => {
           />
           </div>
         </div>
+        <OfflineIndicator />
       </MediaRegistryProvider>
     </MotionConfig>
   );

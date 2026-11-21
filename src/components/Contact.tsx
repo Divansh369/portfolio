@@ -41,7 +41,7 @@ export const Contact: React.FC<ContactProps> = ({
   };
 
   return (
-    <section id="contact" className="py-24">
+    <section id="contact" className="py-16 sm:py-24">
       <motion.div
         initial={prefersReduced ? false : { opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -64,7 +64,7 @@ export const Contact: React.FC<ContactProps> = ({
           {message}
         </p>
 
-        <GlassCard tilt={true} spotlight={true} brackets={true} chamfer={true} className="p-8 sm:p-10">
+        <GlassCard tilt={true} spotlight={true} brackets={true} chamfer={true} className="p-5 sm:p-10">
           <div className="space-y-6">
             {email && (
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
@@ -72,10 +72,10 @@ export const Contact: React.FC<ContactProps> = ({
                   href={`mailto:${email}`}
                   variant="primary"
                   chamfer={true}
-                  className="w-full sm:w-auto px-6 py-3 min-h-[44px] text-sm"
+                  className="w-full sm:w-auto px-5 sm:px-6 py-3 min-h-[44px] text-sm max-w-full"
                 >
-                  <Mail className="w-4 h-4" aria-hidden="true" />
-                  <span>{email}</span>
+                  <Mail className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  <span className="break-all sm:break-normal">{email}</span>
                 </FloodButton>
 
                 <FloodButton
@@ -108,7 +108,7 @@ export const Contact: React.FC<ContactProps> = ({
                       href={social.url}
                       target={isMail ? undefined : '_blank'}
                       rel={isMail ? undefined : 'noopener noreferrer'}
-                      className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl glass-panel-subtle glass-panel-hover text-xs font-mono text-zinc-200 hover:text-cyan-200 transition-all"
+                      className="inline-flex items-center gap-2 px-3.5 py-2 min-h-[42px] rounded-xl glass-panel-subtle glass-panel-hover text-xs font-mono text-zinc-200 hover:text-cyan-200 transition-all"
                     >
                       <RepoImage
                         src={social.logos}

@@ -9,6 +9,17 @@ import {
   resolveDocumentFileName,
   writeCvPdfToFile,
 } from './server/cvPdfGenerator.ts';
+import {
+  buildAiTxt,
+  buildJsonLdGraph,
+  buildLlmsFullTxt,
+  buildLlmsTxt,
+  buildRobotsTxt,
+  buildSitemapXml,
+  buildWebManifest,
+  resolveSiteUrl,
+  writeStaticSeoAssets,
+} from './server/seoGenerator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,9 +34,90 @@ async function startServer() {
     return JSON.parse(raw);
   };
 
+  const getRequestOrigin = (req: express.Request, portfolioData: any) => {
+    const host = req.get('host');
+    const requestUrl = host ? `${req.protocol}://${host}` : undefined;
+    return resolveSiteUrl(portfolioData, process.env.APP_URL || requestUrl);
+  };
+
   // Direct JSON API endpoint for modular data
   app.get('/api/portfolio', (_req, res) => {
     res.sendFile(jsonPath);
+  });
+
+  // Search Engine & Generative Engine (SEO / GEO / AIEO) dynamic endpoints
+  app.get('/robots.txt', (req, res) => {
+    try {
+      const portfolioData = readPortfolioJson();
+      const siteUrl = getRequestOrigin(req, portfolioData);
+      res.type('text/plain; charset=utf-8').send(buildRobotsTxt(siteUrl));
+    } catch {
+      res.type('text/plain; charset=utf-8').send('User-agent: *\nAllow: /\n');
+    }
+  });
+
+  app.get('/sitemap.xml', (req, res) => {
+    try {
+      const portfolioData = readPortfolioJson();
+      const siteUrl = getRequestOrigin(req, portfolioData);
+      res.type('application/xml; charset=utf-8').send(buildSitemapXml(siteUrl, portfolioData));
+    } catch {
+      res.status(500).send('Failed to generate sitemap');
+    }
+  });
+
+  app.get(['/llms.txt', '/.well-known/llms.txt'], (req, res) => {
+    try {
+      const portfolioData = readPortfolioJson();
+      const siteUrl = getRequestOrigin(req, portfolioData);
+      res.type('text/plain; charset=utf-8').send(buildLlmsTxt(siteUrl, portfolioData));
+    } catch {
+      res.status(500).send('Failed to generate llms.txt');
+    }
+  });
+
+  app.get('/llms-full.txt', (req, res) => {
+    try {
+      const portfolioData = readPortfolioJson();
+      const siteUrl = getRequestOrigin(req, portfolioData);
+      res.type('text/plain; charset=utf-8').send(buildLlmsFullTxt(siteUrl, portfolioData));
+    } catch {
+      res.status(500).send('Failed to generate llms-full.txt');
+    }
+  });
+
+  app.get(['/ai.txt', '/.well-known/ai.txt'], (req, res) => {
+    try {
+      const portfolioData = readPortfolioJson();
+      const siteUrl = getRequestOrigin(req, portfolioData);
+      res.type('text/plain; charset=utf-8').send(buildAiTxt(siteUrl, portfolioData));
+    } catch {
+      res.status(500).send('Failed to generate ai.txt');
+    }
+  });
+
+  app.get(['/api/schema.jsonld', '/api/ai-context.json'], (req, res) => {
+    try {
+      const portfolioData = readPortfolioJson();
+      const siteUrl = getRequestOrigin(req, portfolioData);
+      res
+        .setHeader('Content-Type', 'application/ld+json; charset=utf-8')
+        .send(JSON.stringify(buildJsonLdGraph(siteUrl, portfolioData), null, 2));
+    } catch {
+      res.status(500).json({ error: 'Failed to generate structured Schema.org graph' });
+    }
+  });
+
+  app.get('/manifest.json', (req, res) => {
+    try {
+      const portfolioData = readPortfolioJson();
+      const siteUrl = getRequestOrigin(req, portfolioData);
+      res
+        .setHeader('Content-Type', 'application/manifest+json; charset=utf-8')
+        .send(JSON.stringify(buildWebManifest(siteUrl, portfolioData), null, 2));
+    } catch {
+      res.status(500).json({ error: 'Failed to generate Web App Manifest' });
+    }
   });
 
   const streamPdf = (mode: DocumentMode, req: express.Request, res: express.Response) => {
@@ -110,16 +202,20 @@ async function startServer() {
       const resumeFileName = resolveDocumentFileName(portfolioData, 'resume');
       const cvFileName = resolveDocumentFileName(portfolioData, 'cv');
 
+      writeStaticSeoAssets(jsonPath, path.resolve(__dirname, 'public'));
+
       Promise.all([
         writeCvPdfToFile(jsonPath, path.resolve(__dirname, 'public', resumeFileName), 'resume'),
         writeCvPdfToFile(jsonPath, path.resolve(__dirname, 'public', cvFileName), 'cv'),
       ])
         .then(() =>
-          console.log(`ATS PDFs verified and updated at /${resumeFileName} and /${cvFileName}`)
+          console.log(
+            `ATS PDFs (${resumeFileName}, ${cvFileName}) & SEO/GEO files verified in /public`
+          )
         )
-        .catch((err) => console.warn('Warning: initial PDF generation failed:', err));
+        .catch((err) => console.warn('Warning: initial asset generation failed:', err));
     } catch (err) {
-      console.warn('Warning: could not read portfolio.json for startup PDF generation:', err);
+      console.warn('Warning: could not read portfolio.json for startup generation:', err);
     }
   });
 }

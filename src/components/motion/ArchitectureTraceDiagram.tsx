@@ -320,13 +320,13 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
           </h3>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           {modeConfigs.length > 1 && (
             <LayoutGroup id="trace-mode-switch">
               <div
                 role="tablist"
                 aria-label="Select architecture trace flow"
-                className="flex items-center gap-1 p-1 glass-panel-subtle rounded-xl"
+                className="flex items-center gap-1 p-1 glass-panel-subtle rounded-xl overflow-x-auto scrollbar-none max-w-full"
               >
                 {modeConfigs.map((cfg) => {
                   const selected = modeId === cfg.id;
@@ -340,7 +340,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
                         setModeId(cfg.id);
                         setSelectedIndex(2);
                       }}
-                      className={`relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                      className={`relative px-3 py-2 min-h-[38px] text-xs font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                         selected ? 'text-white' : 'text-zinc-400 hover:text-zinc-100'
                       }`}
                     >
@@ -362,7 +362,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
           <button
             type="button"
             onClick={() => setRunCounter((c) => c + 1)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-mono text-zinc-300 hover:text-cyan-300 glass-panel-subtle rounded-xl hover:border-cyan-400/40 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] text-xs font-mono text-zinc-300 hover:text-cyan-300 glass-panel-subtle rounded-xl hover:border-cyan-400/40 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             title="Replay signal trace animation"
           >
             <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
@@ -510,7 +510,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
               key={node.id}
               type="button"
               onClick={() => setSelectedIndex(idx)}
-              className={`px-3 py-2 rounded-xl text-xs font-mono border transition-colors cursor-pointer ${
+              className={`px-3 py-2 min-h-[42px] rounded-xl text-xs font-mono border transition-colors cursor-pointer ${
                 isSelected
                   ? 'bg-cyan-500/15 border-cyan-400/50 text-cyan-200'
                   : 'glass-panel-subtle text-zinc-400'
@@ -545,7 +545,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
             </p>
           </div>
 
-          <div className="text-xs font-mono text-zinc-400 glass-panel-subtle px-3.5 py-2.5 rounded-xl shrink-0">
+          <div className="text-xs font-mono text-zinc-400 glass-panel-subtle px-3.5 py-2.5 rounded-xl shrink-0 max-w-full break-words">
             {activeNode.stack}
           </div>
         </div>

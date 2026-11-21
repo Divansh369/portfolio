@@ -97,7 +97,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <motion.div
-      className="fixed inset-0 bg-[#02040a]/75 z-[90] flex justify-center items-center p-4 backdrop-blur-md"
+      className="fixed inset-0 bg-[#02040a]/75 z-[90] flex justify-center items-center p-3 sm:p-4 backdrop-blur-md"
       onClick={onClose}
       aria-modal="true"
       role="dialog"
@@ -107,7 +107,7 @@ export const Modal: React.FC<ModalProps> = ({
       exit="hidden"
     >
       <motion.div
-        className="glass-panel rounded-2xl p-6 sm:p-8 max-w-2xl w-full relative overflow-hidden"
+        className="glass-panel rounded-2xl p-5 sm:p-8 max-w-2xl w-full relative flex flex-col max-h-[92dvh] overflow-x-hidden overflow-y-hidden"
         onClick={(e) => e.stopPropagation()}
         variants={modalVariants}
       >
@@ -116,13 +116,13 @@ export const Modal: React.FC<ModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-white p-2 min-w-[40px] min-h-[40px] rounded-xl glass-panel-subtle transition-colors cursor-pointer flex items-center justify-center z-20"
+          className="absolute top-3.5 right-3.5 text-zinc-400 hover:text-white p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle transition-colors cursor-pointer flex items-center justify-center z-20"
           aria-label="Close project details"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-3.5 mb-4 pr-10">
+        <div className="flex items-center gap-3.5 mb-4 pr-12 shrink-0">
           {project.logo && (
             <RepoImage
               src={project.logo}
@@ -152,7 +152,7 @@ export const Modal: React.FC<ModalProps> = ({
           </div>
         </div>
 
-        <div className="space-y-6 max-h-[65vh] overflow-y-auto pr-2">
+        <div className="space-y-6 flex-1 overflow-y-auto pr-1">
           <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
             {project.description}
           </p>
@@ -203,7 +203,7 @@ export const Modal: React.FC<ModalProps> = ({
         </div>
 
         {(hasExternalUrl || (onOpenGallery && itemMilestones.length > 0)) && (
-          <div className="mt-6 pt-5 border-t border-white/[0.08] flex flex-wrap items-center justify-end gap-3">
+          <div className="mt-5 pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-end gap-3 shrink-0">
             {onOpenGallery && itemMilestones.length > 0 && (
               <FloodButton
                 onClick={() =>

@@ -1124,34 +1124,446 @@
   },
   "skills": {
     "iconTiles": [
-      { "label": "Apache", "logoPath": "/images/logos/apache.svg", "brandKey": "apache" },
-      { "label": "Python", "logoPath": "/images/logos/python.svg", "brandKey": "python" },
-      { "label": "SQL", "logoPath": "/images/logos/sql_postgresql.svg", "brandKey": "postgresql" },
-      { "label": "Power BI", "logoPath": "/images/logos/powerbi.webp", "brandKey": "powerbi" },
-      { "label": "C++", "logoPath": "/images/logos/cpp.webp", "brandKey": "cpp" },
-      { "label": "Java", "logoPath": "/images/logos/java.webp", "brandKey": "java" },
-      { "label": "HTML5", "logoPath": "/images/logos/html5.svg", "brandKey": "html5" },
-      { "label": "CSS3", "logoPath": "/images/logos/css.webp", "brandKey": "css3" },
-      { "label": "JavaScript", "logoPath": "/images/logos/javascript.svg", "brandKey": "javascript" },
-      { "label": "React", "logoPath": "/images/logos/react.svg", "brandKey": "react" },
-      { "label": "Node.js", "logoPath": "/images/logos/nodejs.svg", "brandKey": "nodejs" },
-      { "label": "Linux", "logoPath": "/images/logos/linux.svg", "brandKey": "linux" },
-      { "label": "Shellscript", "logoPath": "/images/logos/shell-bash.svg", "brandKey": "bash" },
-      { "label": "Docker", "logoPath": "/images/logos/docker.svg", "brandKey": "docker" },
-      { "label": "Git", "logoPath": "/images/logos/git.svg", "brandKey": "git" },
-      { "label": "TensorFlow", "logoPath": "/images/logos/tensorflow.svg", "brandKey": "tensorflow" },
-      { "label": "PyTorch", "logoPath": "/images/logos/pytorch.svg", "brandKey": "pytorch" },
-      { "label": "Scikit-learn", "logoPath": "/images/logos/scikit-learn.svg", "brandKey": "scikit" },
-      { "label": "Pandas", "logoPath": "/images/logos/pandas.svg", "brandKey": "pandas" },
-      { "label": "NumPy", "logoPath": "/images/logos/numpy.svg", "brandKey": "numpy" },
-      { "label": "Raspberry Pi", "logoPath": "/images/logos/raspberry-pi.svg", "brandKey": "raspberrypi" },
-      { "label": "MS Office", "logoPath": "/images/logos/ms.webp", "brandKey": "ms" },
-      { "label": "Databricks", "brandKey": "databricks" },
-      { "label": "FastAPI", "brandKey": "fastapi" },
-      { "label": "Flutter", "brandKey": "flutter" },
-      { "label": "Proxmox VE", "brandKey": "proxmox" },
-      { "label": "Kubernetes (K3s)", "brandKey": "kubernetes" },
-      { "label": "NVIDIA CUDA", "brandKey": "cuda" }
+      {
+        "label": "Linux",
+        "logoPath": "/images/logos/linux.svg",
+        "brandKey": "linux",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Open-source kernel powering bare-metal servers, LXC containers, and KVM hypervisor nodes.",
+        "websiteUrl": "https://www.kernel.org/",
+        "githubUrl": "https://github.com/torvalds/linux",
+        "connections": ["proxmox", "docker", "bash", "kubernetes", "raspberrypi"]
+      },
+      {
+        "label": "Shellscript",
+        "logoPath": "/images/logos/shell-bash.svg",
+        "brandKey": "bash",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "POSIX & Bash automation scripts orchestrating Linux cron tasks, backups, and CI setups.",
+        "websiteUrl": "https://www.gnu.org/software/bash/",
+        "githubUrl": "https://github.com/bminor/bash",
+        "connections": ["linux", "docker", "git", "python"]
+      },
+      {
+        "label": "Proxmox VE",
+        "brandKey": "proxmox",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Open-source Type-1 hypervisor managing LXC service containers, KVM VMs, and Corosync HA.",
+        "websiteUrl": "https://www.proxmox.com/en/proxmox-ve",
+        "githubUrl": "https://github.com/proxmox",
+        "connections": ["linux", "proxmoxbackupserver", "kubernetes", "docker", "nocodb"]
+      },
+      {
+        "label": "Proxmox Backup Server",
+        "brandKey": "pbs",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Enterprise-grade incremental, deduplicated backup server protecting Proxmox VMs and LXC snapshots.",
+        "websiteUrl": "https://www.proxmox.com/en/proxmox-backup-server",
+        "githubUrl": "https://github.com/proxmox/proxmox-backup",
+        "connections": ["proxmox", "linux"]
+      },
+      {
+        "label": "Docker",
+        "logoPath": "/images/logos/docker.svg",
+        "brandKey": "docker",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "OCI container engine packaging microservices and databases with reproducible Compose stacks.",
+        "websiteUrl": "https://www.docker.com/",
+        "githubUrl": "https://github.com/moby/moby",
+        "connections": ["linux", "kubernetes", "coolify", "easypanel", "fastapi", "nodejs", "nocodb"]
+      },
+      {
+        "label": "Kubernetes (K3s)",
+        "brandKey": "kubernetes",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Lightweight CNCF Kubernetes distribution running 6-node HA clusters with MetalLB and Traefik.",
+        "websiteUrl": "https://k3s.io/",
+        "githubUrl": "https://github.com/k3s-io/k3s",
+        "connections": ["proxmox", "docker", "rancher", "talosos", "metallb", "traefik", "nginx", "linux"]
+      },
+      {
+        "label": "Rancher",
+        "brandKey": "rancher",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Open-source multi-cluster Kubernetes management plane unifying K3s workload inspection.",
+        "websiteUrl": "https://www.rancher.com/",
+        "githubUrl": "https://github.com/rancher/rancher",
+        "connections": ["kubernetes", "docker"]
+      },
+      {
+        "label": "Talos OS",
+        "brandKey": "talos",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Immutable, API-driven minimalist Linux distribution purpose-built for Kubernetes nodes.",
+        "websiteUrl": "https://www.talos.dev/",
+        "githubUrl": "https://github.com/siderolabs/talos",
+        "connections": ["linux", "kubernetes"]
+      },
+      {
+        "label": "CasaOS",
+        "brandKey": "casaos",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Clean open-source personal cloud dashboard orchestrating Docker home server apps.",
+        "websiteUrl": "https://casaos.zimaspace.com/",
+        "githubUrl": "https://github.com/IceWhaleTech/CasaOS",
+        "connections": ["docker", "linux", "raspberrypi"]
+      },
+      {
+        "label": "Easypanel",
+        "brandKey": "easypanel",
+        "category": "infra",
+        "isFoss": false,
+        "summary": "Docker-native server control panel simplifying self-hosted app deployments and SSL routing.",
+        "websiteUrl": "https://easypanel.io/",
+        "githubUrl": "https://github.com/easypanel-io/templates",
+        "connections": ["docker", "traefik", "nodejs"]
+      },
+      {
+        "label": "Coolify",
+        "brandKey": "coolify",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Self-hostable open-source PaaS automating Git push builds, containers, and previews.",
+        "websiteUrl": "https://coolify.io/",
+        "githubUrl": "https://github.com/coollabsio/coolify",
+        "connections": ["docker", "traefik", "git"]
+      },
+      {
+        "label": "Home Assistant",
+        "brandKey": "homeassistant",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Local-first open-source home automation hub running on containerized Linux infrastructure.",
+        "websiteUrl": "https://www.home-assistant.io/",
+        "githubUrl": "https://github.com/home-assistant/core",
+        "connections": ["linux", "docker", "raspberrypi", "tailscale"]
+      },
+      {
+        "label": "NGINX",
+        "brandKey": "nginx",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "High-concurrency web server and load-balanced pod workload behind MetalLB and Traefik.",
+        "websiteUrl": "https://nginx.org/",
+        "githubUrl": "https://github.com/nginx/nginx",
+        "connections": ["kubernetes", "metallb", "traefik", "docker"]
+      },
+      {
+        "label": "Traefik",
+        "brandKey": "traefik",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Cloud-native reverse proxy and K3s ingress router distributing TLS traffic across replicas.",
+        "websiteUrl": "https://traefik.io/traefik/",
+        "githubUrl": "https://github.com/traefik/traefik",
+        "connections": ["kubernetes", "docker", "nginx", "cloudflare", "fastapi", "react"]
+      },
+      {
+        "label": "MetalLB",
+        "brandKey": "metallb",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Bare-metal Kubernetes load-balancer controller assigning Layer-2 virtual IPs to K3s services.",
+        "websiteUrl": "https://metallb.universe.tf/",
+        "githubUrl": "https://github.com/metallb/metallb",
+        "connections": ["kubernetes", "traefik", "nginx"]
+      },
+      {
+        "label": "Tailscale",
+        "brandKey": "tailscale",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Zero-config WireGuard mesh VPN connecting Proxmox nodes, workstations, and private services.",
+        "websiteUrl": "https://tailscale.com/",
+        "githubUrl": "https://github.com/tailscale/tailscale",
+        "connections": ["linux", "proxmox", "kubernetes", "cloudflare"]
+      },
+      {
+        "label": "Cloudflare",
+        "brandKey": "cloudflare",
+        "category": "infra",
+        "isFoss": false,
+        "summary": "Zero-Trust Tunnels, DNS, and edge SSL terminating public domains safely with zero open ports.",
+        "websiteUrl": "https://www.cloudflare.com/",
+        "githubUrl": "https://github.com/cloudflare/cloudflared",
+        "connections": ["traefik", "tailscale", "nocodb", "gotify"]
+      },
+      {
+        "label": "Gotify",
+        "brandKey": "gotify",
+        "category": "apps",
+        "isFoss": true,
+        "summary": "Self-hosted open-source push notification server powering NGO Red Alert crisis dispatches.",
+        "websiteUrl": "https://gotify.net/",
+        "githubUrl": "https://github.com/gotify/server",
+        "connections": ["proxmox", "docker", "flutter", "cloudflare"]
+      },
+      {
+        "label": "Raspberry Pi",
+        "logoPath": "/images/logos/raspberry-pi.svg",
+        "brandKey": "raspberrypi",
+        "category": "infra",
+        "isFoss": false,
+        "summary": "ARM single-board computer running edge Linux utilities, voice IoT mirrors, and local DNS.",
+        "websiteUrl": "https://www.raspberrypi.com/",
+        "githubUrl": "https://github.com/raspberrypi",
+        "connections": ["linux", "python", "docker", "homeassistant", "casaos"]
+      },
+      {
+        "label": "Git",
+        "logoPath": "/images/logos/git.svg",
+        "brandKey": "git",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Distributed version control tracking pipelines, application releases, and infrastructure configs.",
+        "websiteUrl": "https://git-scm.com/",
+        "githubUrl": "https://github.com/git/git",
+        "connections": ["bash", "python", "react", "flutter", "cpp", "coolify"]
+      },
+      {
+        "label": "Python",
+        "logoPath": "/images/logos/python.svg",
+        "brandKey": "python",
+        "category": "languages",
+        "isFoss": true,
+        "summary": "Primary language for Databricks Spark jobs, FastAPI backends, OTA scripts, and ML models.",
+        "websiteUrl": "https://www.python.org/",
+        "githubUrl": "https://github.com/python/cpython",
+        "connections": ["databricks", "apache", "fastapi", "pandas", "numpy", "pytorch", "tensorflow", "scikit"]
+      },
+      {
+        "label": "C++",
+        "logoPath": "/images/logos/cpp.webp",
+        "brandKey": "cpp",
+        "category": "languages",
+        "isFoss": true,
+        "summary": "Systems language powering embedded fleet test-rig scripts and parallel GPU algorithms.",
+        "websiteUrl": "https://isocpp.org/",
+        "githubUrl": "https://github.com/llvm/llvm-project",
+        "connections": ["cuda", "linux", "git"]
+      },
+      {
+        "label": "NVIDIA CUDA",
+        "brandKey": "cuda",
+        "category": "languages",
+        "isFoss": false,
+        "summary": "Parallel GPU compute platform accelerating sorting kernels and neural network training.",
+        "websiteUrl": "https://developer.nvidia.com/cuda-toolkit",
+        "githubUrl": "https://github.com/NVIDIA",
+        "connections": ["cpp", "pytorch", "tensorflow"]
+      },
+      {
+        "label": "Java",
+        "logoPath": "/images/logos/java.webp",
+        "brandKey": "java",
+        "category": "languages",
+        "isFoss": true,
+        "summary": "JVM runtime underpinning Apache Spark executors and cross-platform Android build tooling.",
+        "websiteUrl": "https://openjdk.org/",
+        "githubUrl": "https://github.com/openjdk/jdk",
+        "connections": ["apache", "flutter"]
+      },
+      {
+        "label": "JavaScript",
+        "logoPath": "/images/logos/javascript.svg",
+        "brandKey": "javascript",
+        "category": "languages",
+        "isFoss": true,
+        "summary": "Dynamic web language driving React UIs, Three.js canvases, and Node.js auth microservices.",
+        "websiteUrl": "https://developer.mozilla.org/docs/Web/JavaScript",
+        "githubUrl": "https://github.com/tc39/ecma262",
+        "connections": ["react", "nodejs", "html5", "css3"]
+      },
+      {
+        "label": "HTML5",
+        "logoPath": "/images/logos/html5.svg",
+        "brandKey": "html5",
+        "category": "languages",
+        "isFoss": true,
+        "summary": "Semantic document backbone structuring accessible web interfaces, SEO metadata, and PWA tags.",
+        "websiteUrl": "https://html.spec.whatwg.org/",
+        "githubUrl": "https://github.com/whatwg/html",
+        "connections": ["css3", "javascript", "react"]
+      },
+      {
+        "label": "CSS3",
+        "logoPath": "/images/logos/css.webp",
+        "brandKey": "css3",
+        "category": "languages",
+        "isFoss": true,
+        "summary": "Layout engine powering responsive CSS grids, frosted glass blur layers, and fluid typography.",
+        "websiteUrl": "https://www.w3.org/Style/CSS/",
+        "githubUrl": "https://github.com/w3c/csswg-drafts",
+        "connections": ["html5", "javascript", "react"]
+      },
+      {
+        "label": "Apache Spark",
+        "logoPath": "/images/logos/apache.svg",
+        "brandKey": "apache",
+        "category": "data",
+        "isFoss": true,
+        "summary": "Distributed analytics engine processing daily multi-million-row truck fleet telemetry.",
+        "websiteUrl": "https://spark.apache.org/",
+        "githubUrl": "https://github.com/apache/spark",
+        "connections": ["databricks", "python", "java", "postgresql"]
+      },
+      {
+        "label": "Databricks",
+        "brandKey": "databricks",
+        "category": "data",
+        "isFoss": false,
+        "summary": "Lakehouse platform hosting Delta Lake tables, scheduled Spark ETLs, and internal web apps.",
+        "websiteUrl": "https://www.databricks.com/",
+        "githubUrl": "https://github.com/databricks",
+        "connections": ["apache", "python", "postgresql", "fastapi", "powerbi"]
+      },
+      {
+        "label": "SQL / Postgres",
+        "logoPath": "/images/logos/sql_postgresql.svg",
+        "brandKey": "postgresql",
+        "category": "data",
+        "isFoss": true,
+        "summary": "Relational & graph database (Apache AGE) querying telemetry views, schedules, and API tables.",
+        "websiteUrl": "https://www.postgresql.org/",
+        "githubUrl": "https://github.com/postgres/postgres",
+        "connections": ["databricks", "apache", "fastapi", "nocodb", "powerbi"]
+      },
+      {
+        "label": "Pandas",
+        "logoPath": "/images/logos/pandas.svg",
+        "brandKey": "pandas",
+        "category": "data",
+        "isFoss": true,
+        "summary": "Tabular data manipulation library cleaning telemetry extracts, CSV schemas, and forecasts.",
+        "websiteUrl": "https://pandas.pydata.org/",
+        "githubUrl": "https://github.com/pandas-dev/pandas",
+        "connections": ["python", "numpy", "scikit", "powerbi"]
+      },
+      {
+        "label": "NumPy",
+        "logoPath": "/images/logos/numpy.svg",
+        "brandKey": "numpy",
+        "category": "data",
+        "isFoss": true,
+        "summary": "Vectorized array foundation accelerating numerical matrix ops across Python ML libraries.",
+        "websiteUrl": "https://numpy.org/",
+        "githubUrl": "https://github.com/numpy/numpy",
+        "connections": ["python", "pandas", "scikit", "tensorflow", "pytorch"]
+      },
+      {
+        "label": "Scikit-learn",
+        "logoPath": "/images/logos/scikit-learn.svg",
+        "brandKey": "scikit",
+        "category": "data",
+        "isFoss": true,
+        "summary": "Classical machine learning toolkit used for forecasting, regression, and feature evaluation.",
+        "websiteUrl": "https://scikit-learn.org/",
+        "githubUrl": "https://github.com/scikit-learn/scikit-learn",
+        "connections": ["python", "pandas", "numpy"]
+      },
+      {
+        "label": "TensorFlow",
+        "logoPath": "/images/logos/tensorflow.svg",
+        "brandKey": "tensorflow",
+        "category": "data",
+        "isFoss": true,
+        "summary": "Deep learning framework used for sequence NLP models and neural network experimentation.",
+        "websiteUrl": "https://www.tensorflow.org/",
+        "githubUrl": "https://github.com/tensorflow/tensorflow",
+        "connections": ["python", "numpy", "cuda"]
+      },
+      {
+        "label": "PyTorch",
+        "logoPath": "/images/logos/pytorch.svg",
+        "brandKey": "pytorch",
+        "category": "data",
+        "isFoss": true,
+        "summary": "Dynamic tensor & autograd framework paired with CUDA for GPU-accelerated deep learning.",
+        "websiteUrl": "https://pytorch.org/",
+        "githubUrl": "https://github.com/pytorch/pytorch",
+        "connections": ["python", "numpy", "cuda"]
+      },
+      {
+        "label": "FastAPI",
+        "brandKey": "fastapi",
+        "category": "apps",
+        "isFoss": true,
+        "summary": "High-performance async Python API framework serving Databricks apps and social backends.",
+        "websiteUrl": "https://fastapi.tiangolo.com/",
+        "githubUrl": "https://github.com/fastapi/fastapi",
+        "connections": ["python", "databricks", "postgresql", "react", "flutter", "docker"]
+      },
+      {
+        "label": "Node.js",
+        "logoPath": "/images/logos/nodejs.svg",
+        "brandKey": "nodejs",
+        "category": "apps",
+        "isFoss": true,
+        "summary": "Event-driven JS runtime powering authentication microservices, build pipelines, and PDF APIs.",
+        "websiteUrl": "https://nodejs.org/",
+        "githubUrl": "https://github.com/nodejs/node",
+        "connections": ["javascript", "react", "docker", "nocodb"]
+      },
+      {
+        "label": "React",
+        "logoPath": "/images/logos/react.svg",
+        "brandKey": "react",
+        "category": "apps",
+        "isFoss": true,
+        "summary": "Component UI library driving internal Databricks dashboards and interactive web frontends.",
+        "websiteUrl": "https://react.dev/",
+        "githubUrl": "https://github.com/facebook/react",
+        "connections": ["javascript", "html5", "css3", "fastapi", "nodejs", "traefik"]
+      },
+      {
+        "label": "Flutter",
+        "brandKey": "flutter",
+        "category": "apps",
+        "isFoss": true,
+        "summary": "Cross-platform Dart UI toolkit shipping the bilingual FiT-UC NGO app on Google Play.",
+        "websiteUrl": "https://flutter.dev/",
+        "githubUrl": "https://github.com/flutter/flutter",
+        "connections": ["fastapi", "nocodb", "java", "git"]
+      },
+      {
+        "label": "NocoDB",
+        "brandKey": "nocodb",
+        "category": "apps",
+        "isFoss": true,
+        "summary": "Open-source spreadsheet-to-REST API layer running in a Proxmox LXC atop PostgreSQL.",
+        "websiteUrl": "https://nocodb.com/",
+        "githubUrl": "https://github.com/nocodb/nocodb",
+        "connections": ["postgresql", "proxmox", "docker", "flutter", "nodejs"]
+      },
+      {
+        "label": "Power BI",
+        "logoPath": "/images/logos/powerbi.webp",
+        "brandKey": "powerbi",
+        "category": "apps",
+        "isFoss": false,
+        "summary": "Enterprise BI tool used for fleet reporting and workforce capacity KPIs.",
+        "websiteUrl": "https://www.microsoft.com/power-platform/products/power-bi",
+        "connections": ["databricks", "postgresql", "pandas", "ms"]
+      },
+      {
+        "label": "MS Office",
+        "logoPath": "/images/logos/ms.webp",
+        "brandKey": "ms",
+        "category": "apps",
+        "isFoss": false,
+        "summary": "Spreadsheet modeling and documentation suite supporting operational analytics and specs.",
+        "websiteUrl": "https://www.microsoft.com/microsoft-365",
+        "connections": ["powerbi", "pandas"]
+      }
     ],
     "categories": [
       {
@@ -1316,5 +1728,37 @@
       "Consolidated onto a primary Proxmox VE 8 server running production Udayan Care LXCs and a nested 6-node K3s cluster behind Tailscale and Cloudflare Tunnels."
     ],
     "keywords": "Software Developer, Databricks, Apache Spark, Python, FastAPI, Flutter, Proxmox VE, Linux, Docker Compose, Kubernetes, K3s"
+  },
+  "seo": {
+    "siteUrl": "https://diivvansh.com",
+    "shortName": "DivanshDev",
+    "ogImage": "/og-card.png",
+    "keywords": [
+      "Divansh Prasad",
+      "Software Engineer",
+      "Daimler Truck DTICI",
+      "Databricks Spark ETL",
+      "FastAPI",
+      "Flutter Developer",
+      "FiT-UC Udayan Care",
+      "Proxmox VE 8",
+      "Kubernetes K3s",
+      "MetalLB Traefik",
+      "Bengaluru India"
+    ],
+    "faqs": [
+      {
+        "question": "Who is Divansh Prasad and what does he build?",
+        "answer": "Divansh Prasad is a Software Engineer at Daimler Truck Innovation Center India (DTICI) in Bengaluru working on Databricks Apache Spark ETL pipelines across ~70,000 connected commercial trucks, FastAPI and React internal web applications, and Over-The-Air (OTA) vehicle telemetry workflows validated on hardware test rigs."
+      },
+      {
+        "question": "What volunteer software and mobile apps has Divansh Prasad shipped?",
+        "answer": "Outside work, Divansh volunteers as Lead Developer for Udayan Care NGO, where he built and shipped the bilingual (English and Hindi) FiT-UC Flutter mobile app live on Google Play Store backed by self-hosted NocoDB and Node.js authentication containers on Proxmox VE."
+      },
+      {
+        "question": "How is Divansh Prasad's self-hosted Proxmox and K3s infrastructure designed?",
+        "answer": "His homelab evolved from bare-metal Debian, Kali, and Alpine Linux hosts running Docker Compose to a 3-node Proxmox VE HA cluster with a dedicated 4th Proxmox Backup Server (PBS) laptop, and consolidated onto a Proxmox VE 8 host running production LXC containers and a 6-node K3s cluster with MetalLB Layer-2 VIP, Traefik ingress, Tailscale, and Cloudflare Tunnels."
+      }
+    ]
   }
 }

@@ -143,14 +143,14 @@ export const Header: React.FC<HeaderProps> = ({
     <section
       id="hero"
       ref={heroRef}
-      className="pt-28 pb-16 md:pt-36 md:pb-20 border-b border-white/[0.08]"
+      className="pt-24 pb-14 sm:pt-28 sm:pb-16 md:pt-36 md:pb-20 border-b border-white/[0.08]"
     >
       <motion.div
         style={prefersReduced ? undefined : { scale: depthScale, opacity: depthOpacity }}
         className="origin-top will-change-transform"
       >
         {/* 2-Column Split Hero */}
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
+        <div className="grid lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-12 items-stretch">
           {/* Left Column: Kinetic Typographic Hierarchy */}
           <motion.div
             style={prefersReduced ? undefined : { y: leftParallaxY }}
@@ -183,7 +183,7 @@ export const Header: React.FC<HeaderProps> = ({
                 triggerOnMount={true}
                 delay={0.06}
                 stagger={0.045}
-                className="font-display text-4xl sm:text-5xl lg:text-[3.35rem] font-bold tracking-tight text-zinc-50 mb-6 leading-[1.08] max-w-2xl"
+                className="font-display text-[2rem] sm:text-5xl lg:text-[3.35rem] font-bold tracking-tight text-zinc-50 mb-5 sm:mb-6 leading-[1.1] max-w-2xl"
               />
 
               {/* Crisp Editorial Lead */}
@@ -203,13 +203,13 @@ export const Header: React.FC<HeaderProps> = ({
               transition={{ duration: 0.4, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Primary & Secondary Action Row */}
-              <div className="flex flex-wrap items-center gap-3 mb-7">
+              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-7">
                 {onOpenCvModal && (
                   <FloodButton
                     onClick={onOpenCvModal}
                     variant="primary"
                     chamfer={true}
-                    className="px-5 py-2.5 min-h-[44px] text-sm"
+                    className="w-full sm:w-auto justify-center px-5 py-2.5 min-h-[44px] text-sm"
                   >
                     <FileText className="w-4 h-4" aria-hidden="true" />
                     <span>View Resume / CV</span>
@@ -219,7 +219,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <FloodButton
                   href="#projects"
                   variant="glass"
-                  className="px-5 py-2.5 min-h-[44px] text-sm"
+                  className="flex-1 sm:flex-none justify-center px-4 sm:px-5 py-2.5 min-h-[44px] text-sm"
                 >
                   <span>Selected Work</span>
                   <ArrowRight
@@ -232,7 +232,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <FloodButton
                     href={secondaryAction.href}
                     variant="ghost"
-                    className="px-5 py-2.5 min-h-[44px] text-sm font-medium"
+                    className="flex-1 sm:flex-none justify-center px-4 sm:px-5 py-2.5 min-h-[44px] text-sm font-medium"
                   >
                     <Server
                       className="w-3.5 h-3.5 text-zinc-400 group-hover:text-cyan-400 transition-colors"
@@ -244,7 +244,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
 
               {/* Social Contact Links with Repo Icons & Brand SVG Fallbacks */}
-              <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-xs font-mono">
                 {socials.map((social) => {
                   const isMail = social.url.startsWith('mailto:');
                   return (
@@ -253,7 +253,7 @@ export const Header: React.FC<HeaderProps> = ({
                       href={social.url}
                       target={isMail ? undefined : '_blank'}
                       rel={isMail ? undefined : 'noopener noreferrer'}
-                      className="group/link inline-flex items-center gap-2 px-3 py-1.5 rounded-xl glass-panel-subtle glass-panel-hover text-zinc-300 hover:text-cyan-200 transition-all"
+                      className="group/link inline-flex items-center gap-2 px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-[34px] rounded-xl glass-panel-subtle glass-panel-hover text-zinc-300 hover:text-cyan-200 transition-all"
                     >
                       <RepoImage
                         src={social.logos}
@@ -319,12 +319,12 @@ export const Header: React.FC<HeaderProps> = ({
                   {effectiveDossierRows.map((row) => {
                     const RowIcon = getDossierIcon(row.icon);
                     return (
-                      <div key={row.label} className="py-3 flex justify-between items-center gap-4">
+                      <div key={row.label} className="py-3 flex justify-between items-center gap-3">
                         <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
                           <RowIcon className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
                           <span>{row.label}</span>
                         </dt>
-                        <dd className="font-mono text-zinc-100 text-right tabular-nums">
+                        <dd className="font-mono text-zinc-100 text-right tabular-nums min-w-0 break-words">
                           {typeof row.countTo === 'number' ? (
                             <CountUp
                               to={row.countTo}
@@ -344,14 +344,14 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Footer Action Links with Hover Scramble Resolve */}
               {dossierLinks.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-white/[0.08] flex items-center justify-between gap-2 text-xs font-mono">
+                <div className="mt-4 pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
                   {dossierLinks.map((link, idx) => (
                     <a
                       key={link.label}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`transition-colors inline-flex items-center gap-1 ${
+                      className={`py-1 transition-colors inline-flex items-center gap-1 ${
                         idx === dossierLinks.length - 1
                           ? 'text-cyan-400 hover:text-cyan-300 pr-2'
                           : 'text-zinc-400 hover:text-zinc-100'
@@ -368,7 +368,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Full-Width Frosted Glass Quantitative Proof Strip */}
-        <div className="mt-14 pt-8 border-t border-white/[0.08] grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+        <div className="mt-10 sm:mt-14 pt-8 border-t border-white/[0.08] grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
           {metrics.map((metric, idx) => {
             const Icon = metricIcons[idx % metricIcons.length];
 
@@ -382,13 +382,13 @@ export const Header: React.FC<HeaderProps> = ({
                   delay: 0.34 + idx * 0.06,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="glass-panel-subtle glass-panel-hover rounded-2xl p-4 sm:p-5 transition-colors duration-200"
+                className="glass-panel-subtle glass-panel-hover rounded-2xl p-3.5 sm:p-5 transition-colors duration-200 min-w-0"
               >
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-[11px] font-mono text-zinc-400">{metric.label}</span>
+                  <span className="text-[11px] font-mono text-zinc-400 truncate">{metric.label}</span>
                   <Icon className="w-4 h-4 text-cyan-400/80 shrink-0" aria-hidden="true" />
                 </div>
-                <div className="text-xl sm:text-2xl font-bold font-display text-zinc-50 tabular-nums tracking-tight">
+                <div className="text-lg sm:text-2xl font-bold font-display text-zinc-50 tabular-nums tracking-tight break-words">
                   {typeof metric.countTo === 'number' ? (
                     <CountUp
                       to={metric.countTo}

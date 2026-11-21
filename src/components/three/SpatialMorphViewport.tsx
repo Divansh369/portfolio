@@ -263,7 +263,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         ref={stageRef}
         tabIndex={0}
         onKeyDown={handleStageKeyDown}
-        className="group relative h-[440px] sm:h-[510px] lg:h-[560px] w-full rounded-2xl overflow-hidden border border-white/[0.14] bg-[#071124] shadow-[0_28px_72px_-28px_rgba(0,0,0,0.95)] focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+        className="group relative h-[430px] sm:h-[510px] lg:h-[560px] 2xl:h-[610px] w-full rounded-2xl overflow-hidden border border-white/[0.14] bg-[#071124] shadow-[0_28px_72px_-28px_rgba(0,0,0,0.95)] focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
       >
         <CornerBrackets className="text-white/30 group-hover:text-pink-400/80 z-20" />
 
@@ -271,7 +271,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         {!webglFailed ? (
           <div ref={canvasMountRef} className="absolute inset-0 w-full h-full z-0" />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#071124]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-8 text-center bg-[#071124]">
             <Cpu className="w-10 h-10 text-pink-400 mb-3" aria-hidden="true" />
             <h3 className="font-display text-lg font-bold text-zinc-100 mb-1">
               {activeSpec.title}
@@ -283,10 +283,10 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         )}
 
         {/* Minimal Top-Left Readout (solid rgba backing) */}
-        <div className="pointer-events-none absolute top-4 left-4 right-4 sm:right-auto z-10 max-w-md">
-          <div className="rounded-xl bg-black/85 border border-white/[0.14] px-4 py-3 shadow-lg">
-            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono mb-1">
-              <span className="inline-flex items-center gap-2 text-pink-400">
+        <div className="pointer-events-none absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-auto z-10 sm:max-w-md">
+          <div className="rounded-xl bg-black/85 border border-white/[0.14] px-3 py-2.5 sm:px-4 sm:py-3 shadow-lg">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[10px] sm:text-[11px] font-mono mb-1">
+              <span className="inline-flex items-center gap-1.5 sm:gap-2 text-pink-400 min-w-0">
                 <ActiveIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                 <TextScramble
                   text={activeSpec.domain}
@@ -294,14 +294,14 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                   durationMs={260}
                 />
               </span>
-              <span className={`inline-flex items-center gap-1.5 ${phaseAccent}`}>
+              <span className={`inline-flex items-center gap-1.5 ${phaseAccent} shrink-0`}>
                 <PhaseIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                 <span>
                   {celestialPhase.label} · {celestialPhase.windowLabel}
                 </span>
               </span>
             </div>
-            <h3 className="font-display text-sm sm:text-base font-bold text-zinc-50 leading-snug">
+            <h3 className="font-display text-xs sm:text-base font-bold text-zinc-50 leading-snug">
               {activeSpec.title}
             </h3>
             <p className="text-xs text-zinc-300/90 leading-relaxed mt-1 hidden sm:block">
@@ -311,12 +311,12 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         </div>
 
         {/* Unified Collapsible Bottom Control Dock */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center max-w-[94vw]">
+        <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center w-[calc(100%-1.25rem)] sm:w-auto max-w-[96vw]">
           <button
             type="button"
             onClick={() => setControlsCollapsed((prev) => !prev)}
             aria-expanded={!controlsCollapsed}
-            className="mb-1.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-black/90 border border-white/15 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            className="mb-1.5 inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[34px] rounded-lg bg-black/90 border border-white/15 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-colors cursor-pointer whitespace-nowrap shrink-0"
           >
             {controlsCollapsed ? (
               <>
@@ -339,7 +339,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                 : { opacity: 1, y: 0, pointerEvents: 'auto' as const }
             }
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-2xl bg-black/92 border border-white/[0.18] px-2.5 py-2 shadow-[0_16px_40px_rgba(0,0,0,0.9)] flex items-center gap-2 overflow-x-auto max-w-full"
+            className="rounded-2xl bg-black/92 border border-white/[0.18] px-2 py-1.5 sm:px-2.5 sm:py-2 shadow-[0_16px_40px_rgba(0,0,0,0.9)] flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none max-w-full"
           >
             {/* 4 Architecture States */}
             <div className="flex items-center gap-1" role="group" aria-label="Select 3D architecture state">
@@ -352,7 +352,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                     type="button"
                     aria-pressed={selected}
                     onClick={() => handleSelectMorph(spec.id)}
-                    className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-medium whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[40px] rounded-xl text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                       selected
                         ? 'bg-blue-600/90 text-white border border-cyan-300/40 shadow-sm'
                         : 'text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-transparent'
@@ -372,10 +372,39 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
 
             <div className="w-px h-5 bg-white/12 shrink-0" aria-hidden="true" />
 
+            {/* Camera Angle Presets (Visible on Mobile & Desktop so everyone can switch to Horizon) */}
+            <div
+              className="flex items-center gap-1 shrink-0"
+              role="group"
+              aria-label="Camera angle presets"
+            >
+              <Eye className="w-3.5 h-3.5 text-zinc-500 ml-0.5 mr-0.5 shrink-0 hidden sm:block" aria-hidden="true" />
+              {CAMERA_OPTIONS.map((cam) => {
+                const isCamActive = activeCamera === cam.id;
+                return (
+                  <button
+                    key={cam.id}
+                    type="button"
+                    aria-pressed={isCamActive}
+                    onClick={() => handleSelectCamera(cam.id)}
+                    className={`px-2.5 py-2 min-h-[40px] rounded-xl text-[11px] sm:text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                      isCamActive
+                        ? 'bg-pink-500/20 text-pink-300 border border-pink-400/40'
+                        : 'text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-transparent'
+                    }`}
+                  >
+                    {cam.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="w-px h-5 bg-white/12 shrink-0" aria-hidden="true" />
+
             {/* Bloom / Unfold Slider */}
-            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.05] border border-white/12 shrink-0">
+            <div className="flex items-center gap-2 px-2.5 py-1.5 min-h-[40px] rounded-xl bg-white/[0.05] border border-white/12 shrink-0">
               <Flower2 className="w-3.5 h-3.5 text-pink-400 shrink-0" aria-hidden="true" />
-              <span className="text-[11px] font-mono text-zinc-300 whitespace-nowrap">
+              <span className="text-[11px] font-mono text-zinc-300 whitespace-nowrap tabular-nums">
                 Bloom <span className="text-pink-400 font-semibold">{Math.round(explodedFactor * 100)}%</span>
               </span>
               <input
@@ -386,7 +415,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                 value={explodedFactor}
                 onChange={handleExplodedChange}
                 aria-label="Lotus flower bloom and petal unfolding factor"
-                className="w-20 sm:w-28 h-1.5 bg-zinc-700/80 rounded-lg appearance-none cursor-pointer accent-pink-400 focus:outline-none"
+                className="w-20 sm:w-28 h-2 bg-zinc-700/80 rounded-lg appearance-none cursor-pointer accent-pink-400 focus:outline-none"
               />
             </div>
 
@@ -399,7 +428,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                 aria-pressed={wireframe}
                 onClick={handleToggleWireframe}
                 title="Toggle structural petal CAD wireframe overlay"
-                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[40px] rounded-xl text-[11px] sm:text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                   wireframe
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
                     : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border border-transparent'
@@ -415,7 +444,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                   aria-pressed={autoCycle}
                   onClick={handleToggleAutoCycle}
                   title="Toggle continuous shape morph cycling"
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[40px] rounded-xl text-[11px] sm:text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                     autoCycle
                       ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
                       : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border border-transparent'
@@ -429,35 +458,6 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                   <span>Auto-Bloom</span>
                 </button>
               )}
-            </div>
-
-            <div className="hidden md:block w-px h-5 bg-white/12 shrink-0" aria-hidden="true" />
-
-            {/* Camera Angle Presets */}
-            <div
-              className="hidden md:flex items-center gap-1 shrink-0"
-              role="group"
-              aria-label="Camera angle presets"
-            >
-              <Eye className="w-3.5 h-3.5 text-zinc-500 ml-1 mr-0.5 shrink-0" aria-hidden="true" />
-              {CAMERA_OPTIONS.map((cam) => {
-                const isCamActive = activeCamera === cam.id;
-                return (
-                  <button
-                    key={cam.id}
-                    type="button"
-                    aria-pressed={isCamActive}
-                    onClick={() => handleSelectCamera(cam.id)}
-                    className={`px-2.5 py-2 min-h-[40px] rounded-xl text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
-                      isCamActive
-                        ? 'bg-pink-500/20 text-pink-300 border border-pink-400/40'
-                        : 'text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-transparent'
-                    }`}
-                  >
-                    {cam.label}
-                  </button>
-                );
-              })}
             </div>
           </motion.div>
         </div>

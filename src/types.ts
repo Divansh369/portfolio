@@ -100,6 +100,12 @@ export interface SkillIconTile {
   label: string;
   logoPath?: string;
   brandKey: string;
+  category?: 'infra' | 'languages' | 'data' | 'apps';
+  summary?: string;
+  websiteUrl?: string;
+  githubUrl?: string;
+  connections?: string[];
+  isFoss?: boolean;
 }
 
 export interface Social {
@@ -392,5 +398,15 @@ export interface PortfolioData {
     homelabCvLink?: string;
     homelabCvBullets?: string[];
     keywords?: string;
+  };
+  seo?: {
+    siteUrl?: string;
+    shortName?: string;
+    ogImage?: string;
+    keywords?: string[];
+    faqs?: Array<{
+      question: string;
+      answer: string;
+    }>;
   };
 }

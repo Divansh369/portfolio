@@ -254,13 +254,13 @@ export const Projects: React.FC<ProjectsProps> = ({
         </div>
 
         {/* Frosted Filter Tabs with layoutId Spring, Archived Toggle & Search */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
           {dynamicFilterTabs.length > 1 && (
             <LayoutGroup id="project-filter-tabs">
               <div
                 role="tablist"
                 aria-label="Filter projects by category"
-                className="flex flex-wrap items-center gap-1 p-1 glass-panel-subtle rounded-xl"
+                className="flex items-center gap-1 p-1 glass-panel-subtle rounded-xl overflow-x-auto scrollbar-none w-full sm:w-auto"
               >
                 {dynamicFilterTabs.map(({ key, label, icon: Icon }) => {
                   const selected = filter === key;
@@ -271,7 +271,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                       role="tab"
                       aria-selected={selected}
                       onClick={() => setFilter(key)}
-                      className={`relative px-3.5 py-2 min-h-[36px] text-xs font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
+                      className={`relative px-3.5 py-2 min-h-[38px] text-xs font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
                         selected ? 'text-white' : 'text-zinc-400 hover:text-zinc-100'
                       }`}
                     >
@@ -291,57 +291,59 @@ export const Projects: React.FC<ProjectsProps> = ({
             </LayoutGroup>
           )}
 
-          {archivedCount > 0 && (
-            <button
-              type="button"
-              onClick={() => setShowArchived((prev) => !prev)}
-              aria-pressed={showArchived}
-              className={`px-3 py-2 min-h-[42px] text-xs font-mono rounded-xl border transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
-                showArchived
-                  ? 'glass-panel-subtle border-cyan-400/30 text-zinc-200 hover:text-white'
-                  : 'glass-panel-subtle border-white/10 text-zinc-400 hover:text-zinc-100'
-              }`}
-              title="Toggle visibility of archived and unmaintained projects"
-            >
-              <Archive className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
-              <span>
-                {showArchived
-                  ? `Showing Archived (${archivedCount})`
-                  : `Show Archived (${archivedCount})`}
-              </span>
-            </button>
-          )}
-
-          <div className="relative">
-            <Search
-              className="w-3.5 h-3.5 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-              aria-hidden="true"
-            />
-            <input
-              ref={searchInputRef}
-              type="text"
-              aria-label="Filter projects by technology or keyword"
-              placeholder="Search stack... (/)"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') {
-                  setSearch('');
-                  searchInputRef.current?.blur();
-                }
-              }}
-              className="px-3.5 py-2 pl-9 pr-8 min-h-[42px] text-xs glass-panel-subtle rounded-xl text-zinc-100 placeholder:text-zinc-500 focus:border-cyan-400/50 w-44 sm:w-52 transition-colors"
-            />
-            {search && (
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 w-full sm:w-auto">
+            {archivedCount > 0 && (
               <button
                 type="button"
-                onClick={() => setSearch('')}
-                aria-label="Clear search filter"
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white cursor-pointer p-1"
+                onClick={() => setShowArchived((prev) => !prev)}
+                aria-pressed={showArchived}
+                className={`px-3 py-2 min-h-[42px] text-xs font-mono rounded-xl border transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
+                  showArchived
+                    ? 'glass-panel-subtle border-cyan-400/30 text-zinc-200 hover:text-white'
+                    : 'glass-panel-subtle border-white/10 text-zinc-400 hover:text-zinc-100'
+                }`}
+                title="Toggle visibility of archived and unmaintained projects"
               >
-                <X className="w-3.5 h-3.5" />
+                <Archive className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
+                <span>
+                  {showArchived
+                    ? `Showing Archived (${archivedCount})`
+                    : `Show Archived (${archivedCount})`}
+                </span>
               </button>
             )}
+
+            <div className="relative flex-1 sm:flex-none">
+              <Search
+                className="w-3.5 h-3.5 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                aria-hidden="true"
+              />
+              <input
+                ref={searchInputRef}
+                type="text"
+                aria-label="Filter projects by technology or keyword"
+                placeholder="Search stack... (/)"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    setSearch('');
+                    searchInputRef.current?.blur();
+                  }
+                }}
+                className="px-3.5 py-2 pl-9 pr-8 min-h-[42px] text-xs glass-panel-subtle rounded-xl text-zinc-100 placeholder:text-zinc-500 focus:border-cyan-400/50 w-full sm:w-52 transition-colors"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch('')}
+                  aria-label="Clear search filter"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white cursor-pointer p-1.5"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -477,12 +479,12 @@ export const Projects: React.FC<ProjectsProps> = ({
                       )}
 
                       {/* Card Footer Actions */}
-                      <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2.5 text-xs">
-                        <div className="flex items-center gap-3">
+                      <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div className="flex flex-wrap items-center gap-3">
                           <button
                             type="button"
                             onClick={() => onViewDetails(project)}
-                            className="group/btn font-medium text-zinc-200 hover:text-white transition-colors inline-flex items-center gap-1.5 py-1 cursor-pointer"
+                            className="group/btn font-medium text-zinc-200 hover:text-white transition-colors inline-flex items-center gap-1.5 min-h-[40px] py-1 cursor-pointer"
                           >
                             <span>View Details</span>
                             <ArrowRight
@@ -502,7 +504,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                                   milestones: itemMilestones,
                                 })
                               }
-                              className="font-mono text-[11px] text-cyan-300/90 hover:text-cyan-200 transition-colors inline-flex items-center gap-1.5 py-1 cursor-pointer"
+                              className="font-mono text-[11px] text-cyan-300/90 hover:text-cyan-200 transition-colors inline-flex items-center gap-1.5 min-h-[40px] py-1 cursor-pointer"
                               title="Open chronological build progress gallery"
                             >
                               <Images className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -516,7 +518,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1 py-1 pr-2 whitespace-nowrap shrink-0"
+                            className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1 min-h-[40px] py-1 pr-2 whitespace-nowrap shrink-0"
                           >
                             <span>
                               {isPlayStore ? 'Google Play' : isGithub ? 'GitHub' : 'Visit Website'}

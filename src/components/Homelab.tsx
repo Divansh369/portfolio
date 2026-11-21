@@ -191,10 +191,6 @@ export const Homelab: React.FC<HomelabProps> = ({
   const hardwareTitle = config?.hardwareTitle || 'Hardware & Compute Nodes';
   const hardwareSubtitle =
     config?.hardwareSubtitle || 'Primary server hardware, workstations, and compute cluster inventory.';
-  const platformsTitle = config?.platformsTitle || 'FOSS Platforms & Cluster Tooling';
-  const platformsSubtitle =
-    config?.platformsSubtitle ||
-    'Container orchestrators, hypervisors, reverse proxies, and infrastructure management tools.';
 
   const displayDomains =
     network?.domains && network.domains.length > 0 ? network.domains.join(' · ') : 'Self-Hosted';
@@ -228,7 +224,7 @@ export const Homelab: React.FC<HomelabProps> = ({
         <div
           role="tablist"
           aria-label="Infrastructure architecture views"
-          className="flex flex-wrap items-center gap-1 p-1 glass-panel-subtle rounded-xl w-fit mb-10"
+          className="flex items-center gap-1 p-1 glass-panel-subtle rounded-xl w-full sm:w-fit overflow-x-auto scrollbar-none mb-10"
         >
           {tabItems.map(({ id, label, icon: Icon }) => {
             const selected = activeTab === id;
@@ -431,27 +427,29 @@ export const Homelab: React.FC<HomelabProps> = ({
                   <span>Mesh &amp; Ingress Routing</span>
                 </span>
                 <dl className="divide-y divide-white/[0.07] text-xs mt-3">
-                  <div className="py-2.5 flex justify-between gap-4">
+                  <div className="py-2.5 flex justify-between gap-3">
                     <dt className="text-zinc-400 shrink-0">Private Mesh</dt>
-                    <dd className="text-zinc-100 font-mono text-right">
+                    <dd className="text-zinc-100 font-mono text-right min-w-0 break-words">
                       {network?.overlay || 'WireGuard private mesh'}
                     </dd>
                   </div>
-                  <div className="py-2.5 flex justify-between gap-4">
+                  <div className="py-2.5 flex justify-between gap-3">
                     <dt className="text-zinc-400 shrink-0">Public Ingress</dt>
-                    <dd className="text-zinc-100 font-mono text-right">
+                    <dd className="text-zinc-100 font-mono text-right min-w-0 break-words">
                       {network?.ingress || 'Zero-Trust Edge Tunnels'}
                     </dd>
                   </div>
-                  <div className="py-2.5 flex justify-between gap-4">
+                  <div className="py-2.5 flex justify-between gap-3">
                     <dt className="text-zinc-400 shrink-0">Cluster Routing</dt>
-                    <dd className="text-zinc-100 font-mono text-right">
+                    <dd className="text-zinc-100 font-mono text-right min-w-0 break-words">
                       {network?.loadBalancer || 'L2 Virtual IP + Reverse Proxy'}
                     </dd>
                   </div>
-                  <div className="py-2.5 flex justify-between gap-4">
+                  <div className="py-2.5 flex justify-between gap-3">
                     <dt className="text-zinc-400 shrink-0">Domains</dt>
-                    <dd className="text-cyan-400 font-mono text-right">{displayDomains}</dd>
+                    <dd className="text-cyan-400 font-mono text-right min-w-0 break-words">
+                      {displayDomains}
+                    </dd>
                   </div>
                 </dl>
               </div>
@@ -459,12 +457,21 @@ export const Homelab: React.FC<HomelabProps> = ({
               {platforms.length > 0 && (
                 <div className="glass-panel-subtle rounded-2xl p-6 flex flex-col justify-between">
                   <div>
-                    <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 mb-2">
-                      <Globe className="w-3.5 h-3.5" aria-hidden="true" />
-                      <span>Core Infrastructure Stack</span>
-                    </span>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400">
+                        <Globe className="w-3.5 h-3.5" aria-hidden="true" />
+                        <span>Core Infrastructure Stack</span>
+                      </span>
+                      <a
+                        href="#skills"
+                        className="inline-flex items-center gap-1 text-[11px] font-mono text-cyan-300/90 hover:text-cyan-200 transition-colors"
+                      >
+                        <span>Inspect Graph</span>
+                        <ArrowUpRight className="w-3 h-3" aria-hidden="true" />
+                      </a>
+                    </div>
                     <p className="text-sm text-zinc-300/90 leading-relaxed mt-3">
-                      Daily tools used to manage storage snapshots, reverse proxies, container images, and internal authentication endpoints.
+                      Daily FOSS tools managing storage snapshots, reverse proxies, container images, and internal authentication endpoints.
                     </p>
                   </div>
                   <div className="mt-5 pt-4 border-t border-white/[0.08] text-xs font-mono text-zinc-200 flex flex-wrap gap-y-1.5 items-center">
@@ -499,146 +506,111 @@ export const Homelab: React.FC<HomelabProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Hardware Inventory & FOSS Self-Hosted Platforms Grid */}
-      {(devices.length > 0 || platforms.length > 0) && (
-        <div className="mt-12 pt-10 border-t border-white/[0.08] space-y-10">
-          {devices.length > 0 && (
+      {/* Hardware & Compute Inventory */}
+      {devices.length > 0 && (
+        <div className="mt-12 pt-10 border-t border-white/[0.08]">
+          <div className="mb-5 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
-              <div className="mb-5 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-                <div>
-                  <h3 className="font-display text-lg font-bold text-zinc-50 flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-                    <span>{hardwareTitle}</span>
-                  </h3>
-                  <p className="text-xs text-zinc-400 mt-1">{hardwareSubtitle}</p>
-                </div>
-              </div>
+              <h3 className="font-display text-lg font-bold text-zinc-50 flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+                <span>{hardwareTitle}</span>
+              </h3>
+              <p className="text-xs text-zinc-400 mt-1">{hardwareSubtitle}</p>
+            </div>
+          </div>
 
-              <div className="grid md:grid-cols-3 gap-5">
-                {devices.map((node) => {
-                  const vendorBrand = getNodeVendorBrand(node.hostname, node.type);
-                  const cpuBrand = getCpuBrand(node.cpu);
-                  const gpuBrand = getGpuBrand(node.gpu || '');
-                  const hasDualVendorCpu =
-                    node.cpu.toLowerCase().includes('intel') &&
-                    node.cpu.toLowerCase().includes('amd');
+          <div className="grid md:grid-cols-3 gap-5">
+            {devices.map((node) => {
+              const vendorBrand = getNodeVendorBrand(node.hostname, node.type);
+              const cpuBrand = getCpuBrand(node.cpu);
+              const gpuBrand = getGpuBrand(node.gpu || '');
+              const hasDualVendorCpu =
+                node.cpu.toLowerCase().includes('intel') &&
+                node.cpu.toLowerCase().includes('amd');
 
-                  return (
-                    <GlassCard key={node.hostname} tilt={true} spotlight={true} className="p-6">
-                      <div>
-                        <div className="flex items-center justify-between gap-2 mb-3">
-                          <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400">
-                            <RepoImage
-                              src={node.logo}
-                              alt={node.hostname}
-                              className="w-4 h-4 shrink-0"
-                              imgClassName="w-full h-full object-contain"
-                              fallback={<BrandMark brand={vendorBrand} className="w-4 h-4 shrink-0" />}
-                            />
-                            <span>{node.type}</span>
-                          </span>
-                        </div>
-                        <h4 className="font-display text-lg font-bold text-zinc-50 mb-2 flex items-center gap-2">
-                          <span>{node.hostname}</span>
-                        </h4>
-                        {node.notes && (
-                          <p className="text-xs sm:text-sm text-zinc-300/90 leading-relaxed mb-5">
-                            {node.notes}
-                          </p>
-                        )}
+              return (
+                <GlassCard key={node.hostname} tilt={true} spotlight={true} className="p-6">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400">
+                        <RepoImage
+                          src={node.logo}
+                          alt={node.hostname}
+                          className="w-4 h-4 shrink-0"
+                          imgClassName="w-full h-full object-contain"
+                          fallback={<BrandMark brand={vendorBrand} className="w-4 h-4 shrink-0" />}
+                        />
+                        <span>{node.type}</span>
+                      </span>
+                    </div>
+                    <h4 className="font-display text-lg font-bold text-zinc-50 mb-2 flex items-center gap-2">
+                      <span>{node.hostname}</span>
+                    </h4>
+                    {node.notes && (
+                      <p className="text-xs sm:text-sm text-zinc-300/90 leading-relaxed mb-5">
+                        {node.notes}
+                      </p>
+                    )}
 
-                        <dl className="divide-y divide-white/[0.07] text-xs font-mono">
-                          <div className="py-2.5 flex justify-between items-center gap-3">
-                            <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
-                              <BrandMark brand={cpuBrand} className="w-4 h-4 shrink-0" />
-                              {hasDualVendorCpu && (
-                                <BrandMark brand="intel" className="w-4 h-4 shrink-0" />
-                              )}
-                              <span>CPU</span>
-                            </dt>
-                            <dd className="text-zinc-100 text-right">{node.cpu}</dd>
-                          </div>
-                          {node.gpu && (
-                            <div className="py-2.5 flex justify-between items-center gap-3">
-                              <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
-                                <BrandMark brand={gpuBrand} className="w-4 h-4 shrink-0" />
-                                <span>GPU</span>
-                              </dt>
-                              <dd className="text-zinc-100 text-right">{node.gpu}</dd>
-                            </div>
+                    <dl className="divide-y divide-white/[0.07] text-xs font-mono">
+                      <div className="py-2.5 flex justify-between items-center gap-3">
+                        <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
+                          <BrandMark brand={cpuBrand} className="w-4 h-4 shrink-0" />
+                          {hasDualVendorCpu && (
+                            <BrandMark brand="intel" className="w-4 h-4 shrink-0" />
                           )}
-                          <div className="py-2.5 flex justify-between items-center gap-3">
-                            <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
-                              <BrandMark brand="ram" className="w-4 h-4 shrink-0" />
-                              <span>Memory</span>
-                            </dt>
-                            <dd className="text-zinc-100 tabular-nums text-right">{node.ram}</dd>
-                          </div>
-                          <div className="py-2.5 flex justify-between items-center gap-3">
-                            <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
-                              <BrandMark brand="nvme" className="w-4 h-4 shrink-0" />
-                              <span>Storage</span>
-                            </dt>
-                            <dd className="text-zinc-100 tabular-nums text-right">{node.storage}</dd>
-                          </div>
-                        </dl>
+                          <span>CPU</span>
+                        </dt>
+                        <dd className="text-zinc-100 text-right min-w-0 break-words">{node.cpu}</dd>
                       </div>
-
-                      {node.url && (
-                        <div className="mt-5 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono">
-                          <span className="text-zinc-400">Console</span>
-                          <a
-                            href={node.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1"
-                          >
-                            <TextScramble
-                              text={node.url.replace(/^https?:\/\//, '')}
-                              trigger="hover"
-                              durationMs={320}
-                            />
-                            <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-                          </a>
+                      {node.gpu && (
+                        <div className="py-2.5 flex justify-between items-center gap-3">
+                          <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
+                            <BrandMark brand={gpuBrand} className="w-4 h-4 shrink-0" />
+                            <span>GPU</span>
+                          </dt>
+                          <dd className="text-zinc-100 text-right min-w-0 break-words">{node.gpu}</dd>
                         </div>
                       )}
-                    </GlassCard>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {platforms.length > 0 && (
-            <div>
-              <div className="mb-5">
-                <h3 className="font-display text-lg font-bold text-zinc-50 flex items-center gap-2">
-                  <Boxes className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-                  <span>{platformsTitle}</span>
-                </h3>
-                <p className="text-xs text-zinc-400 mt-1">{platformsSubtitle}</p>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                {platforms.map((platform) => (
-                  <div
-                    key={platform.name}
-                    className="glass-panel-subtle glass-panel-hover rounded-xl px-3 py-4 flex flex-col items-center justify-center gap-2.5 text-center transition-all"
-                  >
-                    <RepoImage
-                      src={platform.logo}
-                      alt={platform.name}
-                      className="w-7 h-7 shrink-0"
-                      imgClassName="w-full h-full object-contain"
-                      fallback={<BrandMark brand={platform.name} className="w-7 h-7 shrink-0" />}
-                    />
-                    <span className="text-[11px] font-mono text-zinc-200 leading-tight">
-                      {platform.name}
-                    </span>
+                      <div className="py-2.5 flex justify-between items-center gap-3">
+                        <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
+                          <BrandMark brand="ram" className="w-4 h-4 shrink-0" />
+                          <span>Memory</span>
+                        </dt>
+                        <dd className="text-zinc-100 tabular-nums text-right min-w-0 break-words">{node.ram}</dd>
+                      </div>
+                      <div className="py-2.5 flex justify-between items-center gap-3">
+                        <dt className="text-zinc-400 inline-flex items-center gap-1.5 shrink-0">
+                          <BrandMark brand="nvme" className="w-4 h-4 shrink-0" />
+                          <span>Storage</span>
+                        </dt>
+                        <dd className="text-zinc-100 tabular-nums text-right min-w-0 break-words">{node.storage}</dd>
+                      </div>
+                    </dl>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
+
+                  {node.url && (
+                    <div className="mt-5 pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono">
+                      <span className="text-zinc-400">Console</span>
+                      <a
+                        href={node.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1"
+                      >
+                        <TextScramble
+                          text={node.url.replace(/^https?:\/\//, '')}
+                          trigger="hover"
+                          durationMs={320}
+                        />
+                        <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                      </a>
+                    </div>
+                  )}
+                </GlassCard>
+              );
+            })}
+          </div>
         </div>
       )}
     </section>

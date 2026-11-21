@@ -247,7 +247,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
           transition={{ duration: 0.18 }}
         >
           <motion.div
-            className="glass-panel rounded-2xl max-w-5xl w-full relative flex flex-col max-h-[93vh] overflow-hidden my-auto"
+            className="glass-panel rounded-2xl max-w-5xl w-full relative flex flex-col max-h-[94dvh] overflow-hidden my-auto"
             onClick={(e) => e.stopPropagation()}
             initial={
               prefersReduced
@@ -272,171 +272,172 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
           >
             {/* Top Control Bar */}
             <div className="flex flex-col gap-3 p-4 sm:px-6 bg-[#060914]/80 border-b border-white/[0.08] print-hide">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                <div>
-                  <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 mb-0.5">
-                    <FileText className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-mono text-cyan-400 mb-0.5">
+                    <FileText className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                    <span className="truncate">
                       ATS Linear Single-Column PDF ·{' '}
                       {isResume ? '1-Page Executive Resume' : 'Full Curriculum Vitae'}
                     </span>
                   </div>
-                  <h2 className="font-display text-lg sm:text-xl font-bold text-zinc-50">
+                  <h2 className="font-display text-base sm:text-xl font-bold text-zinc-50 leading-snug">
                     {isResume ? 'Resume (1-Page ATS)' : 'Curriculum Vitae (Comprehensive)'} —{' '}
                     {profile.name || 'Developer'}
                   </h2>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  {/* Resume vs CV Mode Switcher */}
-                  <LayoutGroup id="doc-mode-toggle">
-                    <div
-                      role="tablist"
-                      aria-label="Switch between 1-page Resume and comprehensive CV"
-                      className="flex items-center p-0.5 rounded-xl glass-panel-subtle text-xs font-mono"
+                {/* Pinned Close */}
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="text-zinc-400 hover:text-white p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle transition-colors cursor-pointer flex items-center justify-center shrink-0"
+                  aria-label="Close document preview"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Resume vs CV Mode Switcher */}
+                <LayoutGroup id="doc-mode-toggle">
+                  <div
+                    role="tablist"
+                    aria-label="Switch between 1-page Resume and comprehensive CV"
+                    className="flex items-center p-0.5 rounded-xl glass-panel-subtle text-xs font-mono"
+                  >
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={isResume}
+                      onClick={() => setDocMode('resume')}
+                      className={`relative px-3 py-1.5 min-h-[38px] rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+                        isResume ? 'text-white font-medium' : 'text-zinc-400 hover:text-zinc-100'
+                      }`}
                     >
-                      <button
-                        type="button"
-                        role="tab"
-                        aria-selected={isResume}
-                        onClick={() => setDocMode('resume')}
-                        className={`relative px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-                          isResume ? 'text-white font-medium' : 'text-zinc-400 hover:text-zinc-100'
-                        }`}
-                      >
-                        {isResume && (
-                          <motion.span
-                            layoutId="doc-mode-pill"
-                            transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
-                          />
-                        )}
-                        <span className="relative z-10">Resume (1-Page)</span>
-                      </button>
-                      <button
-                        type="button"
-                        role="tab"
-                        aria-selected={!isResume}
-                        onClick={() => setDocMode('cv')}
-                        className={`relative px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-                          !isResume ? 'text-white font-medium' : 'text-zinc-400 hover:text-zinc-100'
-                        }`}
-                      >
-                        {!isResume && (
-                          <motion.span
-                            layoutId="doc-mode-pill"
-                            transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
-                          />
-                        )}
-                        <span className="relative z-10">Full CV</span>
-                      </button>
-                    </div>
-                  </LayoutGroup>
+                      {isResume && (
+                        <motion.span
+                          layoutId="doc-mode-pill"
+                          transition={{ type: 'spring', stiffness: 360, damping: 30 }}
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                        />
+                      )}
+                      <span className="relative z-10">Resume (1-Page)</span>
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={!isResume}
+                      onClick={() => setDocMode('cv')}
+                      className={`relative px-3 py-1.5 min-h-[38px] rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+                        !isResume ? 'text-white font-medium' : 'text-zinc-400 hover:text-zinc-100'
+                      }`}
+                    >
+                      {!isResume && (
+                        <motion.span
+                          layoutId="doc-mode-pill"
+                          transition={{ type: 'spring', stiffness: 360, damping: 30 }}
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                        />
+                      )}
+                      <span className="relative z-10">Full CV</span>
+                    </button>
+                  </div>
+                </LayoutGroup>
 
-                  {/* Theme Toggle */}
-                  <LayoutGroup id="cv-theme-toggle">
-                    <div className="flex items-center p-0.5 rounded-xl glass-panel-subtle text-xs font-mono">
-                      <button
-                        type="button"
-                        onClick={() => setViewTheme('paper')}
-                        className={`relative inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                          isPaper ? 'text-white font-medium' : 'text-zinc-400 hover:text-zinc-100'
-                        }`}
-                        title="White ATS paper preview"
-                      >
-                        {isPaper && (
-                          <motion.span
-                            layoutId="cv-theme-pill"
-                            transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
-                          />
-                        )}
-                        <Sun className="w-3.5 h-3.5 relative z-10" aria-hidden="true" />
-                        <span className="relative z-10">Paper</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setViewTheme('dark')}
-                        className={`relative inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                          !isPaper ? 'text-white font-medium' : 'text-zinc-400 hover:text-zinc-100'
-                        }`}
-                        title="Dark preview"
-                      >
-                        {!isPaper && (
-                          <motion.span
-                            layoutId="cv-theme-pill"
-                            transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
-                          />
-                        )}
-                        <Moon className="w-3.5 h-3.5 relative z-10" aria-hidden="true" />
-                        <span className="relative z-10">Dark</span>
-                      </button>
-                    </div>
-                  </LayoutGroup>
+                {/* Theme Toggle */}
+                <LayoutGroup id="cv-theme-toggle">
+                  <div className="flex items-center p-0.5 rounded-xl glass-panel-subtle text-xs font-mono">
+                    <button
+                      type="button"
+                      onClick={() => setViewTheme('paper')}
+                      className={`relative inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[38px] rounded-lg transition-colors cursor-pointer ${
+                        isPaper ? 'text-white font-medium' : 'text-zinc-400 hover:text-zinc-100'
+                      }`}
+                      title="White ATS paper preview"
+                    >
+                      {isPaper && (
+                        <motion.span
+                          layoutId="cv-theme-pill"
+                          transition={{ type: 'spring', stiffness: 360, damping: 30 }}
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                        />
+                      )}
+                      <Sun className="w-3.5 h-3.5 relative z-10" aria-hidden="true" />
+                      <span className="relative z-10">Paper</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewTheme('dark')}
+                      className={`relative inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[38px] rounded-lg transition-colors cursor-pointer ${
+                        !isPaper ? 'text-white font-medium' : 'text-zinc-400 hover:text-zinc-100'
+                      }`}
+                      title="Dark preview"
+                    >
+                      {!isPaper && (
+                        <motion.span
+                          layoutId="cv-theme-pill"
+                          transition={{ type: 'spring', stiffness: 360, damping: 30 }}
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                        />
+                      )}
+                      <Moon className="w-3.5 h-3.5 relative z-10" aria-hidden="true" />
+                      <span className="relative z-10">Dark</span>
+                    </button>
+                  </div>
+                </LayoutGroup>
 
-                  {/* Download PDF */}
-                  <FloodButton
-                    onClick={handleDownloadPdf}
-                    disabled={isDownloading}
-                    variant="primary"
-                    className="px-3.5 py-2 font-mono text-xs min-h-[36px]"
-                  >
-                    <Download className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span>
-                      {isDownloading
-                        ? 'Generating...'
-                        : isResume
-                        ? 'Download Resume'
-                        : 'Download CV'}
-                    </span>
-                  </FloodButton>
+                {/* Download PDF */}
+                <FloodButton
+                  onClick={handleDownloadPdf}
+                  disabled={isDownloading}
+                  variant="primary"
+                  className="px-3.5 py-2 font-mono text-xs min-h-[40px]"
+                >
+                  <Download className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>
+                    {isDownloading
+                      ? 'Generating...'
+                      : isResume
+                      ? 'Download Resume'
+                      : 'Download CV'}
+                  </span>
+                </FloodButton>
 
-                  {/* Open PDF in Tab */}
-                  <button
-                    type="button"
-                    onClick={handleOpenInNewTab}
-                    className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-200 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap"
-                    title="Open PDF in new tab"
-                  >
-                    <span>Open PDF</span>
-                    <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-                  </button>
+                {/* Open PDF in Tab */}
+                <button
+                  type="button"
+                  onClick={handleOpenInNewTab}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-200 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap"
+                  title="Open PDF in new tab"
+                >
+                  <span className="hidden sm:inline">Open PDF</span>
+                  <span className="sm:hidden">PDF</span>
+                  <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                </button>
 
-                  {/* Print */}
-                  <button
-                    type="button"
-                    onClick={handlePrint}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-200 font-mono text-xs transition-colors cursor-pointer"
-                    title="Print document"
-                  >
-                    <Printer className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span className="hidden sm:inline">Print</span>
-                  </button>
+                {/* Print */}
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-200 font-mono text-xs transition-colors cursor-pointer"
+                  title="Print document"
+                >
+                  <Printer className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span className="hidden sm:inline">Print</span>
+                </button>
 
-                  {/* Copy Link */}
-                  <button
-                    type="button"
-                    onClick={handleCopyPdfLink}
-                    className="inline-flex items-center gap-1 px-3 py-2 rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap"
-                  >
-                    {copiedLink ? <Check className="w-3.5 h-3.5 text-cyan-400" /> : null}
-                    <span className={copiedLink ? 'text-cyan-300' : ''}>
-                      {copiedLink ? 'Copied' : 'Copy Link'}
-                    </span>
-                  </button>
-
-                  {/* Close */}
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="text-zinc-400 hover:text-white p-2 min-w-[36px] min-h-[36px] rounded-xl glass-panel-subtle transition-colors cursor-pointer flex items-center justify-center"
-                    aria-label="Close document preview"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
+                {/* Copy Link */}
+                <button
+                  type="button"
+                  onClick={handleCopyPdfLink}
+                  className="inline-flex items-center gap-1 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  {copiedLink ? <Check className="w-3.5 h-3.5 text-cyan-400" /> : null}
+                  <span className={copiedLink ? 'text-cyan-300' : ''}>
+                    {copiedLink ? 'Copied' : 'Copy Link'}
+                  </span>
+                </button>
               </div>
 
               {/* Compact ATS Health Check Toggle Bar */}
@@ -607,13 +608,13 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
 
             {/* Document Viewport */}
             <div
-              className={`flex-1 overflow-y-auto p-3 sm:p-8 flex justify-center ${
+              className={`flex-1 overflow-y-auto p-2.5 sm:p-8 flex justify-center ${
                 isPaper ? 'bg-[#090d18]' : 'bg-[#040711]'
               }`}
             >
               <div
                 id="ats-resume-document"
-                className={`w-full max-w-3xl rounded-sm p-6 sm:p-10 font-sans text-xs leading-normal space-y-3.5 print:p-0 print:shadow-none print:max-w-full ${
+                className={`w-full max-w-3xl rounded-sm p-4 sm:p-10 font-sans text-xs leading-normal space-y-3.5 print:p-0 print:shadow-none print:max-w-full ${
                   isPaper
                     ? 'bg-white shadow-2xl border border-gray-200'
                     : 'bg-[#0d1322] border border-white/10 shadow-2xl'

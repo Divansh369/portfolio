@@ -179,18 +179,18 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
       </div>
 
       {/* Controls Bar */}
-      <div className="px-6 py-4 bg-white/[0.02] border-b border-white/[0.08] flex flex-wrap items-center justify-between gap-4">
+      <div className="px-4 sm:px-6 py-4 bg-white/[0.02] border-b border-white/[0.08] flex flex-wrap items-center justify-between gap-3 sm:gap-4">
         <div className="flex items-center gap-2 text-xs font-mono">
           <span className="text-zinc-400">Active Session:</span>
           <span className="text-cyan-400 font-semibold">{clientTab}</span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           <FloodButton
             onClick={() => dispatchRequest()}
             disabled={isDispatching}
             variant="primary"
-            className="px-3.5 py-2 min-h-[38px] font-mono text-xs"
+            className="flex-1 sm:flex-none justify-center px-3.5 py-2 min-h-[42px] sm:min-h-[38px] font-mono text-xs"
           >
             <Send className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Send Request</span>
@@ -200,17 +200,17 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
             onClick={handleSimulateNewTab}
             disabled={isDispatching}
             variant="glass"
-            className="px-3.5 py-2 min-h-[38px] font-mono text-xs"
+            className="flex-1 sm:flex-none justify-center px-3.5 py-2 min-h-[42px] sm:min-h-[38px] font-mono text-xs"
           >
             <Plus className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
-            <span>New Tab Session</span>
+            <span>New Tab</span>
           </FloodButton>
 
           <FloodButton
             onClick={handleBurstTraffic}
             disabled={isDispatching}
             variant="ghost"
-            className="px-3.5 py-2 min-h-[38px] font-mono text-xs"
+            className="px-3.5 py-2 min-h-[42px] sm:min-h-[38px] font-mono text-xs"
           >
             <Zap className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
             <span>Burst 3x</span>
@@ -219,9 +219,9 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
       </div>
 
       {/* Animated Conduit Transit Bus */}
-      <div className="px-6 py-3 bg-[#050914]/60 border-b border-white/[0.08] flex items-center justify-between gap-3 text-[11px] font-mono text-zinc-400">
+      <div className="px-4 sm:px-6 py-3 bg-[#050914]/60 border-b border-white/[0.08] flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-3 text-[11px] font-mono text-zinc-400">
         <span className="whitespace-nowrap text-zinc-300">VIP {vipAddress}</span>
-        <div className="relative flex-1 h-4 flex items-center">
+        <div className="relative flex-1 min-w-[60px] h-4 flex items-center">
           <div className="w-full h-[1px] connector-dash-active" />
           {!prefersReduced && pulseSeq > 0 && (
             <motion.div
@@ -233,7 +233,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
             />
           )}
         </div>
-        <span className="whitespace-nowrap text-cyan-400 font-semibold">
+        <span className="whitespace-nowrap text-cyan-400 font-semibold tabular-nums">
           {activePod.node} · {activePod.internalIp}
         </span>
       </div>

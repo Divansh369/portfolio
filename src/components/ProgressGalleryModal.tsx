@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   ArrowUpRight,
@@ -53,7 +53,7 @@ const BlueprintPlaceholder: React.FC<{
   const suggestedLocalPath = `/images/gallery/${itemId}/${stepNum}.webp`;
 
   return (
-    <div className="relative w-full h-full min-h-[290px] sm:min-h-[360px] rounded-xl overflow-hidden bg-[#050a16] border border-cyan-400/20 flex flex-col justify-between p-6 sm:p-8 select-none">
+    <div className="relative w-full h-full min-h-[210px] sm:min-h-[360px] rounded-xl overflow-hidden bg-[#050a16] border border-cyan-400/20 flex flex-col justify-between p-4 sm:p-8 select-none">
       {/* Blueprint Architectural Micro-Grid */}
       <div
         aria-hidden="true"
@@ -126,6 +126,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [imgFailedMap, setImgFailedMap] = useState<Record<string, boolean>>({});
+  const touchStartXRef = useRef<number | null>(null);
 
   const orderedMilestones = useMemo(() => {
     return [...milestones].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
@@ -168,11 +169,31 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
     setActiveIndex(targetIdx);
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartXRef.current = e.touches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartXRef.current === null || orderedMilestones.length <= 1) return;
+    const endX = e.changedTouches[0]?.clientX ?? touchStartXRef.current;
+    const deltaX = endX - touchStartXRef.current;
+    touchStartXRef.current = null;
+
+    if (Math.abs(deltaX) < 45) return;
+    if (deltaX < 0) {
+      setDirection(1);
+      setActiveIndex((prev) => (prev + 1) % orderedMilestones.length);
+    } else {
+      setDirection(-1);
+      setActiveIndex((prev) => (prev - 1 + orderedMilestones.length) % orderedMilestones.length);
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && current && (
         <motion.div
-          className="fixed inset-0 bg-[#02040a]/88 z-[110] flex justify-center items-center p-3 sm:p-6 backdrop-blur-lg overflow-y-auto"
+          className="fixed inset-0 bg-[#02040a]/88 z-[110] flex justify-center items-center p-2.5 sm:p-6 backdrop-blur-lg overflow-y-auto"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
@@ -183,7 +204,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
           transition={{ duration: 0.18 }}
         >
           <motion.div
-            className="glass-panel rounded-2xl max-w-5xl w-full relative overflow-hidden flex flex-col max-h-[92vh] my-auto"
+            className="glass-panel rounded-2xl max-w-5xl w-full relative overflow-hidden flex flex-col max-h-[94dvh] my-auto"
             onClick={(e) => e.stopPropagation()}
             initial={
               prefersReduced
@@ -232,7 +253,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                         goToIndex((activeIndex - 1 + orderedMilestones.length) % orderedMilestones.length)
                       }
                       aria-label="Previous milestone"
-                      className="p-2 min-w-[40px] min-h-[40px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
+                      className="p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
@@ -240,7 +261,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                       type="button"
                       onClick={() => goToIndex((activeIndex + 1) % orderedMilestones.length)}
                       aria-label="Next milestone"
-                      className="p-2 min-w-[40px] min-h-[40px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
+                      className="p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
@@ -251,7 +272,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                   type="button"
                   onClick={onClose}
                   aria-label="Close progress gallery"
-                  className="p-2 min-w-[40px] min-h-[40px] rounded-xl glass-panel-subtle text-zinc-400 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
+                  className="p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle text-zinc-400 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -259,7 +280,11 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
             </div>
 
             {/* Animated Stage + Editorial Rationale */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+            <div
+              className="flex-1 overflow-y-auto p-3.5 sm:p-6"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={current.id}
@@ -269,12 +294,12 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                   animate={prefersReduced ? { opacity: 1 } : 'center'}
                   exit={prefersReduced ? { opacity: 0 } : 'exit'}
                   transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="grid lg:grid-cols-12 gap-6 items-stretch"
+                  className="grid lg:grid-cols-12 gap-4 sm:gap-6 items-stretch"
                 >
                   {/* Visual Canvas / Blueprint Placeholder */}
                   <div className="lg:col-span-7 flex flex-col">
                     {hasWorkingImage ? (
-                      <div className="relative w-full h-full min-h-[290px] sm:min-h-[360px] rounded-xl overflow-hidden border border-white/[0.1] bg-[#040711] flex items-center justify-center">
+                      <div className="relative w-full h-full min-h-[210px] sm:min-h-[360px] rounded-xl overflow-hidden border border-white/[0.1] bg-[#040711] flex items-center justify-center">
                         <img
                           src={resolvedMedia}
                           alt={`${itemTitle} - ${current.title}`}
@@ -287,7 +312,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                           onError={() =>
                             setImgFailedMap((prev) => ({ ...prev, [current.id]: true }))
                           }
-                          className="w-full h-full max-h-[420px] object-contain"
+                          className="w-full h-full max-h-[260px] sm:max-h-[420px] object-contain"
                         />
                         {current.caption && (
                           <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-4 text-xs text-zinc-200">
@@ -345,7 +370,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                     </div>
 
                     <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-2 text-xs font-mono text-zinc-500">
-                      <span>Use ← / → keys to step timeline</span>
+                      <span>Swipe or use ← / → keys</span>
                       {current.mediaUrl && current.mediaType === 'link' && (
                         <a
                           href={current.mediaUrl}
