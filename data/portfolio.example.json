@@ -319,15 +319,103 @@
   },
   "skills": {
     "iconTiles": [
-      { "label": "TypeScript", "logoPath": "/images/logos/javascript.svg", "brandKey": "javascript" },
-      { "label": "Python", "logoPath": "/images/logos/python.svg", "brandKey": "python" },
-      { "label": "PostgreSQL", "logoPath": "/images/logos/sql_postgresql.svg", "brandKey": "postgresql" },
-      { "label": "React", "logoPath": "/images/logos/react.svg", "brandKey": "react" },
-      { "label": "Docker", "logoPath": "/images/logos/docker.svg", "brandKey": "docker" },
-      { "label": "Linux", "logoPath": "/images/logos/linux.svg", "brandKey": "linux" },
-      { "label": "Git", "logoPath": "/images/logos/git.svg", "brandKey": "git" },
-      { "label": "FastAPI", "brandKey": "fastapi" },
-      { "label": "Kubernetes", "brandKey": "kubernetes" }
+      {
+        "label": "Linux",
+        "logoPath": "/images/logos/linux.svg",
+        "brandKey": "linux",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Open-source kernel powering container hosts and server infrastructure.",
+        "websiteUrl": "https://www.kernel.org/",
+        "githubUrl": "https://github.com/torvalds/linux",
+        "connections": ["docker", "kubernetes", "git"]
+      },
+      {
+        "label": "Docker",
+        "logoPath": "/images/logos/docker.svg",
+        "brandKey": "docker",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Container runtime packaging backend APIs and data stores consistently.",
+        "websiteUrl": "https://www.docker.com/",
+        "githubUrl": "https://github.com/moby/moby",
+        "connections": ["linux", "kubernetes", "fastapi", "postgresql"]
+      },
+      {
+        "label": "Kubernetes",
+        "brandKey": "kubernetes",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Container orchestrator automating rolling deployments and service scaling.",
+        "websiteUrl": "https://kubernetes.io/",
+        "githubUrl": "https://github.com/kubernetes/kubernetes",
+        "connections": ["docker", "linux", "fastapi"]
+      },
+      {
+        "label": "Git",
+        "logoPath": "/images/logos/git.svg",
+        "brandKey": "git",
+        "category": "infra",
+        "isFoss": true,
+        "summary": "Distributed version control tracking source code and CI workflows.",
+        "websiteUrl": "https://git-scm.com/",
+        "githubUrl": "https://github.com/git/git",
+        "connections": ["linux", "python", "javascript"]
+      },
+      {
+        "label": "TypeScript",
+        "logoPath": "/images/logos/javascript.svg",
+        "brandKey": "javascript",
+        "category": "languages",
+        "isFoss": true,
+        "summary": "Typed superset of JavaScript powering frontend components and tooling.",
+        "websiteUrl": "https://www.typescriptlang.org/",
+        "githubUrl": "https://github.com/microsoft/TypeScript",
+        "connections": ["react", "git"]
+      },
+      {
+        "label": "Python",
+        "logoPath": "/images/logos/python.svg",
+        "brandKey": "python",
+        "category": "languages",
+        "isFoss": true,
+        "summary": "General-purpose language driving APIs, telemetry ingestion, and automation.",
+        "websiteUrl": "https://www.python.org/",
+        "githubUrl": "https://github.com/python/cpython",
+        "connections": ["fastapi", "postgresql", "git"]
+      },
+      {
+        "label": "PostgreSQL",
+        "logoPath": "/images/logos/sql_postgresql.svg",
+        "brandKey": "postgresql",
+        "category": "data",
+        "isFoss": true,
+        "summary": "Relational database storing transactional application records and metrics.",
+        "websiteUrl": "https://www.postgresql.org/",
+        "githubUrl": "https://github.com/postgres/postgres",
+        "connections": ["docker", "python", "fastapi"]
+      },
+      {
+        "label": "FastAPI",
+        "brandKey": "fastapi",
+        "category": "apps",
+        "isFoss": true,
+        "summary": "Async Python web framework serving typed REST APIs with OpenAPI schemas.",
+        "websiteUrl": "https://fastapi.tiangolo.com/",
+        "githubUrl": "https://github.com/fastapi/fastapi",
+        "connections": ["python", "postgresql", "react", "docker", "kubernetes"]
+      },
+      {
+        "label": "React",
+        "logoPath": "/images/logos/react.svg",
+        "brandKey": "react",
+        "category": "apps",
+        "isFoss": true,
+        "summary": "Component UI library building responsive, state-driven web workspaces.",
+        "websiteUrl": "https://react.dev/",
+        "githubUrl": "https://github.com/facebook/react",
+        "connections": ["javascript", "fastapi"]
+      }
     ],
     "categories": [
       {
@@ -396,5 +484,23 @@
     "includeHomelabInResume": false,
     "includeCertsInResume": true,
     "includeInterestsInResume": false
+  },
+  "seo": {
+    "siteUrl": "https://alexrivera.dev",
+    "shortName": "AlexDev",
+    "ogImage": "/og-card.png",
+    "keywords": [
+      "Software Engineer",
+      "Distributed Systems",
+      "Go",
+      "Python",
+      "Kubernetes"
+    ],
+    "faqs": [
+      {
+        "question": "What systems does Alex Rivera specialize in?",
+        "answer": "Alex Rivera builds high-throughput Go and TypeScript APIs, streaming ETL pipelines, and automated Kubernetes infrastructure."
+      }
+    ]
   }
 }

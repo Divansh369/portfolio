@@ -1,0 +1,46 @@
+# Search Engine & AI Answer Engine (GEO / AIEO) Crawler Policy
+User-agent: *
+Allow: /
+
+# Major Search Engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AI Search & Generative Engine Crawlers
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+Sitemap: https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/sitemap.xml
+# LLMs-Txt: https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/llms.txt
+# LLMs-Full-Txt: https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/llms-full.txt
+# AI-Txt: https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/ai.txt
