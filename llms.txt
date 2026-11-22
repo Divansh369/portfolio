@@ -1,6 +1,6 @@
 # Divansh Prasad — Software Engineer · Daimler Truck (DTICI)
 
-> Software Engineer at Daimler Truck Innovation Center India (DTICI) architecting Databricks Spark ETL pipelines for ~70,000 connected trucks, FastAPI + React internal web apps, and scheduled OTA collection scripts verified on test rigs. Lead volunteer developer for Udayan Care NGO shipping the bilingual FiT-UC Flutter app on Google Play backed by self-hosted Proxmox LXC and K3s infrastructure.
+> Software Engineer at Daimler Truck (DTICI) scaling modular Databricks Spark ETL from 50 to 175k+ vehicle capacity across ~70,000 trucks and cutting BI costs 50%+ via a ~3x faster FastAPI + React Databricks App. Lead Udayan Care volunteer saving ₹1L+ agency spend and 30% team Excel time via a Google Play Flutter app on Proxmox LXC.
 
 ## Key Links & Machine-Readable Endpoints
 - [Portfolio Home](https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/): Main interactive portfolio with 3D architecture viewport
@@ -21,12 +21,12 @@
 - **Data Science Intern** at Multiplier (May 2024 - July 2024, Delhi, India)
 
 ## Selected Projects & Systems
-- **FiT - Udayan Care (NGO Platform)** [Mobile & Production]: End-to-end bilingual (English & Hindi) mobile app for Care Leavers at Udayan Care NGO, live on Google Play Store with self-hosted Proxmox backend. — https://play.google.com/store/apps/dev?id=8541457488243382905
-- **DTICI Connected Truck Databricks App & ETL** [Big Data & Enterprise]: Custom FastAPI + React internal web application built inside Databricks alongside ETL pipelines processing daily telemetry for ~70,000 trucks. — https://www.daimlertruck.com
-- **HA NGINX Load Balancer on Proxmox K3s** [Infrastructure & Systems]: Multi-replica NGINX load balancer running inside a 6-node K3s cluster on Proxmox VE, using MetalLB Layer-2 VIPs and Traefik ingress. — https://pve.diivvansh.com
-- **Fiorejoy** [Full-Stack Platform]: Community event-discovery app combining social graph queries with real-time chat and media sharing. — https://fiorejoy.com
-- **AvignaTattva** [Full-Stack Web]: Consultation and scheduling web platform connecting users with verified wellness practitioners. — https://avignatattva.com
-- **PokeRoyale** [Real-Time Multiplayer Game]: Work-in-progress real-time lane-combat multiplayer game built with Godot Engine and a Go/Redis server.
+- **FiT - Udayan Care (NGO Platform)** [Mobile & Production]: Solo-built bilingual Flutter app on Google Play saving ₹1L+ build cost, ₹2k-5k/mo cloud fees, and ~30% field Excel entry time for 5-6 NGO coordinators. — https://play.google.com/store/apps/dev?id=8541457488243382905
+- **DTICI Connected Truck Databricks App & ETL** [Big Data & Enterprise]: FastAPI + React Databricks App (~3x faster, 50%+ cost cut vs Power BI) paired with modular Spark ETL pipelines across ~70,000 connected trucks. — https://www.daimlertruck.com
+- **HA NGINX Load Balancer on Proxmox K3s** [Infrastructure & Systems]: 6-node Proxmox K3s cluster rotating NGINX traffic cleanly across 3 worker replicas via MetalLB Layer-2 VIP (192.168.1.180) and zero open home ports. — https://pve.diivvansh.com
+- **Fiorejoy** [Full-Stack Platform]: Live community event platform (fiorejoy.com) unifying graph recommendations and SQL inside 1 PostgreSQL + Apache AGE instance with WebSocket chat. — https://fiorejoy.com
+- **AvignaTattva** [Full-Stack Web]: Live practitioner discovery and scheduling web platform (avignatattva.com) replacing manual CSV coordination with NocoDB REST APIs. — https://avignatattva.com
+- **PokeRoyale** [Real-Time Multiplayer Game]: Server-authoritative multiplayer lane-combat prototype syncing 2+ concurrent players via Go tick loops, Redis Pub/Sub, and Godot Engine.
 
 ## Direct Q&A Reference (GEO / AIEO)
 - **Who is Divansh Prasad and what does he build?** Divansh Prasad is a Software Engineer at Daimler Truck Innovation Center India (DTICI) in Bengaluru working on Databricks Apache Spark ETL pipelines across ~70,000 connected commercial trucks, FastAPI and React internal web applications, and Over-The-Air (OTA) vehicle telemetry workflows validated on hardware test rigs.

@@ -7,7 +7,7 @@
     "location": "Austin, TX",
     "email": "alex.rivera@example.com",
     "phone": "+1 512-555-0148",
-    "avatarUrl": "/images/profile.jpg",
+    "avatarUrl": "",
     "resumeFileName": "Alex_Rivera_Resume.pdf",
     "cvFileName": "Alex_Rivera_CV.pdf",
     "resumeSummary": "Software engineer specializing in high-throughput Go and TypeScript APIs, streaming ETL pipelines, and automated Kubernetes deployments.",
@@ -192,8 +192,8 @@
       "location": "Austin, TX",
       "duration": "2024 - Present",
       "bulletPoints": [
-        "Engineered high-throughput TypeScript and Go services handling 50k+ events per minute.",
-        "Orchestrated container deployments and CI/CD pipelines across 3 staging and production clusters."
+        "Scaled asynchronous webhook ingestion 4x (to 50,000+ events/min with sub-15ms p99 latency) by rewriting Go consumer pools over buffered PostgreSQL queues.",
+        "Cut deployment recovery time by 45% across 3 staging and production Kubernetes clusters by standardizing GitOps pipelines and automated rollback probes."
       ],
       "skills": ["Go", "TypeScript", "PostgreSQL", "Docker", "Kubernetes"]
     }
@@ -321,10 +321,12 @@
     "iconTiles": [
       {
         "label": "Linux",
-        "logoPath": "/images/logos/linux.svg",
         "brandKey": "linux",
         "category": "infra",
         "isFoss": true,
+        "proficiency": 92,
+        "years": "4+ yrs",
+        "levelLabel": "Core Daily",
         "summary": "Open-source kernel powering container hosts and server infrastructure.",
         "websiteUrl": "https://www.kernel.org/",
         "githubUrl": "https://github.com/torvalds/linux",
@@ -336,6 +338,9 @@
         "brandKey": "docker",
         "category": "infra",
         "isFoss": true,
+        "proficiency": 90,
+        "years": "3+ yrs",
+        "levelLabel": "Core Daily",
         "summary": "Container runtime packaging backend APIs and data stores consistently.",
         "websiteUrl": "https://www.docker.com/",
         "githubUrl": "https://github.com/moby/moby",
@@ -346,6 +351,9 @@
         "brandKey": "kubernetes",
         "category": "infra",
         "isFoss": true,
+        "proficiency": 82,
+        "years": "2+ yrs",
+        "levelLabel": "Production",
         "summary": "Container orchestrator automating rolling deployments and service scaling.",
         "websiteUrl": "https://kubernetes.io/",
         "githubUrl": "https://github.com/kubernetes/kubernetes",
@@ -357,6 +365,9 @@
         "brandKey": "git",
         "category": "infra",
         "isFoss": true,
+        "proficiency": 92,
+        "years": "4+ yrs",
+        "levelLabel": "Core Daily",
         "summary": "Distributed version control tracking source code and CI workflows.",
         "websiteUrl": "https://git-scm.com/",
         "githubUrl": "https://github.com/git/git",
@@ -364,10 +375,12 @@
       },
       {
         "label": "TypeScript",
-        "logoPath": "/images/logos/javascript.svg",
         "brandKey": "javascript",
         "category": "languages",
         "isFoss": true,
+        "proficiency": 85,
+        "years": "2+ yrs",
+        "levelLabel": "Production",
         "summary": "Typed superset of JavaScript powering frontend components and tooling.",
         "websiteUrl": "https://www.typescriptlang.org/",
         "githubUrl": "https://github.com/microsoft/TypeScript",
@@ -375,10 +388,12 @@
       },
       {
         "label": "Python",
-        "logoPath": "/images/logos/python.svg",
         "brandKey": "python",
         "category": "languages",
         "isFoss": true,
+        "proficiency": 94,
+        "years": "4+ yrs",
+        "levelLabel": "Core Daily",
         "summary": "General-purpose language driving APIs, telemetry ingestion, and automation.",
         "websiteUrl": "https://www.python.org/",
         "githubUrl": "https://github.com/python/cpython",
@@ -386,10 +401,12 @@
       },
       {
         "label": "PostgreSQL",
-        "logoPath": "/images/logos/sql_postgresql.svg",
         "brandKey": "postgresql",
         "category": "data",
         "isFoss": true,
+        "proficiency": 90,
+        "years": "3+ yrs",
+        "levelLabel": "Production",
         "summary": "Relational database storing transactional application records and metrics.",
         "websiteUrl": "https://www.postgresql.org/",
         "githubUrl": "https://github.com/postgres/postgres",
@@ -400,6 +417,9 @@
         "brandKey": "fastapi",
         "category": "apps",
         "isFoss": true,
+        "proficiency": 88,
+        "years": "2+ yrs",
+        "levelLabel": "Production",
         "summary": "Async Python web framework serving typed REST APIs with OpenAPI schemas.",
         "websiteUrl": "https://fastapi.tiangolo.com/",
         "githubUrl": "https://github.com/fastapi/fastapi",
@@ -407,10 +427,12 @@
       },
       {
         "label": "React",
-        "logoPath": "/images/logos/react.svg",
         "brandKey": "react",
         "category": "apps",
         "isFoss": true,
+        "proficiency": 86,
+        "years": "2+ yrs",
+        "levelLabel": "Production",
         "summary": "Component UI library building responsive, state-driven web workspaces.",
         "websiteUrl": "https://react.dev/",
         "githubUrl": "https://github.com/facebook/react",
@@ -454,18 +476,15 @@
   "socials": [
     {
       "name": "GitHub",
-      "url": "https://github.com/example-user",
-      "logos": "/images/socials/github.webp"
+      "url": "https://github.com/example-user"
     },
     {
       "name": "LinkedIn",
-      "url": "https://www.linkedin.com/in/example-user/",
-      "logos": "/images/socials/linkedin.webp"
+      "url": "https://www.linkedin.com/in/example-user/"
     },
     {
       "name": "Email",
-      "url": "mailto:alex.rivera@example.com",
-      "logos": "/images/socials/gmail.webp"
+      "url": "mailto:alex.rivera@example.com"
     }
   ],
   "contact": {
@@ -484,6 +503,37 @@
     "includeHomelabInResume": false,
     "includeCertsInResume": true,
     "includeInterestsInResume": false
+  },
+  "factBank": {
+    "roles": [
+      {
+        "id": "backend-swe",
+        "label": "Backend Engineering",
+        "shortLabel": "Backend SWE",
+        "fileSlug": "Backend_SWE",
+        "resumeHeadline": "Backend Software Engineer  |  Go, TypeScript & Event Streams",
+        "heroKicker": ["Backend Engineering Track", "Go · PostgreSQL · APIs", "Austin, TX"],
+        "heroHeadline": "Scaling event APIs 4x to 50,000+ req/min cleanly.",
+        "heroLead": "Focused on low-latency Go and TypeScript microservices sustaining sub-15ms p99 response times under production load.",
+        "resumeSummary": "Backend Software Engineer scaling Go and TypeScript ingestion services 4x to 50,000+ events/min with sub-15ms p99 latency, backed by PostgreSQL, Redis, and automated Kubernetes deployments.",
+        "skillCategoryOrder": ["Languages & Frameworks", "Infrastructure & DevOps"],
+        "projectOrder": ["streampulse", "cloudnote"]
+      },
+      {
+        "id": "platform-ops",
+        "label": "Platform & DevOps",
+        "shortLabel": "Platform Ops",
+        "fileSlug": "Platform_Engineer",
+        "resumeHeadline": "Platform Engineer  |  Kubernetes, Linux & Zero-Downtime Ops",
+        "heroKicker": ["Platform Ops Track", "Kubernetes · Linux · Traefik", "Austin, TX"],
+        "heroHeadline": "Cutting release recovery 45% across multi-node clusters.",
+        "heroLead": "Automating GitOps pipelines, container orchestration, and Prometheus observability across staging and production Linux clusters.",
+        "resumeSummary": "Platform & DevOps Engineer cutting release recovery time 45% across 3 Kubernetes clusters with automated GitOps, Traefik TLS ingress, and Prometheus SLA telemetry.",
+        "includeHomelabInResume": true,
+        "skillCategoryOrder": ["Infrastructure & DevOps", "Languages & Frameworks"],
+        "projectOrder": ["streampulse", "cloudnote"]
+      }
+    ]
   },
   "seo": {
     "siteUrl": "https://alexrivera.dev",

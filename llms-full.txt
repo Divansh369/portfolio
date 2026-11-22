@@ -7,114 +7,107 @@
 - GitHub: https://github.com/Divansh369
 - LinkedIn: https://www.linkedin.com/in/divansh-prasad-893b05230/
 ## Executive Summary
-Software Engineer at Daimler Truck Innovation Center India (DTICI) maintaining Databricks ETL pipelines for ~70,000 connected trucks, internal FastAPI and React web apps, and scheduled Over-The-Air (OTA) data collection scripts verified on hardware test rigs. Lead volunteer developer for Udayan Care NGO, shipping the bilingual FiT-UC mobile app on Google Play Store backed by self-hosted Proxmox LXC containers. Experienced advancing from bare-metal Debian, Kali, and Alpine Linux with Docker Compose to a 3-node Proxmox VE HA cluster with Proxmox Backup Server (PBS) and K3s routing.
+Software Engineer at Daimler Truck Innovation Center India (DTICI) scaling Apache Spark ETL from 50 prototypes to 175k+ vehicle capacity across ~70,000 connected trucks, cutting dedicated BI server costs 50%+ with a ~3x faster FastAPI + React Databricks App, and verifying OTA scripts on hardware test rigs. Lead volunteer developer for Udayan Care NGO saving ₹1L+ build cost via a self-hosted Google Play Flutter app on Proxmox VE 8 LXC and K3s infrastructure.
 
 ## Work Experience & Volunteering
 ### Software Engineer — Daimler Truck Innovation Center India (DTICI)
 Location: Bengaluru, India | Duration: July 2026 - Present
-- Maintain and tune Databricks Spark ETL pipelines processing daily telemetry across ~70,000 connected commercial trucks.
-- Engineered a FastAPI + React/Node.js internal web application hosted inside Databricks to replace legacy Power BI dashboards on multi-million-row tables.
-- Author and verify scheduled daily Over-The-Air (OTA) fleet data collection scripts on hardware test rigs prior to fleet rollout.
-Skills: Python, Databricks, Apache Spark, FastAPI, Node.js, React, OTA Data Collection, C++, Test Rig Validation
+- Cut analytics query latency ~3x and reduced BI compute cost 50%+ ($5k-$8k/mo dedicated capacity vs serverless) by replacing Power BI with a cached FastAPI + React Databricks App.
+- Accelerated cross-functional ADAS and executive feature delivery 3-4x by adopting AI-assisted development over direct SQL Warehouse connections instead of rigid BI semantic models.
+- Safeguarded daily OTA telemetry ingestion across ~70,000 connected trucks and multi-million-row Delta tables by authoring and validating Python/C++ scripts on hardware test rigs.
+Skills: Python, Databricks, Apache Spark, FastAPI, React, Node.js, OTA Data Collection, C++, Test Rig Validation
 ### Lead Volunteer Developer — Udayan Care (NGO)
 Location: Bengaluru / Remote | Duration: 2025 - Present
-- Architected and shipped FiT-UC, an aftercare mobile platform for Care Leavers at Udayan Care NGO, live on Google Play Store (20–30 monthly active users).
-- Developed the bilingual (English & Hindi) Flutter client using AI-assisted UI iteration paired with a self-hosted NocoDB LXC REST backend and Node.js auth server at udayan.diivvansh.com.
-- Partnered with the NGO team and field Care Leavers across Google Play closed testing to deliver 3 core modules: skilling lessons, mentor booking, and Red Alert push notifications via Gotify.
+- Saved ₹1,00,000+ in agency build costs and avoided ₹2,000-5,000/mo cloud bills by solo-building FiT-UC with AI workflows and self-hosting NocoDB + Node.js on Proxmox LXC.
+- Cut manual Excel tracking ~30% for 5-6 NGO field coordinators while serving 20-30 MAU on Google Play by shipping 3 modules: courses, mentor booking, and Gotify alerts.
 Skills: Flutter, Dart, NocoDB (LXC), Node.js, Proxmox VE, REST APIs, Gotify, Google Play Console
 ### Data Analyst (Graduate Engineer Trainee) — Daimler Truck Innovation Center India (DTICI)
 Location: Bengaluru, India | Duration: July 2025 - July 2026
-- Streamlined daily fleet data extraction jobs and reporting pipelines across connected commercial vehicles.
-- Delivered Power BI dashboards and internal cloud data views before transitioning full-time into software engineering.
-Skills: Power BI, Python, SQL, Data Pipelines, Automation
+- Expanded daily telemetry pipeline capacity from a 50-vehicle prototype to 175k+ vehicles (sustaining ~70,000 live trucks) by modularizing redundant Spark and SQL ETL scripts.
+- Eliminated 10x scale Power BI refresh bottlenecks by restructuring lookup tables and lightweight Delta views before transitioning full-time into software engineering.
+Skills: Databricks, Apache Spark, Power BI, Python, SQL, Data Pipelines
 ### Digital Verification and Automation Intern — STMicroelectronics
 Location: Greater Noida, India | Duration: Jan 2025 - July 2025
-- Scripted digital verification test workflows in Python to standardize regression checks.
-- Evaluated SAT solver algorithms for boolean constraint verification and explored hardware acceleration models.
+- Reclaimed ~1 hour/day of repetitive manual verification effort by scripting automated Python regression workflows across digital hardware suites.
+- Benchmarked GPU-based SAT solver techniques handling 10x constraint difficulty vs serial CPU runs by prototyping parallel boolean equivalence harnesses.
 Skills: Python, Automation, SAT Solvers, Digital Verification, VHDL
 ### Data Science Intern — Multiplier
 Location: Delhi, India | Duration: May 2024 - July 2024
-- Designed workforce analytics dashboards in Microsoft Power BI and trained Python forecasting models to evaluate workforce trends.
-Skills: Microsoft Power BI, Python, Machine Learning, Forecasting, Microsoft Excel
+- Shipped 1 executive Power BI report alongside ~70% accurate staffing forecasts by training Facebook Prophet time-series models in Python.
+Skills: Microsoft Power BI, Python, Facebook Prophet, Forecasting, Microsoft Excel
 ### IoT Intern — IIT Delhi
 Location: Delhi, India | Duration: Dec 2023 - Jan 2024
-- Constructed a voice-interactive smart mirror by integrating a Raspberry Pi with the Alexa SDK, handling hardware setup, coding, and testing.
+- Unblocked Alexa Voice SDK execution on ARM Raspberry Pi Linux hardware by resolving cross-compilation build errors and audio dependency bugs for a smart-mirror prototype.
 Skills: Linux, AWS, Raspberry Pi, Alexa SDK, IoT
 ### Data Science Intern — Goalkeep
 Location: Remote | Duration: Jun 2023 - Aug 2023
-- Configured survey analytics dashboards in Apache Superset and executed data migration across SQL databases, Kobo Toolbox, Glide Apps, Google Sheets, and AppSheet.
+- Delivered sole end-to-end ownership of 1 Apache Superset analytics dashboard across 3 civic analytics projects by unifying SQL, Kobo Toolbox, Glide Apps, and AppSheet pipelines.
 Skills: Python, SQL, Apache Superset, Kobo Toolbox, Glide Apps, Google AppSheet
 
 ## Projects & Technical Builds
 ### FiT - Udayan Care (NGO Platform) (Mobile & Production)
 Badge: Google Play · 20–30 MAU
 URL: https://play.google.com/store/apps/dev?id=8541457488243382905
-End-to-end bilingual (English & Hindi) mobile app for Care Leavers at Udayan Care NGO, live on Google Play Store with self-hosted Proxmox backend.
-- Authored the bilingual Flutter mobile client with AI-assisted UI iteration and published open-source code at github.com/FioreJoy/FiT-UC.
-- Hosted REST backend inside a Proxmox LXC container (NocoDB) paired with a Node.js auth server at udayan.diivvansh.com.
-- Passed Google Play field testing with Care Leavers to serve 3 core workflows: TTS skilling lessons, mentor scheduling, and Red Alert crisis dispatch.
+Solo-built bilingual Flutter app on Google Play saving ₹1L+ build cost, ₹2k-5k/mo cloud fees, and ~30% field Excel entry time for 5-6 NGO coordinators.
+- Saved ₹1,00,000+ agency fees and ₹2,000-5,000/mo cloud spend by coding solo with AI workflows and self-hosting NocoDB + Node.js auth in Proxmox LXC containers.
+- Cut ~30% manual Excel entry effort for 5-6 field coordinators serving 20-30 MAU by shipping 3 Play Store modules: bilingual TTS courses, mentor booking, and Gotify Red Alerts.
 Stack: Flutter, Dart, NocoDB (LXC), Node.js, Proxmox VE, Gotify, REST APIs
 ### DTICI Connected Truck Databricks App & ETL (Big Data & Enterprise)
-Badge: Enterprise · ~70k Fleet
+Badge: 70k+ Fleet · ~3x Faster
 URL: https://www.daimlertruck.com
-Custom FastAPI + React internal web application built inside Databricks alongside ETL pipelines processing daily telemetry for ~70,000 trucks.
-- Replaced slow legacy Power BI dashboards on multi-million-row tables with a custom FastAPI and React/Node.js app inside Databricks.
-- Optimized Spark ETL jobs handling daily operational telemetry from ~70,000 connected commercial trucks.
-- Orchestrated daily OTA fleet data collection scripts and verified throughput on hardware test rigs prior to release.
+FastAPI + React Databricks App (~3x faster, 50%+ cost cut vs Power BI) paired with modular Spark ETL pipelines across ~70,000 connected trucks.
+- Slashed query load time ~3x, accelerated UI shipping 3-4x, and cut BI spend 50%+ by replacing Power BI dedicated servers with cached FastAPI + React SQL Warehouse endpoints.
+- Modularized fleet ETL capacity from a 50-vehicle baseline to a 175k+ ceiling (serving ~70,000 live trucks) and verified OTA ingestion scripts on physical hardware test rigs.
 Stack: Databricks, Apache Spark, FastAPI, React, Node.js, Python, Delta Lake
 ### HA NGINX Load Balancer on Proxmox K3s (Infrastructure & Systems)
-Badge: K3s · Bare-Metal VIP
+Badge: 6-Node K3s · 3 Replicas
 URL: https://pve.diivvansh.com
-Multi-replica NGINX load balancer running inside a 6-node K3s cluster on Proxmox VE, using MetalLB Layer-2 VIPs and Traefik ingress.
-- Allocated bare-metal Layer-2 VIPs with MetalLB paired with Traefik ingress routing traffic across 3 worker replica pods.
-- Configured per-session distribution so serving pod hostnames and internal cluster IPs rotate cleanly across concurrent browser tabs.
-- Provisioned inside a 6-node Proxmox K3s cluster behind Cloudflare Tunnels and Tailscale.
+6-node Proxmox K3s cluster rotating NGINX traffic cleanly across 3 worker replicas via MetalLB Layer-2 VIP (192.168.1.180) and zero open home ports.
+- Achieved round-robin request rotation across 3 worker replica pods with 0 exposed home ports by pairing MetalLB Layer-2 VIP, Traefik ingress, and Cloudflare Tunnels.
+- Consolidated 4 standalone laptops (3 HA nodes + 1 PBS backup) into 1 unified Proxmox VE 8 server running 6 K3s VMs cleanly 24/7.
 Stack: Proxmox VE, Kubernetes (K3s), MetalLB, Traefik, NGINX, Docker, Linux
 ### Fiorejoy (Full-Stack Platform)
 Badge: Live Platform
 URL: https://fiorejoy.com
-Community event-discovery app combining social graph queries with real-time chat and media sharing.
-- Modeled user-event recommendations using PostgreSQL with the Apache AGE graph extension.
-- Implemented real-time group messaging over WebSockets with MinIO S3-compatible media storage.
+Live community event platform (fiorejoy.com) unifying graph recommendations and SQL inside 1 PostgreSQL + Apache AGE instance with WebSocket chat.
+- Eliminated dual-database sync overhead on fiorejoy.com by running Cypher friend-event graph traversals alongside relational SQL inside 1 PostgreSQL + Apache AGE instance.
+- Delivered live multi-user event chat rooms and S3-compatible media storage by pairing async FastAPI WebSockets with self-hosted MinIO buckets.
 Stack: Flutter, FastAPI, PostgreSQL, Apache AGE, MinIO, WebSockets
 ### AvignaTattva (Full-Stack Web)
 Badge: Production Web
 URL: https://avignatattva.com
-Consultation and scheduling web platform connecting users with verified wellness practitioners.
-- Implemented appointment booking flows and practitioner profile views.
-- Backed scheduling tables with NocoDB REST endpoints on PostgreSQL.
+Live practitioner discovery and scheduling web platform (avignatattva.com) replacing manual CSV coordination with NocoDB REST APIs.
+- Replaced manual spreadsheet slot coordination across wellness practitioners on avignatattva.com by shipping Flutter Web booking flows backed by NocoDB REST endpoints on PostgreSQL.
 Stack: Flutter, PostgreSQL, NocoDB, REST APIs
 ### PokeRoyale (Real-Time Multiplayer Game)
 Badge: In Development
-Work-in-progress real-time lane-combat multiplayer game built with Godot Engine and a Go/Redis server.
-- Writing a server-authoritative game loop in Go backed by Redis for fast state synchronization.
-- Prototyping real-time unit deployment and combat mechanics in Godot.
+Server-authoritative multiplayer lane-combat prototype syncing 2+ concurrent players via Go tick loops, Redis Pub/Sub, and Godot Engine.
+- Prevented client-side combat desyncs across 2+ concurrent lane-battle sessions by authoring a server-authoritative Go simulation tick loop synced through Redis Pub/Sub.
 Stack: Godot, Go, WebSockets, Redis, Docker
 ### SixSortAlgoCUDA (GPU & Parallel Computing)
 URL: https://github.com/divansh369/cuda-sorting-algo
-Benchmarked GPU parallel speedup vs serial C++ across six sorting algorithms on NVIDIA CUDA.
-- Implemented parallel Bubble, Insertion, and Merge sort kernels in CUDA C++ across 6 algorithms.
-- Measured GPU vs CPU runtime scaling across varied array sizes.
+Benchmarked CUDA parallel speedups across 6 sorting algorithms vs serial C++ execution.
+- Profiled GPU vs serial CPU crossover array thresholds across 6 algorithms by authoring custom shared-memory CUDA C++ sorting kernels.
 Stack: C++, CUDA, Algorithms, Parallel Computing
 ### LeetCode Solutions (Algorithms & DSA)
 URL: https://github.com/divansh369/leetcode-solutions
-Collection of 150+ algorithm and data structure solutions maintained in Python.
-- Organized 150+ solutions across dynamic programming, graph traversal, trees, and greedy problems.
+Structured open-source archive of 150+ Python data structure and algorithm solutions.
+- Standardized 150+ Python interview implementations across DP, graphs, trees, and sliding-window patterns for rapid algorithmic lookup.
 Stack: Python, Algorithms, Data Structures
 ### MIT Labs (Academic Archive)
 URL: https://github.com/divansh369/mit-labs
-All-semester Manipal B.Tech Data Science coursework spanning statistical modeling and ML pipelines.
-- Completed supervised, unsupervised, and statistical data analysis lab notebooks across 8 B.Tech semesters.
+Complete 8-semester B.Tech Data Science repository spanning DBMS, statistical modeling, and deep learning labs.
+- Archived reproducible machine learning, DBMS, and statistical inference lab notebooks completed across 8 B.Tech semesters.
 Stack: Python, Pandas, NumPy, Scikit-learn
 ### ChatBot Cynthia (Deep Learning & NLP)
 URL: https://github.com/divansh369/chatbot-cynthia
-Intent-recognition conversational bot built with Recurrent Neural Networks (RNN) and TensorFlow.
-- Trained sequence models on custom intent JSON corpora using tokenization and padding.
+Intent-recognition conversational assistant built with 1 custom TensorFlow RNN sequence pipeline.
+- Built 1 working Keras RNN intent classifier over custom tokenized corpora using NLTK stemming and sequence padding.
 Stack: Python, TensorFlow, Keras, NLTK, RNN
 ### Dwarka BookStore (Web Prototype)
 URL: https://github.com/divansh369/dwarka-bookstore
-Lightweight online bookstore inventory and search interface built with Streamlit.
-- Designed dynamic catalog filtering and cart workflows in Streamlit.
+Multi-page Streamlit book catalog and CSV shopping-cart prototype built cleanly in Python.
+- Shipped 1 functional Streamlit storefront demo managing dynamic catalog filters and session-state cart workflows.
 Stack: Python, Streamlit, Pandas
 
 ## Infrastructure & Virtualization Architecture

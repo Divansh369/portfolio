@@ -1,24 +1,20 @@
 skill,logo,Skill Category
-Python,/images/logos/python.svg,Technology
+Python,python,Technology
 C++ & CUDA,/images/logos/cpp.webp,Technology
-SQL & PostgreSQL,/images/logos/sql_postgresql.svg,Technology
-Dart & Flutter,/images/logos/flutter.svg,Technology
-Databricks,/images/logos/databricks.svg,Technology
-Apache Spark,/images/logos/spark.svg,Technology
-FastAPI,/images/logos/fastapi.svg,Technology
-Node.js,/images/logos/nodejs.svg,Technology
-React,/images/logos/react.svg,Technology
-Proxmox VE & PBS,/images/logos/proxmox.svg,Technology
-Debian · Kali · Alpine Linux,/images/logos/linux.svg,Technology
-Docker & Docker Compose,docker,Technology
+SQL & PostgreSQL,postgresql,Technology
+Dart & Flutter,flutter,Technology
+Databricks,databricks,Technology
+Apache Spark,/images/logos/apache.svg,Technology
+FastAPI,fastapi,Technology
+Node.js,nodejs,Technology
+React,react,Technology
+Proxmox VE & PBS,proxmox,Technology
+Debian · Kali · Alpine Linux,linux,Technology
+Docker & Docker Compose,/images/logos/docker.svg,Technology
 Kubernetes (K3s) & NGINX,k3s,Technology
-Tailscale & Cloudflare Tunnels,/images/logos/tailscale.svg,Technology
+Tailscale & Cloudflare Tunnels,tailscale,Technology
 Git & CI/CD,/images/logos/git.svg,Technology
 Spark & Databricks Query Tuning,,Soft Skill
-OTA Script Validation on Test Rigs,,Soft Skill
-End-to-End Product Delivery,,Soft Skill
-Proxmox HA Quorum & PBS Recovery,,Soft Skill
-AI-Assisted Rapid UI Prototyping,,Soft Skill
-Bare-Metal Linux to Virtualization,,Soft Skill
-Zero-Trust Self-Hosted Ingress,,Soft Skill
-Iterative NGO & Stakeholder Feedback,,Soft Skill
+Hardware Test-Rig Verification,,Soft Skill
+Proxmox HA & PBS Recovery,,Soft Skill
+Direct User Feedback Loops,,Soft Skill
