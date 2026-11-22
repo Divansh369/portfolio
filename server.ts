@@ -123,7 +123,8 @@ async function startServer() {
   const streamPdf = (mode: DocumentMode, req: express.Request, res: express.Response) => {
     try {
       const portfolioData = readPortfolioJson();
-      const fileName = resolveDocumentFileName(portfolioData, mode);
+      const roleId = typeof req.query.role === 'string' ? req.query.role.trim() : undefined;
+      const fileName = resolveDocumentFileName(portfolioData, mode, roleId);
 
       const isInline = req.query.view === 'inline';
       res.setHeader('Content-Type', 'application/pdf');
@@ -134,7 +135,7 @@ async function startServer() {
       res.setHeader('Content-Transfer-Encoding', 'binary');
       res.setHeader('Cache-Control', 'no-cache');
 
-      const doc = buildDocumentPdf(portfolioData, mode);
+      const doc = buildDocumentPdf(portfolioData, mode, roleId);
       doc.pipe(res);
     } catch (err) {
       console.error(`Failed generating ${mode} PDF:`, err);
@@ -142,7 +143,7 @@ async function startServer() {
     }
   };
 
-  // Separate endpoints for 1-page Resume vs comprehensive CV
+  // Separate endpoints for 1-page Resume vs comprehensive CV (supports ?role=<roleId>)
   app.get('/api/resume.pdf', (req, res) => {
     const queryMode = req.query.mode === 'cv' ? 'cv' : 'resume';
     streamPdf(queryMode, req, res);
@@ -158,15 +159,24 @@ async function startServer() {
     try {
       const mode: DocumentMode =
         req.path.includes('resume') || req.query.mode === 'resume' ? 'resume' : 'cv';
+      const roleId = typeof req.query.role === 'string' ? req.query.role.trim() : undefined;
       const portfolioData = readPortfolioJson();
-      const fileName = resolveDocumentFileName(portfolioData, mode);
+      const fileName = resolveDocumentFileName(portfolioData, mode, roleId);
       const staticPdfPath = path.resolve(__dirname, 'public', fileName);
+
+      if (roleId && roleId !== 'general') {
+        const doc = buildDocumentPdf(portfolioData, mode, roleId);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+        doc.pipe(res);
+        return;
+      }
 
       res.download(staticPdfPath, fileName, (err) => {
         if (err) {
           console.error('Direct download error:', err);
           try {
-            const doc = buildDocumentPdf(portfolioData, mode);
+            const doc = buildDocumentPdf(portfolioData, mode, roleId);
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
             doc.pipe(res);

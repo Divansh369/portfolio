@@ -592,8 +592,8 @@ export function buildWebManifest(siteUrl: string, portfolioData: any): Record<st
     scope: '/',
     display: 'standalone',
     orientation: 'any',
-    theme_color: '#040711',
-    background_color: '#040711',
+    theme_color: '#040b07',
+    background_color: '#040b07',
     categories: ['portfolio', 'developer', 'productivity'],
     icons: [
       {

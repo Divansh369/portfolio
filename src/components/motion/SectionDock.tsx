@@ -108,13 +108,13 @@ export const SectionDock: React.FC<SectionDockProps> = ({
                 <motion.span
                   layoutId="section-dock-indicator"
                   transition={{ type: 'spring', stiffness: 360, damping: 28 }}
-                  className="absolute w-3.5 h-3.5 rounded-full border border-cyan-400/70 bg-cyan-400/15"
+                  className="absolute w-3.5 h-3.5 rounded-full border border-amber-400/70 bg-amber-400/15"
                 />
               )}
               <span
                 className={`block rounded-full transition-all duration-200 ${
                   isActive
-                    ? 'w-1.5 h-1.5 bg-cyan-400'
+                    ? 'w-1.5 h-1.5 bg-emerald-400'
                     : 'w-1 h-1 bg-zinc-500 hover:bg-zinc-200'
                 }`}
               />

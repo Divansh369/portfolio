@@ -58,7 +58,7 @@ const DEFAULT_MODE_CONFIGS: Systems3DModeConfig[] = [
     id: 'cluster',
     shortLabel: 'Cluster Mesh',
     title: 'Distributed Cluster Manifold (Hexagonal Blossom)',
-    domain: 'Orchestration · Multi-Node Quorum',
+    domain: 'Cluster Scheduling · Multi-Node Quorum',
     caption:
       'Hexagonal 6-symmetry bloom separating control-plane nodes and worker pods behind L2 VIP & ingress routing.',
     stack: 'Kubernetes / Load Balancer / Ingress / CoreDNS',
@@ -233,11 +233,11 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
   const phaseAccent = PHASE_ACCENTS[celestialPhase.id] || 'text-amber-300';
 
   return (
-    <section id="systems-3d" className="py-20 border-b border-white/[0.08]">
+    <section id="systems-3d" className="py-24 sm:py-28 border-b border-white/[0.08]">
       {/* Section Heading */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
         <div>
-          <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
+          <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400/90 mb-2">
             <Flower2 className="w-3.5 h-3.5 text-[#39FF14]" aria-hidden="true" />
             <span>{eyebrow}</span>
           </span>
@@ -263,7 +263,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         ref={stageRef}
         tabIndex={0}
         onKeyDown={handleStageKeyDown}
-        className="group relative h-[430px] sm:h-[510px] lg:h-[560px] 2xl:h-[610px] w-full rounded-2xl overflow-hidden border border-white/[0.14] bg-[#071124] shadow-[0_28px_72px_-28px_rgba(0,0,0,0.95)] focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+        className="group relative h-[430px] sm:h-[510px] lg:h-[560px] 2xl:h-[610px] w-full rounded-2xl overflow-hidden border border-white/[0.14] bg-[#040e08] shadow-[0_28px_72px_-28px_rgba(0,0,0,0.95)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
       >
         <CornerBrackets className="text-white/30 group-hover:text-pink-400/80 z-20" />
 
@@ -271,7 +271,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
         {!webglFailed ? (
           <div ref={canvasMountRef} className="absolute inset-0 w-full h-full z-0" />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-8 text-center bg-[#071124]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-8 text-center bg-[#040e08]">
             <Cpu className="w-10 h-10 text-pink-400 mb-3" aria-hidden="true" />
             <h3 className="font-display text-lg font-bold text-zinc-100 mb-1">
               {activeSpec.title}
@@ -282,11 +282,11 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
           </div>
         )}
 
-        {/* Minimal Top-Left Readout (solid rgba backing) */}
-        <div className="pointer-events-none absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-auto z-10 sm:max-w-md">
-          <div className="rounded-xl bg-black/85 border border-white/[0.14] px-3 py-2.5 sm:px-4 sm:py-3 shadow-lg">
+        {/* Minimal Top-Left Readout */}
+        <div className="pointer-events-none absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-auto z-10 sm:max-w-sm">
+          <div className="rounded-xl bg-black/80 border border-white/[0.12] px-3.5 py-2.5 shadow-lg">
             <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[10px] sm:text-[11px] font-mono mb-1">
-              <span className="inline-flex items-center gap-1.5 sm:gap-2 text-pink-400 min-w-0">
+              <span className="inline-flex items-center gap-1.5 text-pink-400 min-w-0">
                 <ActiveIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                 <TextScramble
                   text={activeSpec.domain}
@@ -296,17 +296,12 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
               </span>
               <span className={`inline-flex items-center gap-1.5 ${phaseAccent} shrink-0`}>
                 <PhaseIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                <span>
-                  {celestialPhase.label} · {celestialPhase.windowLabel}
-                </span>
+                <span>{celestialPhase.label}</span>
               </span>
             </div>
-            <h3 className="font-display text-xs sm:text-base font-bold text-zinc-50 leading-snug">
+            <h3 className="font-display text-xs sm:text-sm font-bold text-zinc-50 leading-snug">
               {activeSpec.title}
             </h3>
-            <p className="text-xs text-zinc-300/90 leading-relaxed mt-1 hidden sm:block">
-              {activeSpec.caption}
-            </p>
           </div>
         </div>
 
@@ -316,7 +311,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
             type="button"
             onClick={() => setControlsCollapsed((prev) => !prev)}
             aria-expanded={!controlsCollapsed}
-            className="mb-1.5 inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[34px] rounded-lg bg-black/90 border border-white/15 text-[11px] font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            className="mb-1.5 inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[34px] rounded-lg bg-black/90 border border-white/15 text-[11px] font-mono text-zinc-300 hover:text-amber-300 hover:border-amber-400/45 transition-colors cursor-pointer whitespace-nowrap shrink-0"
           >
             {controlsCollapsed ? (
               <>
@@ -354,13 +349,13 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                     onClick={() => handleSelectMorph(spec.id)}
                     className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[40px] rounded-xl text-[11px] sm:text-xs font-medium whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                       selected
-                        ? 'bg-blue-600/90 text-white border border-cyan-300/40 shadow-sm'
+                        ? 'bg-emerald-600/90 text-white border border-amber-300/45 shadow-sm'
                         : 'text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-transparent'
                     }`}
                   >
                     <Icon
                       className={`w-3.5 h-3.5 shrink-0 ${
-                        selected ? 'text-cyan-200' : 'text-cyan-400/80'
+                        selected ? 'text-amber-200' : 'text-emerald-400/85'
                       }`}
                       aria-hidden="true"
                     />
@@ -430,7 +425,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                 title="Toggle structural petal CAD wireframe overlay"
                 className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[40px] rounded-xl text-[11px] sm:text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                   wireframe
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/50'
                     : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border border-transparent'
                 }`}
               >
@@ -446,7 +441,7 @@ export const SpatialMorphViewport: React.FC<SpatialMorphViewportProps> = ({ conf
                   title="Toggle continuous shape morph cycling"
                   className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[40px] rounded-xl text-[11px] sm:text-xs font-mono whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                     autoCycle
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50'
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/50'
                       : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] border border-transparent'
                   }`}
                 >

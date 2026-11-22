@@ -137,7 +137,7 @@ export const setCachedPortfolioData = (data: Data, rawJson?: any): void => {
 /**
  * Convert modular portfolio.json into normalized Data structures
  */
-const transformJsonToData = (json: any, baseUrl: string): Data => {
+export const transformJsonToData = (json: any, baseUrl: string): Data => {
   const profile = json.profile || {};
   const contact = json.contact || {};
 

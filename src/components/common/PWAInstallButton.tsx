@@ -26,7 +26,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
         onClick={install}
         aria-label="Install app to device"
         title="Install Portfolio App"
-        className={`inline-flex items-center justify-center gap-1.5 rounded-xl glass-panel-subtle hover:border-cyan-400/50 text-cyan-300 hover:text-cyan-200 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+        className={`inline-flex items-center justify-center gap-1.5 rounded-xl glass-panel-subtle hover:border-amber-400/50 text-emerald-300 hover:text-amber-200 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
           compact ? 'px-2.5 py-2 min-h-[40px]' : 'px-3.5 py-2 min-h-[40px]'
         } ${className}`}
       >
@@ -44,7 +44,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
           onClick={() => setShowIOSGuide(true)}
           aria-label="Install app on iOS"
           title="Install on iPhone or iPad"
-          className={`inline-flex items-center justify-center gap-1.5 rounded-xl glass-panel-subtle hover:border-cyan-400/50 text-cyan-300 hover:text-cyan-200 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+          className={`inline-flex items-center justify-center gap-1.5 rounded-xl glass-panel-subtle hover:border-amber-400/50 text-emerald-300 hover:text-amber-200 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
             compact ? 'px-2.5 py-2 min-h-[40px]' : 'px-3.5 py-2 min-h-[40px]'
           } ${className}`}
         >
@@ -54,7 +54,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
 
         {showIOSGuide && (
           <div
-            className="fixed inset-0 z-[120] flex items-center justify-center bg-[#02040a]/80 backdrop-blur-md p-4"
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-[#040b07]/82 backdrop-blur-md p-4"
             onClick={() => setShowIOSGuide(false)}
             role="dialog"
             aria-modal="true"
@@ -77,7 +77,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
                 Install on iPhone / iPad
               </h3>
               <p className="mt-3 text-sm text-zinc-300 leading-relaxed">
-                1. Tap the <Share className="inline w-4 h-4 text-cyan-300 mx-0.5" aria-hidden="true" />{' '}
+                1. Tap the <Share className="inline w-4 h-4 text-amber-300 mx-0.5" aria-hidden="true" />{' '}
                 <strong>Share</strong> icon in Safari&apos;s toolbar.
                 <br />
                 2. Scroll down and tap <strong>Add to Home Screen</strong>.
@@ -85,7 +85,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({
               <button
                 type="button"
                 onClick={() => setShowIOSGuide(false)}
-                className="mt-5 w-full min-h-[44px] rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs font-mono font-medium cursor-pointer"
+                className="mt-5 w-full min-h-[44px] rounded-xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600 text-white text-xs font-mono font-medium cursor-pointer"
               >
                 Got it
               </button>

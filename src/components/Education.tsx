@@ -34,10 +34,10 @@ export const Education: React.FC<EducationProps> = ({
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="education" className="py-16 sm:py-20 border-b border-white/[0.08]">
+    <section id="education" className="py-24 sm:py-28 border-b border-white/[0.08]">
       {/* Section Header */}
       <div className="mb-12">
-        <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
+        <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400/90 mb-2">
           <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
           <span>{eyebrow}</span>
         </span>
@@ -53,7 +53,7 @@ export const Education: React.FC<EducationProps> = ({
       </div>
 
       {/* 3-Column Academic Frosted Glass Cards */}
-      <div className="grid md:grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-3 gap-6">
         {education.map((edu, index) => {
           const dimmed = hoveredIndex !== null && hoveredIndex !== index;
           return (
@@ -81,12 +81,12 @@ export const Education: React.FC<EducationProps> = ({
                       className="w-11 h-11 rounded-xl border border-white/15 bg-white/95 p-1 shrink-0"
                       imgClassName="w-full h-full object-contain rounded-lg"
                       fallback={
-                        <span className="w-full h-full flex items-center justify-center bg-slate-900 rounded-lg">
+                        <span className="w-full h-full flex items-center justify-center bg-[#07150d] rounded-lg">
                           <BrandMark brand={edu.institution} className="w-6 h-6" />
                         </span>
                       }
                     />
-                    <span className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 tabular-nums">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 tabular-nums">
                       <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
                       <span>{edu.duration}</span>
                     </span>
@@ -109,9 +109,9 @@ export const Education: React.FC<EducationProps> = ({
 
       {/* Certifications 2-Column Frosted Ledger */}
       {certificates && certificates.length > 0 && (
-        <div className="mt-12 pt-10 border-t border-white/[0.08]">
+        <div className="mt-14 pt-12 border-t border-white/[0.08]">
           <h3 className="font-display text-lg font-bold text-zinc-100 mb-6 inline-flex items-center gap-2">
-            <Award className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+            <Award className="w-4 h-4 text-amber-400" aria-hidden="true" />
             <span>Certifications</span>
           </h3>
           <div className="grid md:grid-cols-2 gap-3.5">
@@ -130,7 +130,7 @@ export const Education: React.FC<EducationProps> = ({
                   />
                   <span className="line-clamp-2 sm:truncate">{cert.name}</span>
                 </span>
-                <span className="text-xs font-mono text-cyan-400/90 whitespace-nowrap shrink-0 tabular-nums">
+                <span className="text-xs font-mono text-amber-300/90 whitespace-nowrap shrink-0 tabular-nums">
                   {cert.date}
                 </span>
               </div>

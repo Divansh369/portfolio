@@ -160,7 +160,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
       {/* Header */}
       <div className="p-6 sm:p-8 border-b border-white/[0.08] flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 mb-1.5">
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1.5">
             <Network className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{eyebrow}</span>
           </div>
@@ -173,7 +173,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
         </div>
 
         <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-200 whitespace-nowrap shrink-0">
-          <Server className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+          <Server className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
           <span>{pods.length} / {pods.length} Replicas Configured</span>
         </div>
       </div>
@@ -182,7 +182,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
       <div className="px-4 sm:px-6 py-4 bg-white/[0.02] border-b border-white/[0.08] flex flex-wrap items-center justify-between gap-3 sm:gap-4">
         <div className="flex items-center gap-2 text-xs font-mono">
           <span className="text-zinc-400">Active Session:</span>
-          <span className="text-cyan-400 font-semibold">{clientTab}</span>
+          <span className="text-amber-300 font-semibold">{clientTab}</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
@@ -202,7 +202,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
             variant="glass"
             className="flex-1 sm:flex-none justify-center px-3.5 py-2 min-h-[42px] sm:min-h-[38px] font-mono text-xs"
           >
-            <Plus className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+            <Plus className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
             <span>New Tab</span>
           </FloodButton>
 
@@ -212,14 +212,14 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
             variant="ghost"
             className="px-3.5 py-2 min-h-[42px] sm:min-h-[38px] font-mono text-xs"
           >
-            <Zap className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+            <Zap className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
             <span>Burst 3x</span>
           </FloodButton>
         </div>
       </div>
 
       {/* Animated Conduit Transit Bus */}
-      <div className="px-4 sm:px-6 py-3 bg-[#050914]/60 border-b border-white/[0.08] flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-3 text-[11px] font-mono text-zinc-400">
+      <div className="px-4 sm:px-6 py-3 bg-[#040d08]/75 border-b border-white/[0.08] flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-3 text-[11px] font-mono text-zinc-400">
         <span className="whitespace-nowrap text-zinc-300">VIP {vipAddress}</span>
         <div className="relative flex-1 min-w-[60px] h-4 flex items-center">
           <div className="w-full h-[1px] connector-dash-active" />
@@ -229,11 +229,11 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
               initial={{ left: '0%', opacity: 1 }}
               animate={{ left: '100%', opacity: [1, 1, 0] }}
               transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_12px_4px_rgba(34,211,238,0.85)] pointer-events-none"
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-yellow-200 shadow-[0_0_12px_4px_rgba(250,204,21,0.85)] pointer-events-none"
             />
           )}
         </div>
-        <span className="whitespace-nowrap text-cyan-400 font-semibold tabular-nums">
+        <span className="whitespace-nowrap text-emerald-400 font-semibold tabular-nums">
           {activePod.node} · {activePod.internalIp}
         </span>
       </div>
@@ -268,9 +268,9 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
         </div>
 
         {/* Column 2: Active Serving Pod */}
-        <div className="p-6 flex flex-col justify-between bg-cyan-500/[0.045]">
+        <div className="p-6 flex flex-col justify-between bg-emerald-500/[0.05]">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 mb-1">
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 mb-1">
               <Activity className="w-3.5 h-3.5" aria-hidden="true" />
               <span>02 · Active Target Pod</span>
             </div>
@@ -280,7 +280,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
             <dl className="space-y-2 text-xs font-mono">
               <div className="flex justify-between gap-2">
                 <dt className="text-zinc-400">Internal Pod IP</dt>
-                <dd className="text-cyan-400 font-bold tabular-nums">
+                <dd className="text-amber-300 font-bold tabular-nums">
                   <TextScramble text={activePod.internalIp} trigger="change" durationMs={260} />
                 </dd>
               </div>
@@ -317,7 +317,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
               return (
                 <div key={pod.id} className="text-xs font-mono">
                   <div className="flex justify-between items-center mb-1.5">
-                    <span className={isActive ? 'text-cyan-300 font-semibold' : 'text-zinc-400'}>
+                    <span className={isActive ? 'text-amber-300 font-semibold' : 'text-zinc-400'}>
                       {pod.id.toUpperCase()} · <span className="tabular-nums">{pod.internalIp}</span>
                     </span>
                     <span className="text-zinc-300 tabular-nums">
@@ -330,7 +330,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
                       transition={{ type: 'spring', stiffness: 260, damping: 28 }}
                       className={`h-full rounded-full ${
                         isActive
-                          ? 'bg-gradient-to-r from-blue-500 to-cyan-400'
+                          ? 'bg-gradient-to-r from-emerald-500 via-yellow-400 to-orange-500'
                           : 'bg-zinc-600'
                       }`}
                     />
@@ -372,7 +372,7 @@ export const NginxLoadBalancerDemo: React.FC<NginxLoadBalancerDemoProps> = ({ co
                     className="hover:bg-white/[0.03] transition-colors"
                   >
                     <td className="py-2.5 px-6 text-zinc-400 tabular-nums">{log.timestamp}</td>
-                    <td className="py-2.5 px-4 text-cyan-400">{log.clientTab}</td>
+                    <td className="py-2.5 px-4 text-emerald-400">{log.clientTab}</td>
                     <td className="py-2.5 px-4 text-zinc-100">{log.podName}</td>
                     <td className="py-2.5 px-4 text-zinc-50 font-semibold tabular-nums">
                       {log.internalIp}

@@ -17,6 +17,7 @@ import RepoImage from './common/RepoImage';
 import BrandMark from './icons/BrandMarks';
 import { ProgressMilestone } from '../types';
 import { resolveItemId } from '../utils/itemId';
+import { splitQuantifiedSegments } from '../utils/atsAnalyzer';
 
 interface ExperienceType {
   id?: string;
@@ -34,6 +35,7 @@ interface ExperienceProps {
   eyebrow?: string;
   title?: string;
   subtitle?: string;
+  activeRoleLabel?: string;
   experience: ExperienceType[];
   progressMilestones?: ProgressMilestone[];
   onOpenGallery?: (payload: {
@@ -106,9 +108,9 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
       {/* Static subtle timeline node tick for alignment on md+ */}
       <div
         aria-hidden="true"
-        className="hidden md:flex absolute -left-[34px] top-7 w-3 h-3 rounded-sm border border-cyan-400/50 bg-[#040711] items-center justify-center"
+        className="hidden md:flex absolute -left-[34px] top-7 w-3 h-3 rounded-sm border border-amber-400/60 bg-[#040b07] items-center justify-center"
       >
-        <div className="w-1 h-1 bg-cyan-400/80" />
+        <div className="w-1 h-1 bg-amber-400/90" />
       </div>
 
       <GlassCard
@@ -119,7 +121,7 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
         dimmed={dimmed}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        className="p-5 sm:p-7"
+        className="p-6 sm:p-8"
       >
         <div className="grid md:grid-cols-12 gap-4 md:gap-6 items-start">
           {/* Left Metadata Column (foreground scroll layer) */}
@@ -134,7 +136,7 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
                 className="w-11 h-11 rounded-xl border border-white/15 bg-white/95 p-1 shrink-0 shadow-[0_6px_18px_-8px_rgba(0,0,0,0.65)]"
                 imgClassName="w-full h-full object-contain rounded-lg"
                 fallback={
-                  <span className="w-full h-full flex items-center justify-center bg-slate-900 rounded-lg">
+                  <span className="w-full h-full flex items-center justify-center bg-[#07150d] rounded-lg">
                     <BrandMark brand={job.company} className="w-6 h-6" />
                   </span>
                 }
@@ -146,12 +148,12 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
                 <div className="text-xs text-zinc-400">{job.location}</div>
               </div>
             </div>
-            <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 tabular-nums pt-0.5">
+            <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 tabular-nums pt-0.5">
               <RoleIcon className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
               <TextScramble text={job.duration} trigger="inView" durationMs={380} />
             </div>
             {job.milestone && (
-              <div className="text-xs font-mono text-blue-300 pt-1">
+              <div className="text-xs font-mono text-amber-300 pt-1">
                 {job.milestone}
               </div>
             )}
@@ -169,7 +171,17 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
             {job.description && (
               <ul className="space-y-2 text-sm text-zinc-300 leading-relaxed list-disc pl-5">
                 {job.description.split('|').map((desc, i) => (
-                  <li key={i}>{desc.trim()}</li>
+                  <li key={i}>
+                    {splitQuantifiedSegments(desc.trim()).map((seg, sIdx) =>
+                      seg.highlight ? (
+                        <strong key={sIdx} className="font-semibold text-zinc-50">
+                          {seg.text}
+                        </strong>
+                      ) : (
+                        <React.Fragment key={sIdx}>{seg.text}</React.Fragment>
+                      )
+                    )}
+                  </li>
                 ))}
               </ul>
             )}
@@ -177,20 +189,15 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
             {(job.skills || (onOpenGallery && milestones.length > 0)) && (
               <div className="mt-4 pt-3.5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-zinc-400">
                 {job.skills ? (
-                  <div className="flex flex-wrap gap-y-1.5 items-center">
-                    {job.skills.split('|').map((skill, sIdx) => (
-                      <React.Fragment key={skill}>
-                        {sIdx > 0 && (
-                          <span className="mx-1.5 text-zinc-600" aria-hidden="true">
-                            /
-                          </span>
-                        )}
-                        <span className="inline-flex items-center gap-1">
-                          <BrandMark brand={skill} className="w-3.5 h-3.5 shrink-0 opacity-85" />
-                          <span>{skill.trim()}</span>
-                        </span>
-                      </React.Fragment>
-                    ))}
+                  <div className="truncate text-zinc-400">
+                    {(() => {
+                      const list = job.skills
+                        .split('|')
+                        .map((s) => s.trim())
+                        .filter(Boolean);
+                      const head = list.slice(0, 5).join(' · ');
+                      return list.length > 5 ? `${head} · +${list.length - 5}` : head;
+                    })()}
                   </div>
                 ) : (
                   <span />
@@ -207,7 +214,7 @@ const ExperienceRow: React.FC<ExperienceRowProps> = ({
                         milestones,
                       })
                     }
-                    className="inline-flex items-center gap-1.5 min-h-[40px] py-1 text-cyan-300 hover:text-cyan-200 transition-colors cursor-pointer shrink-0 tabular-nums"
+                    className="inline-flex items-center gap-1.5 min-h-[40px] py-1 text-amber-300 hover:text-amber-200 transition-colors cursor-pointer shrink-0 tabular-nums"
                   >
                     <Images className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span>Work Timeline ({milestones.length})</span>
@@ -226,6 +233,7 @@ export const Experience: React.FC<ExperienceProps> = ({
   eyebrow = 'Career History',
   title = 'Work Experience & Volunteering',
   subtitle = 'Production software engineering, data pipelines, community impact builds, and technical internships.',
+  activeRoleLabel,
   experience,
   progressMilestones = [],
   onOpenGallery,
@@ -243,12 +251,18 @@ export const Experience: React.FC<ExperienceProps> = ({
   const markerRotate = useTransform(scrollYProgress, [0, 1], [0, 720]);
 
   return (
-    <section id="experience" className="py-16 sm:py-20 border-b border-white/[0.08]">
+    <section id="experience" className="py-24 sm:py-28 border-b border-white/[0.08]">
       {/* Section Header */}
-      <div className="mb-12">
-        <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
+      <div className="mb-14">
+        <span className="inline-flex flex-wrap items-center gap-2 text-xs font-mono text-emerald-400/90 mb-2">
           <Briefcase className="w-3.5 h-3.5" aria-hidden="true" />
           <span>{eyebrow}</span>
+          {activeRoleLabel && (
+            <>
+              <span className="text-zinc-600" aria-hidden="true">·</span>
+              <span className="text-zinc-300">Tailored for {activeRoleLabel}</span>
+            </>
+          )}
         </span>
         <SplitText
           as="h2"
@@ -270,18 +284,18 @@ export const Experience: React.FC<ExperienceProps> = ({
         >
           <motion.div
             style={prefersReduced ? { height: '100%' } : { height: railHeight }}
-            className="w-full bg-gradient-to-b from-blue-400 via-cyan-400 to-blue-500 origin-top relative"
+            className="w-full bg-gradient-to-b from-emerald-400 via-yellow-400 to-orange-500 origin-top relative"
           >
             {!prefersReduced && (
               <motion.div
                 style={{ rotate: markerRotate }}
-                className="w-2.5 h-2.5 bg-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.85)] -translate-x-[4px] absolute -bottom-1 left-0 rounded-[2px]"
+                className="w-2.5 h-2.5 bg-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.85)] -translate-x-[4px] absolute -bottom-1 left-0 rounded-[2px]"
               />
             )}
           </motion.div>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-6">
           {experience.map((job, index) => {
             const jobId = resolveItemId(job.id, job.role, job.company);
             const jobMilestones = progressMilestones.filter((m) => m.itemId === jobId);

@@ -2,16 +2,16 @@
   "profile": {
     "name": "Divansh Prasad",
     "title": "Software Engineer · Daimler Truck (DTICI)",
-    "resumeHeadline": "Software Engineer  |  Data Pipelines & Backend Infrastructure",
+    "resumeHeadline": "Software Engineer  |  Data Pipelines, Full-Stack Apps & Linux",
     "company": "Daimler Truck Innovation Center India (DTICI)",
     "location": "Bengaluru, India",
     "email": "divanshthebest@gmail.com",
     "phone": "+91 9873354637",
-    "avatarUrl": "/images/profile.jpg",
+    "avatarUrl": "",
     "resumeFileName": "Divansh_Prasad_Resume.pdf",
     "cvFileName": "Divansh_Prasad_CV.pdf",
-    "resumeSummary": "Software Engineer at Daimler Truck Innovation Center India (DTICI) architecting Databricks Spark ETL pipelines for ~70,000 connected trucks, FastAPI + React internal web apps, and scheduled OTA collection scripts verified on test rigs. Lead volunteer developer for Udayan Care NGO shipping the bilingual FiT-UC Flutter app on Google Play backed by self-hosted Proxmox LXC and K3s infrastructure.",
-    "summary": "Software Engineer at Daimler Truck Innovation Center India (DTICI) maintaining Databricks ETL pipelines for ~70,000 connected trucks, internal FastAPI and React web apps, and scheduled Over-The-Air (OTA) data collection scripts verified on hardware test rigs. Lead volunteer developer for Udayan Care NGO, shipping the bilingual FiT-UC mobile app on Google Play Store backed by self-hosted Proxmox LXC containers. Experienced advancing from bare-metal Debian, Kali, and Alpine Linux with Docker Compose to a 3-node Proxmox VE HA cluster with Proxmox Backup Server (PBS) and K3s routing.",
+    "resumeSummary": "Software Engineer at Daimler Truck (DTICI) working on Spark ETL scaled from a 50-vehicle prototype to 175k+ capacity (~70,000 live trucks) and an internal FastAPI + React Databricks app (~3x faster, 50%+ lower BI compute spend). Solo Udayan Care volunteer saving ₹1L+ agency fees and ~30% Excel time via a Google Play Flutter app on Proxmox LXC.",
+    "summary": "Software Engineer at Daimler Truck Innovation Center India (DTICI) working on Databricks Apache Spark ETL scaled from 50 prototypes to 175k+ capacity (~70,000 connected trucks), replacing dedicated Power BI capacity with a ~3x faster FastAPI + React app (50%+ lower compute spend), and verifying OTA scripts on hardware test rigs. Also volunteer solo for Udayan Care NGO, saving ₹1L+ build cost with a Google Play Flutter app hosted on Proxmox VE 8 and K3s.",
     "domains": [
       "diivvansh.com",
       "fiorejoy.com"
@@ -25,20 +25,16 @@
   },
   "media": {
     "icons": {
-      "daimler": "/images/daimler.jpeg",
-      "udayan": "/images/udayan.svg",
-      "goalkeep": "/images/goalkeep.jpeg",
-      "iitd": "/images/iitd.jpeg",
-      "stmicro": "/images/st.jpeg",
-      "multiplier": "/images/multiplier.jpeg",
-      "mit": "/images/mit.webp",
+      "daimler": "/images/brands/daimler.jpeg",
+      "udayan": "/images/brands/udayan.svg",
+      "goalkeep": "/images/brands/goalkeep.jpeg",
+      "iitd": "/images/brands/iitd.jpeg",
       "docker": "/images/logos/docker.svg",
       "git": "/images/logos/git.svg",
       "apache": "/images/logos/apache.svg",
       "cpp": "/images/logos/cpp.webp",
       "css3": "/images/logos/css.webp",
-      "html5": "/images/logos/html5.svg",
-      "java": "/images/logos/java.svg"
+      "html5": "/images/logos/html5.svg"
     }
   },
   "hero": {
@@ -47,22 +43,22 @@
       "Daimler Truck (DTICI)",
       "Bengaluru"
     ],
-    "headline": "Software Engineer building data systems and backend apps.",
-    "lead": "At Daimler Truck, I work on Databricks ETL for 70,000+ trucks, FastAPI web apps, and automated OTA data workflows. I also build Flutter apps for non-profits and run my own Proxmox and Linux lab.",
+    "headline": "Data pipelines, internal apps, and Linux.",
+    "lead": "Engineering fleet telemetry at Daimler Truck, solo-building a Google Play NGO app, and running self-hosted Proxmox.",
     "secondaryAction": {
-      "label": "Proxmox Story",
-      "href": "#homelab"
+      "label": "Selected Work",
+      "href": "#projects"
     },
     "dossier": {
       "subtitle": "Software Engineer · Daimler Truck, Bengaluru",
       "rows": [
         {
           "label": "Focus",
-          "value": "Databricks ETL · FastAPI · Flutter",
+          "value": "Databricks ETL · FastAPI · Flutter · K3s",
           "icon": "workflow"
         },
         {
-          "label": "Production Scale",
+          "label": "Fleet Scale",
           "value": "~70,000 Connected Trucks",
           "icon": "truck",
           "countTo": 70000,
@@ -70,24 +66,14 @@
           "countSuffix": " Connected Trucks"
         },
         {
-          "label": "Background",
-          "value": "1+ Yr Full-Time · 4 Internships",
-          "icon": "briefcase"
-        },
-        {
           "label": "Infrastructure",
-          "value": "Proxmox VE · Linux · Docker · K3s",
+          "value": "Proxmox VE 8 · LXC · 6-Node K3s",
           "icon": "server"
         },
         {
           "label": "Education",
           "value": "B.Tech Data Science · MIT Manipal",
           "icon": "graduation"
-        },
-        {
-          "label": "Live Apps & Web",
-          "value": "diivvansh.com · fiorejoy.com",
-          "icon": "globe"
         }
       ],
       "links": [
@@ -104,21 +90,21 @@
     "metrics": [
       {
         "value": "70,000+",
-        "label": "Trucks in Daily ETL",
+        "label": "Connected Trucks in Daily ETL",
         "countTo": 70000,
         "countSuffix": "+"
       },
       {
-        "value": "FastAPI + Spark",
-        "label": "Internal Databricks Apps"
+        "value": "~3x Faster",
+        "label": "Databricks App vs Power BI"
       },
       {
-        "value": "Google Play",
-        "label": "Live App for Udayan Care"
+        "value": "50%+ Saved",
+        "label": "Dedicated BI Compute Cost"
       },
       {
-        "value": "Proxmox + Linux",
-        "label": "Self-Hosted Lab & K3s"
+        "value": "₹1L+ Saved",
+        "label": "Solo FiT-UC NGO Build"
       }
     ]
   },
@@ -127,38 +113,38 @@
       "enabled": true,
       "eyebrow": "3D Blooming Lotus · Systems Architecture",
       "title": "Interactive 3D Blooming Lotus Architecture",
-      "subtitle": "Procedural 3D blooming pink lotus floating on a reflective water pond across an Evening -> Night -> Morning -> Afternoon Sun & Moon horizon — mapping Proxmox hypervisor topology, Databricks Spark pipelines, 6-node K3s cluster geometry, and FiT-UC mobile mesh.",
+      "subtitle": "4-phase lotus scene mapping Proxmox virtualization, Databricks telemetry pipelines, 6-node K3s, and FiT-UC mobile delivery.",
       "modes": [
         {
           "id": "core",
           "shortLabel": "Proxmox Core",
-          "title": "Proxmox VE 8 Hypervisor Core (Structured Bud)",
+          "title": "Proxmox VE 8 Host (Structured Bud)",
           "domain": "Infrastructure · pve.diivvansh.com",
-          "caption": "Consolidated Proxmox VE 8 host with Linux bridge networking, PBS snapshots, and isolated LXC workloads represented in an upright structured bud.",
+          "caption": "Consolidated Proxmox VE 8 server with Linux bridge networking, PBS snapshots, and isolated LXC containers.",
           "stack": "Proxmox VE 8 / Debian & Alpine LXCs / PBS Backups"
         },
         {
           "id": "stream",
           "shortLabel": "Fleet Stream",
-          "title": "Databricks Fleet Stream Topology (Flowing Bloom)",
+          "title": "Databricks Fleet Pipeline (Flowing Bloom)",
           "domain": "Big Data ETL · ~70,000 Trucks",
-          "caption": "Continuous Apache Spark & Delta Lake telemetry stream ribbons weaving through unfolding petals to feed live internal apps.",
+          "caption": "Apache Spark and Delta Lake jobs moving daily truck telemetry into cached Databricks web apps.",
           "stack": "Databricks / Apache Spark / Delta Lake / FastAPI"
         },
         {
           "id": "cluster",
           "shortLabel": "K3s Quorum",
-          "title": "6-Node K3s Cluster Manifold (Hexagonal Blossom)",
+          "title": "6-Node K3s Cluster (Hexagonal Blossom)",
           "domain": "Kubernetes · 3 Masters + 3 Workers",
-          "caption": "Hexagonal 6-symmetry bloom separating control-plane masters and NGINX worker pods behind MetalLB VIP & Traefik ingress.",
+          "caption": "Six K3s VMs separating control-plane masters from NGINX workers behind MetalLB VIP and Traefik.",
           "stack": "K3s (3+3) / MetalLB VIP / Traefik Ingress / CoreDNS"
         },
         {
           "id": "mesh",
           "shortLabel": "FiT-UC Blossom",
-          "title": "FiT-UC Mobile Harmonic Network (Full Open Bloom)",
+          "title": "FiT-UC NGO Network (Full Open Bloom)",
           "domain": "Production NGO · Google Play Live",
-          "caption": "Radiant full open blossom with luminous stamen core, connecting Care Leavers with self-hosted NocoDB APIs and Gotify alerts.",
+          "caption": "Open blossom connecting Care Leavers on Android to self-hosted NocoDB tables and Gotify push alerts.",
           "stack": "Flutter / Dart / NocoDB LXC / Node Auth / Gotify"
         }
       ]
@@ -166,15 +152,15 @@
     "projects": {
       "eyebrow": "Selected Works",
       "title": "Projects & Production Systems",
-      "subtitle": "Databricks big data workflows, Google Play volunteer software for Udayan Care, self-hosted services, and K3s infrastructure.",
-      "showArchivedByDefault": true
+      "subtitle": "Fleet analytics, volunteer NGO software, and infrastructure tooling.",
+      "showArchivedByDefault": false
     },
     "homelab": {
       "enabled": true,
       "navLabel": "Proxmox",
       "eyebrow": "Infrastructure & Virtualization",
       "title": "From Bare-Metal Linux to Proxmox HA & K3s",
-      "subtitle": "My homelab evolved from running bare-metal Debian, Kali, and Alpine Linux with Docker Compose on spare laptops, to a 3-node Proxmox VE HA cluster backed up by a 4th PBS laptop, and finally consolidating onto one dedicated Proxmox VE 8 server.",
+      "subtitle": "From bare-metal Debian, Kali, and Alpine laptops to a consolidated Proxmox VE 8 host running live NGO containers and a 6-node K3s lab.",
       "workloadsTitle": "Active LXC Containers & K3s Cluster Workloads",
       "workloadsSubtitle": "Production containers serving Udayan Care alongside the nested 6-node Kubernetes lab.",
       "workloadsBadge": "Proxmox VE 8 · 3 Masters + 3 Workers",
@@ -183,7 +169,7 @@
       "hardwareTitle": "Hardware & Compute Nodes",
       "hardwareSubtitle": "Bare-metal cluster host, ASUS ROG AI workstation, and archived 3+1 HA laptop rack.",
       "platformsTitle": "FOSS Platforms & Cluster Tooling",
-      "platformsSubtitle": "Container orchestrators, hypervisors, reverse proxies, and self-hosted infrastructure management tools.",
+      "platformsSubtitle": "Cluster schedulers, hypervisors, reverse proxies, and self-hosted infrastructure tools.",
       "lessons": [
         {
           "topic": "Corosync HA & 3-Node Quorum",
@@ -210,7 +196,7 @@
         {
           "id": "primary",
           "label": "Proxmox & K3s Ingress",
-          "headline": "End-to-End Request Flow: Client to Proxmox VE 8 & K3s",
+          "headline": "Request Path: Client to Proxmox VE 8 & K3s",
           "nodes": [
             {
               "id": "client",
@@ -218,7 +204,7 @@
               "label": "Client & Mobile Apps",
               "shortTitle": "FiT-UC / Browser",
               "endpoint": "diivvansh.com",
-              "summary": "Flutter Care Leaver mobile users (20–30 monthly active users on Google Play) and browser sessions enter via HTTPS.",
+              "summary": "Care Leaver mobile users (20–30 monthly active users on Google Play) and browser sessions hit HTTPS endpoints.",
               "stack": "Flutter (Android) / HTTPS / TLS 1.3",
               "icon": "globe"
             },
@@ -228,7 +214,7 @@
               "label": "Zero-Trust Edge",
               "shortTitle": "Cloudflare Tunnel",
               "endpoint": "udayan.diivvansh.com",
-              "summary": "Outbound-only cloudflared daemon exposes internal sub-services cleanly with zero open firewall ports on home broadband.",
+              "summary": "Outbound-only cloudflared tunnels publish internal services with zero open firewall ports on home broadband.",
               "stack": "Cloudflare Zero-Trust / WireGuard Tailscale",
               "icon": "shield"
             },
@@ -238,7 +224,7 @@
               "label": "Hypervisor & Bridge",
               "shortTitle": "Proxmox VE 8 Bridge",
               "endpoint": "pve.diivvansh.com",
-              "summary": "Consolidated Proxmox VE 8 server routes Linux bridge traffic (vmbr0) between isolated LXC containers and K3s virtual machines, with PBS snapshots.",
+              "summary": "Unified Proxmox VE 8 host routes Linux bridge (vmbr0) packets across LXC containers and K3s VMs with PBS backups.",
               "stack": "Proxmox VE 8 / vmbr0 / PBS Deduplicated Backups",
               "icon": "server"
             },
@@ -248,7 +234,7 @@
               "label": "L2 Ingress & VIP",
               "shortTitle": "MetalLB + Traefik",
               "endpoint": "192.168.1.180",
-              "summary": "MetalLB announces bare-metal Layer-2 virtual IPs while Traefik ingress controller distributes sessions round-robin across replicas.",
+              "summary": "MetalLB announces Layer-2 virtual IPs while Traefik rotates traffic round-robin across worker pods.",
               "stack": "MetalLB L2 VIP / Traefik Ingress / CoreDNS",
               "icon": "network"
             },
@@ -258,7 +244,7 @@
               "label": "LXCs & 6-Node K3s",
               "shortTitle": "NocoDB / Auth / Pods",
               "endpoint": "k3s-masters (3) + workers (3)",
-              "summary": "Production NocoDB REST API, Node.js auth server, Gotify alert relay (LXCs), and HA NGINX pods (3 K3s masters + 3 workers).",
+              "summary": "NocoDB REST tables, Node.js auth relay, Gotify alerts (LXCs), and NGINX replicas (3 K3s masters + 3 workers).",
               "stack": "LXC (Debian/Alpine) / K3s / NocoDB / Gotify",
               "icon": "boxes"
             }
@@ -356,17 +342,17 @@
     "experience": {
       "eyebrow": "Career History",
       "title": "Work Experience & Volunteering",
-      "subtitle": "Data pipelines, fleet software, and cloud applications at Daimler Truck, alongside end-to-end product engineering for Udayan Care NGO and data science internships."
+      "subtitle": "Fleet pipelines and apps at Daimler Truck, solo volunteering for Udayan Care, and engineering internships."
     },
     "skills": {
       "eyebrow": "Capabilities & Tools",
       "title": "Technical Stack & Working Style",
-      "subtitle": "Practical tools used daily across Databricks fleet pipelines, full-stack mobile products, and self-hosted Linux virtualization."
+      "subtitle": "Tools used across fleet pipelines, mobile delivery, and self-hosted Linux systems."
     },
     "about": {
       "eyebrow": "Background",
       "title": "Engineering Across Fleet Data, Apps & Linux",
-      "subtitle": "Day-to-day focus on Databricks data pipelines and fleet data software, paired with solo non-profit product delivery and hands-on Proxmox virtualization.",
+      "subtitle": "Practical data software, solo NGO product delivery, and bare-metal Linux.",
       "facts": [
         {
           "label": "Current Role",
@@ -398,7 +384,7 @@
     "education": {
       "eyebrow": "Academic History & Credentials",
       "title": "Education & Certifications",
-      "subtitle": "B.Tech in Data Science from Manipal Institute of Technology alongside CBSE schooling in New Delhi and completed coursework certifications."
+      "subtitle": "B.Tech in Data Science at MIT Manipal, CBSE schooling in New Delhi, and technical coursework."
     },
     "contact": {
       "eyebrow": "Direct Contact",
@@ -406,9 +392,8 @@
     }
   },
   "about": [
-    "I'm a Software Engineer at Daimler Truck Innovation Center India (DTICI) in Bengaluru. After starting out as a trainee focused on analytics and Power BI reporting, I transitioned into software engineering—maintaining Databricks ETL pipelines for ~70,000 connected trucks, replacing legacy BI reports with custom FastAPI and React internal apps, and verifying scheduled Over-The-Air (OTA) data scripts on test rigs.",
-    "Outside work, I volunteer as the developer for Udayan Care NGO. I built the bilingual (English & Hindi) FiT-UC mobile app in Flutter using AI-assisted UI workflows alongside a custom Proxmox LXC backend running NocoDB and an auth server at udayan.diivvansh.com. After Google Play testing with Care Leavers on the ground, the app is live with 20–30 monthly active users.",
-    "At home, I run and tinker with Linux infrastructure. I started with bare-metal Debian, Kali, and Alpine Linux across spare laptops running Docker Compose, progressed to a 3-node High-Availability Proxmox VE cluster backed up by a 4th laptop running Proxmox Backup Server (PBS), and later consolidated everything onto a single dedicated Proxmox VE 8 server hosting production containers and a K3s cluster."
+    "At Daimler Truck Innovation Center India (DTICI) in Bengaluru, I scaled fleet Spark ETL scripts originally written for 50 vehicles to 175k+ capacity (~70,000 live trucks) and replaced dedicated Power BI servers with a FastAPI + React Databricks app that loads ~3x faster at less than half the compute spend.",
+    "Outside work, I solo-built the bilingual FiT-UC Flutter app on Google Play for Udayan Care NGO—saving ₹1,00,000+ in build quotes and ~30% field Excel time—hosted on a consolidated Proxmox VE 8 Linux server that also runs a 6-node K3s lab."
   ],
   "experience": [
     {
@@ -417,19 +402,18 @@
       "company": "Daimler Truck Innovation Center India (DTICI)",
       "location": "Bengaluru, India",
       "duration": "July 2026 - Present",
-      "logo": "/images/daimler.jpeg",
+      "logo": "/images/brands/daimler.jpeg",
       "bulletPoints": [
-        "Maintain and tune Databricks Spark ETL pipelines processing daily telemetry across ~70,000 connected commercial trucks.",
-        "Engineered a FastAPI + React/Node.js internal web application hosted inside Databricks to replace legacy Power BI dashboards on multi-million-row tables.",
-        "Author and verify scheduled daily Over-The-Air (OTA) fleet data collection scripts on hardware test rigs prior to fleet rollout."
+        "Replaced dedicated Power BI capacity with a cached FastAPI + React Databricks app, making loads ~3x faster, UI shipping 3-4x quicker, and compute spend 50%+ lower.",
+        "Verified Python and C++ OTA collection scripts on hardware test rigs prior to fleet rollout across ~70,000 connected trucks."
       ],
       "skills": [
         "Python",
         "Databricks",
         "Apache Spark",
         "FastAPI",
-        "Node.js",
         "React",
+        "Node.js",
         "OTA Data Collection",
         "C++",
         "Test Rig Validation"
@@ -441,11 +425,10 @@
       "company": "Udayan Care (NGO)",
       "location": "Bengaluru / Remote",
       "duration": "2025 - Present",
-      "logo": "/images/udayan.svg",
+      "logo": "/images/brands/udayan.svg",
       "bulletPoints": [
-        "Architected and shipped FiT-UC, an aftercare mobile platform for Care Leavers at Udayan Care NGO, live on Google Play Store (20–30 monthly active users).",
-        "Developed the bilingual (English & Hindi) Flutter client using AI-assisted UI iteration paired with a self-hosted NocoDB LXC REST backend and Node.js auth server at udayan.diivvansh.com.",
-        "Partnered with the NGO team and field Care Leavers across Google Play closed testing to deliver 3 core modules: skilling lessons, mentor booking, and Red Alert push notifications via Gotify."
+        "Avoided ₹1,00,000+ in agency build quotes and ₹2,000-5,000/mo cloud bills by developing FiT-UC solo with AI workflows and self-hosting NocoDB + Node.js on Proxmox LXC.",
+        "Reduced manual Excel entry roughly 30% for 5-6 field coordinators serving 20-30 monthly active users on Google Play across 3 modules: courses, mentor booking, and Gotify alerts."
       ],
       "skills": [
         "Flutter",
@@ -464,17 +447,18 @@
       "company": "Daimler Truck Innovation Center India (DTICI)",
       "location": "Bengaluru, India",
       "duration": "July 2025 - July 2026",
-      "logo": "/images/daimler.jpeg",
+      "logo": "/images/brands/daimler.jpeg",
       "bulletPoints": [
-        "Streamlined daily fleet data extraction jobs and reporting pipelines across connected commercial vehicles.",
-        "Delivered Power BI dashboards and internal cloud data views before transitioning full-time into software engineering."
+        "Refactored duplicate Spark and SQL ETL scripts originally meant for 50 vehicles so pipelines scaled past a 10x wall to 175k+ tested vehicle capacity across ~70,000 live trucks.",
+        "Simplified lookup tables and lightweight Delta views to clear 10x scale Power BI refresh bottlenecks before moving full-time into software engineering."
       ],
       "skills": [
+        "Databricks",
+        "Apache Spark",
         "Power BI",
         "Python",
         "SQL",
-        "Data Pipelines",
-        "Automation"
+        "Data Pipelines"
       ]
     },
     {
@@ -483,10 +467,8 @@
       "company": "STMicroelectronics",
       "location": "Greater Noida, India",
       "duration": "Jan 2025 - July 2025",
-      "logo": "/images/st.jpeg",
       "bulletPoints": [
-        "Scripted digital verification test workflows in Python to standardize regression checks.",
-        "Evaluated SAT solver algorithms for boolean constraint verification and explored hardware acceleration models."
+        "Scripted Python regression checks saving roughly 1 hour/day and benchmarked GPU SAT solvers at 10x higher constraint difficulty."
       ],
       "skills": [
         "Python",
@@ -502,14 +484,13 @@
       "company": "Multiplier",
       "location": "Delhi, India",
       "duration": "May 2024 - July 2024",
-      "logo": "/images/multiplier.jpeg",
       "bulletPoints": [
-        "Designed workforce analytics dashboards in Microsoft Power BI and trained Python forecasting models to evaluate workforce trends."
+        "Delivered 1 executive Power BI report alongside ~70% accurate staffing forecasts trained with Facebook Prophet in Python."
       ],
       "skills": [
         "Microsoft Power BI",
         "Python",
-        "Machine Learning",
+        "Facebook Prophet",
         "Forecasting",
         "Microsoft Excel"
       ]
@@ -520,9 +501,9 @@
       "company": "IIT Delhi",
       "location": "Delhi, India",
       "duration": "Dec 2023 - Jan 2024",
-      "logo": "/images/iitd.jpeg",
+      "logo": "/images/brands/iitd.jpeg",
       "bulletPoints": [
-        "Constructed a voice-interactive smart mirror by integrating a Raspberry Pi with the Alexa SDK, handling hardware setup, coding, and testing."
+        "Fixed ARM Linux cross-compilation and dependency issues to get the Alexa Voice SDK running on 1 Raspberry Pi smart-mirror prototype."
       ],
       "skills": [
         "Linux",
@@ -538,9 +519,9 @@
       "company": "Goalkeep",
       "location": "Remote",
       "duration": "Jun 2023 - Aug 2023",
-      "logo": "/images/goalkeep.jpeg",
+      "logo": "/images/brands/goalkeep.jpeg",
       "bulletPoints": [
-        "Configured survey analytics dashboards in Apache Superset and executed data migration across SQL databases, Kobo Toolbox, Glide Apps, Google Sheets, and AppSheet."
+        "Owned 1 end-to-end Apache Superset dashboard and supported 3 civic analytics projects unifying SQL, Kobo Toolbox, Glide Apps, and AppSheet."
       ],
       "skills": [
         "Python",
@@ -562,12 +543,12 @@
       "priority": 1,
       "featured": true,
       "cardStyle": "compact",
-      "description": "End-to-end bilingual (English & Hindi) mobile app for Care Leavers at Udayan Care NGO, live on Google Play Store with self-hosted Proxmox backend.",
+      "description": "Solo-built bilingual Flutter app on Google Play saving ₹1L+ build quotes and ~30% Excel entry time for field coordinators.",
       "url": "https://play.google.com/store/apps/dev?id=8541457488243382905",
-      "logo": "/images/udayan.svg",
+      "logo": "/images/brands/udayan.svg",
       "badge": "Google Play · 20–30 MAU",
       "stack": "Flutter|Dart|NocoDB (LXC)|Node.js|Proxmox VE|Gotify|REST APIs",
-      "details": "Authored the bilingual Flutter mobile client with AI-assisted UI iteration and published open-source code at github.com/FioreJoy/FiT-UC.|Hosted REST backend inside a Proxmox LXC container (NocoDB) paired with a Node.js auth server at udayan.diivvansh.com.|Passed Google Play field testing with Care Leavers to serve 3 core workflows: TTS skilling lessons, mentor scheduling, and Red Alert crisis dispatch."
+      "details": "Saved ₹1,00,000+ in agency quotes and ₹2,000-5,000/mo hosting fees by coding solo with AI workflows atop Proxmox LXC NocoDB + Node.js auth containers.|Trimmed manual Excel tracking ~30% for 5-6 field coordinators serving 20-30 MAU across 3 Play Store modules: bilingual TTS courses, mentor booking, and Gotify alerts."
     },
     {
       "id": "dtici-connected-truck-databricks",
@@ -578,12 +559,12 @@
       "priority": 2,
       "featured": false,
       "cardStyle": "compact",
-      "description": "Custom FastAPI + React internal web application built inside Databricks alongside ETL pipelines processing daily telemetry for ~70,000 trucks.",
+      "description": "FastAPI + React Databricks app (~3x faster, 50%+ lower BI spend) alongside Spark ETL scaled across ~70,000 trucks.",
       "url": "https://www.daimlertruck.com",
-      "logo": "/images/daimler.jpeg",
-      "badge": "Enterprise · ~70k Fleet",
+      "logo": "/images/brands/daimler.jpeg",
+      "badge": "70k+ Fleet · ~3x Faster",
       "stack": "Databricks|Apache Spark|FastAPI|React|Node.js|Python|Delta Lake",
-      "details": "Replaced slow legacy Power BI dashboards on multi-million-row tables with a custom FastAPI and React/Node.js app inside Databricks.|Optimized Spark ETL jobs handling daily operational telemetry from ~70,000 connected commercial trucks.|Orchestrated daily OTA fleet data collection scripts and verified throughput on hardware test rigs prior to release."
+      "details": "Cut query wait time ~3x and lowered BI compute spend 50%+ by replacing dedicated Power BI servers with cached FastAPI + React SQL Warehouse endpoints (3-4x faster UI shipping).|Consolidated redundant fleet ETL scripts from a 50-vehicle baseline to 175k+ capacity (~70,000 live trucks) and verified OTA scripts on hardware test rigs."
     },
     {
       "id": "ha-nginx-proxmox-k3s",
@@ -594,12 +575,12 @@
       "priority": 3,
       "featured": false,
       "cardStyle": "compact",
-      "description": "Multi-replica NGINX load balancer running inside a 6-node K3s cluster on Proxmox VE, using MetalLB Layer-2 VIPs and Traefik ingress.",
+      "description": "6-node Proxmox K3s cluster balancing NGINX across 3 worker replicas via MetalLB VIP (192.168.1.180).",
       "url": "https://pve.diivvansh.com",
-      "logo": "/images/cuda.webp",
-      "badge": "K3s · Bare-Metal VIP",
+      "logo": "",
+      "badge": "6-Node K3s · 3 Replicas",
       "stack": "Proxmox VE|Kubernetes (K3s)|MetalLB|Traefik|NGINX|Docker|Linux",
-      "details": "Allocated bare-metal Layer-2 VIPs with MetalLB paired with Traefik ingress routing traffic across 3 worker replica pods.|Configured per-session distribution so serving pod hostnames and internal cluster IPs rotate cleanly across concurrent browser tabs.|Provisioned inside a 6-node Proxmox K3s cluster behind Cloudflare Tunnels and Tailscale."
+      "details": "Configured round-robin request rotation across 3 NGINX pod replicas with 0 open home firewall ports using MetalLB Layer-2 VIP, Traefik ingress, and Cloudflare Tunnels.|Merged 4 separate laptops (3 HA nodes + 1 PBS backup) onto 1 Proxmox VE 8 host running 6 K3s VMs alongside live NGO containers."
     },
     {
       "id": "fiorejoy",
@@ -610,12 +591,12 @@
       "priority": 4,
       "featured": false,
       "cardStyle": "banner",
-      "description": "Community event-discovery app combining social graph queries with real-time chat and media sharing.",
+      "description": "Event discovery platform (fiorejoy.com) combining graph queries and SQL in PostgreSQL + Apache AGE with live chat.",
       "url": "https://fiorejoy.com",
-      "logo": "/images/fiorejoy.png",
+      "logo": "/images/projects/fiorejoy.png",
       "badge": "Live Platform",
       "stack": "Flutter|FastAPI|PostgreSQL|Apache AGE|MinIO|WebSockets",
-      "details": "Modeled user-event recommendations using PostgreSQL with the Apache AGE graph extension.|Implemented real-time group messaging over WebSockets with MinIO S3-compatible media storage."
+      "details": "Avoided dual-database sync overhead on fiorejoy.com by running Cypher friend-event graph queries alongside SQL inside 1 PostgreSQL + Apache AGE database.|Added live event chat rooms and S3-compatible media uploads by pairing async FastAPI WebSockets with self-hosted MinIO buckets."
     },
     {
       "id": "avignatattva",
@@ -626,12 +607,12 @@
       "priority": 5,
       "featured": false,
       "cardStyle": "banner",
-      "description": "Consultation and scheduling web platform connecting users with verified wellness practitioners.",
+      "description": "Practitioner discovery and slot booking platform (avignatattva.com) backed by NocoDB REST APIs.",
       "url": "https://avignatattva.com",
-      "logo": "/images/avignatattva.jpg",
+      "logo": "/images/projects/avignatattva.jpg",
       "badge": "Production Web",
       "stack": "Flutter|PostgreSQL|NocoDB|REST APIs",
-      "details": "Implemented appointment booking flows and practitioner profile views.|Backed scheduling tables with NocoDB REST endpoints on PostgreSQL."
+      "details": "Replaced manual spreadsheet slot scheduling across practitioners on avignatattva.com with Flutter Web booking flows backed by 1 NocoDB + PostgreSQL instance."
     },
     {
       "id": "pokeroyale",
@@ -642,12 +623,12 @@
       "priority": 6,
       "featured": false,
       "cardStyle": "compact",
-      "description": "Work-in-progress real-time lane-combat multiplayer game built with Godot Engine and a Go/Redis server.",
+      "description": "Authoritative multiplayer lane-combat prototype built with Go, Redis Pub/Sub, and Godot.",
       "url": "",
-      "logo": "/images/pokeroyale.webp",
+      "logo": "",
       "badge": "In Development",
       "stack": "Godot|Go|WebSockets|Redis|Docker",
-      "details": "Writing a server-authoritative game loop in Go backed by Redis for fast state synchronization.|Prototyping real-time unit deployment and combat mechanics in Godot."
+      "details": "Kept 2+ concurrent lane-combat clients in sync via a server-authoritative Go simulation tick loop backed by Redis Pub/Sub."
     }
   ],
   "otherProjects": [
@@ -659,11 +640,11 @@
       "status": "active",
       "priority": 7,
       "cardStyle": "banner",
-      "description": "Benchmarked GPU parallel speedup vs serial C++ across six sorting algorithms on NVIDIA CUDA.",
+      "description": "Benchmarked CUDA parallel speedups across 6 sorting algorithms against serial C++.",
       "url": "https://github.com/divansh369/cuda-sorting-algo",
-      "logo": "/images/cuda.webp",
+      "logo": "/images/projects/cuda.webp",
       "stack": "C++|CUDA|Algorithms|Parallel Computing",
-      "details": "Implemented parallel Bubble, Insertion, and Merge sort kernels in CUDA C++ across 6 algorithms.|Measured GPU vs CPU runtime scaling across varied array sizes."
+      "details": "Measured GPU vs serial CPU crossover array sizes across 6 sorting algorithms using custom shared-memory CUDA C++ kernels."
     },
     {
       "id": "leetcode-solutions",
@@ -673,11 +654,11 @@
       "status": "active",
       "priority": 8,
       "cardStyle": "banner",
-      "description": "Collection of 150+ algorithm and data structure solutions maintained in Python.",
+      "description": "Open-source collection of 150+ Python data structure and algorithm solutions.",
       "url": "https://github.com/divansh369/leetcode-solutions",
-      "logo": "/images/leetcode.webp",
+      "logo": "/images/projects/leetcode.webp",
       "stack": "Python|Algorithms|Data Structures",
-      "details": "Organized 150+ solutions across dynamic programming, graph traversal, trees, and greedy problems."
+      "details": "Organized 150+ Python solutions covering DP, graphs, trees, and sliding-window problems for quick revision."
     },
     {
       "id": "mit-labs",
@@ -687,11 +668,11 @@
       "status": "archived",
       "priority": 9,
       "cardStyle": "compact",
-      "description": "All-semester Manipal B.Tech Data Science coursework spanning statistical modeling and ML pipelines.",
+      "description": "8-semester B.Tech Data Science repository covering DBMS, statistics, and ML labs.",
       "url": "https://github.com/divansh369/mit-labs",
-      "logo": "/images/mit.webp",
+      "logo": "",
       "stack": "Python|Pandas|NumPy|Scikit-learn",
-      "details": "Completed supervised, unsupervised, and statistical data analysis lab notebooks across 8 B.Tech semesters."
+      "details": "Archived 8 semesters of machine learning, DBMS, and statistical inference lab notebooks from MIT Manipal."
     },
     {
       "id": "chatbot-cynthia",
@@ -701,11 +682,11 @@
       "status": "archived",
       "priority": 10,
       "cardStyle": "banner",
-      "description": "Intent-recognition conversational bot built with Recurrent Neural Networks (RNN) and TensorFlow.",
+      "description": "Intent-recognition chatbot trained on a TensorFlow RNN sequence model.",
       "url": "https://github.com/divansh369/chatbot-cynthia",
-      "logo": "/images/chatbot.webp",
+      "logo": "/images/projects/chatbot.webp",
       "stack": "Python|TensorFlow|Keras|NLTK|RNN",
-      "details": "Trained sequence models on custom intent JSON corpora using tokenization and padding."
+      "details": "Trained 1 Keras RNN intent classifier over tokenized conversational datasets with NLTK stemming."
     },
     {
       "id": "dwarka-bookstore",
@@ -715,11 +696,11 @@
       "status": "archived",
       "priority": 11,
       "cardStyle": "banner",
-      "description": "Lightweight online bookstore inventory and search interface built with Streamlit.",
+      "description": "Multi-page Streamlit book catalog and CSV shopping-cart prototype in Python.",
       "url": "https://github.com/divansh369/dwarka-bookstore",
-      "logo": "/images/book.webp",
+      "logo": "/images/projects/book.webp",
       "stack": "Python|Streamlit|Pandas",
-      "details": "Designed dynamic catalog filtering and cart workflows in Streamlit."
+      "details": "Built 1 multi-page Streamlit catalog demo supporting search filters and session-state carts."
     }
   ],
   "progressGallery": [
@@ -731,7 +712,7 @@
       "phase": "Ideation & Scope",
       "title": "Care Leaver Journey & Bilingual UX Wireframes",
       "ideaNote": "Mapped out aftercare onboarding hurdles with Udayan Care NGO coordinators, prioritizing zero-cost offline-tolerant access, dual English/Hindi TTS audio toggles, and low-friction Red Alert emergency escalation.",
-      "outcome": "Approved 3-pillar app spec: Learning Courses, Mentor Booking, and Red Alert.",
+      "outcome": "Saved ₹1L+ agency build cost across 3 scoped pillars: Courses, Mentor Booking, and Red Alert.",
       "mediaUrl": "",
       "order": 1
     },
@@ -743,7 +724,7 @@
       "phase": "Self-Hosted Backend",
       "title": "Proxmox LXC NocoDB API + Node Auth + Gotify",
       "ideaNote": "Avoided paid SaaS BaaS fees for a non-profit by deploying NocoDB REST endpoints inside an isolated Proxmox VE LXC paired with a custom Node.js JWT auth relay behind Cloudflare Tunnels.",
-      "outcome": "Live API & auth gateway at udayan.diivvansh.com plus instant Gotify alert routing.",
+      "outcome": "Avoided ₹2k-5k/mo cloud fees with live APIs at udayan.diivvansh.com and Gotify alerts.",
       "mediaUrl": "",
       "order": 2
     },
@@ -755,7 +736,7 @@
       "phase": "Field Testing & Play Store",
       "title": "Closed Testing with Field Care Leavers & Live Release",
       "ideaNote": "Ran rapid UI revisions during closed Play Store testing cohorts, simplifying form typography and adding Hindi text-to-speech playback after observing direct user sessions.",
-      "outcome": "Published on Google Play Store serving 20–30 monthly active Care Leavers.",
+      "outcome": "Cut field Excel entry ~30% across 5-6 coordinators while serving 20-30 monthly active users.",
       "mediaUrl": "",
       "order": 3
     },
@@ -766,8 +747,8 @@
       "date": "2025-09",
       "phase": "Bottleneck Audit",
       "title": "Replacing Multi-Million-Row Power BI Delays",
-      "ideaNote": "Legacy Power BI extracts struggled with refresh latency and cross-filtering across telemetry for ~70,000 commercial trucks. Proposed a native Databricks App querying Delta Lake directly via FastAPI.",
-      "outcome": "Scoped full-stack FastAPI + React internal app inside the Databricks workspace.",
+      "ideaNote": "Legacy Power BI extracts struggled with refresh latency and dedicated server costs (~$5k-$8k/mo P1/F64) across telemetry for ~70,000 commercial trucks. Proposed a native Databricks App querying SQL Warehouse directly via FastAPI.",
+      "outcome": "Achieved ~3x faster query latency and 50%+ BI cost savings while shipping features 3-4x faster.",
       "mediaUrl": "",
       "order": 1
     },
@@ -778,8 +759,8 @@
       "date": "2026-02",
       "phase": "Pipeline & Rig Validation",
       "title": "Spark ETL Optimization & Hardware Test Rig OTA Loop",
-      "ideaNote": "Paired partitioned Databricks Spark ETL jobs with scheduled Over-The-Air (OTA) fleet telemetry scripts verified step-by-step on physical test rigs prior to fleet rollout.",
-      "outcome": "Replaced legacy reports with unified self-serve React UI & reliable daily fleet ETL.",
+      "ideaNote": "Paired modularized Databricks Spark ETL jobs with scheduled Over-The-Air (OTA) fleet telemetry scripts verified step-by-step on physical test rigs prior to fleet rollout.",
+      "outcome": "Expanded pipeline throughput from a 50-vehicle baseline to 175k+ vehicle capacity across ~70,000 live trucks with reliable daily ETL.",
       "mediaUrl": "",
       "order": 2
     },
@@ -791,7 +772,7 @@
       "phase": "Cluster Architecture",
       "title": "6-Node K3s Topology & MetalLB Layer-2 VIP",
       "ideaNote": "Wanted bare-metal load balancing experience inside a nested Proxmox lab—splitting 3 control-plane masters and 3 workers so MetalLB announces subnet IP 192.168.1.180 without external cloud LBs.",
-      "outcome": "Provisioned 6 K3s KVM nodes over vmbr0 with automated Traefik TLS termination.",
+      "outcome": "Provisioned 6 K3s KVM nodes (3 masters + 3 workers) over vmbr0 with automated Traefik TLS termination.",
       "mediaUrl": "",
       "order": 1
     },
@@ -803,7 +784,7 @@
       "phase": "Traffic Verification",
       "title": "Session Rotation Across 3 NGINX Pod Replicas",
       "ideaNote": "Exposed live pod hostname & internal pod IP via NGINX headers to prove round-robin distribution across separate browser tabs and failover resiliency.",
-      "outcome": "Verified seamless request rotation & zero-port-forwarding ingress via Cloudflare.",
+      "outcome": "Verified 100% round-robin rotation across 3 worker replicas with 0 open firewall ports via Cloudflare.",
       "mediaUrl": "",
       "order": 2
     },
@@ -815,7 +796,7 @@
       "phase": "Social Graph Model",
       "title": "PostgreSQL + Apache AGE Event Recommendations",
       "ideaNote": "Joined relational event schedules with multi-hop friend-and-interest graph traversals in Apache AGE inside a single Postgres instance to avoid syncing a separate Neo4j cluster.",
-      "outcome": "Unified Cypher + SQL backend powering live community discovery at fiorejoy.com.",
+      "outcome": "Unified Cypher + SQL in 1 database powering live community discovery at fiorejoy.com.",
       "mediaUrl": "",
       "order": 1
     },
@@ -827,7 +808,7 @@
       "phase": "Realtime & Media",
       "title": "WebSocket Event Chat & Self-Hosted MinIO Buckets",
       "ideaNote": "Added FastAPI WebSocket rooms per event and routed user photo uploads through self-hosted MinIO S3 storage.",
-      "outcome": "Launched production multi-user web & mobile experience.",
+      "outcome": "Launched live WebSocket messaging and MinIO media rooms on fiorejoy.com.",
       "mediaUrl": "",
       "order": 2
     },
@@ -839,7 +820,7 @@
       "phase": "Booking Flow",
       "title": "Practitioner Profiles & Slot Scheduling Engine",
       "ideaNote": "Designed clean practitioner discovery and slot booking flows backed by NocoDB REST tables over PostgreSQL so non-technical admins can manage availability cleanly.",
-      "outcome": "Production launch on avignatattva.com with admin scheduling dashboard.",
+      "outcome": "Launched live booking on avignatattva.com with NocoDB self-serve admin scheduling.",
       "mediaUrl": "",
       "order": 1
     },
@@ -851,7 +832,7 @@
       "phase": "Engine Prototype",
       "title": "Authoritative Go Tick Loop + Godot Client Lanes",
       "ideaNote": "Experimenting with deterministic server ticks in Go + Redis pub/sub state sync so clients render smooth lane combat without trusting client-side damage calculations.",
-      "outcome": "Ongoing prototype: lane deployment physics and WebSocket delta protocol underway.",
+      "outcome": "Built authoritative Go + Redis server loop syncing 2+ test player sessions in Godot.",
       "mediaUrl": "",
       "order": 1
     },
@@ -863,7 +844,7 @@
       "phase": "Kernel Benchmarking",
       "title": "CUDA Shared-Memory Parallel Sort Comparisons",
       "ideaNote": "Evaluated warp divergence and memory coalescing penalties across 6 sorting algorithms (Bubble, Insertion, Merge, Bitonic, etc.) on NVIDIA GPU vs serial C++.",
-      "outcome": "Documented crossover array thresholds where GPU thread launch overhead pays off.",
+      "outcome": "Benchmarked GPU vs CPU crossover curves across 6 CUDA sorting algorithms.",
       "mediaUrl": "",
       "order": 1
     },
@@ -875,7 +856,7 @@
       "phase": "Problem Solving Log",
       "title": "Structured 150+ Python Algorithm Patterns",
       "ideaNote": "Categorized solutions by recurring algorithmic templates (sliding window, monotonic stack, DP state transitions, union-find) for fast technical interview recall.",
-      "outcome": "Maintained open repository spanning 150+ documented Python implementations.",
+      "outcome": "Maintained open repository spanning 150+ documented Python solutions.",
       "mediaUrl": "",
       "order": 1
     },
@@ -887,7 +868,7 @@
       "phase": "Academic Archive",
       "title": "8-Semester Data Science & ML Lab Archive",
       "ideaNote": "Archived clean reproducible Jupyter notebooks covering DBMS, statistical inference, deep learning, and computer vision coursework across MIT Manipal.",
-      "outcome": "Complete semester-by-semester reference repository.",
+      "outcome": "Archived 8 semesters of reproducible Data Science & ML coursework notebooks.",
       "mediaUrl": "",
       "order": 1
     },
@@ -899,7 +880,7 @@
       "phase": "NLP Training",
       "title": "Intent Classification RNN Pipeline",
       "ideaNote": "Explored classical sequence tokenization, NLTK stemming, and Keras RNN classification before transformer APIs became ubiquitous.",
-      "outcome": "Working intent router achieving clean domain response matching on custom corpora.",
+      "outcome": "Trained 1 functional Keras RNN intent router over custom corpora.",
       "mediaUrl": "",
       "order": 1
     },
@@ -911,7 +892,7 @@
       "phase": "Rapid Web Prototype",
       "title": "Streamlit Catalog & Cart State Workflow",
       "ideaNote": "First Python web prototype testing session-state shopping carts and CSV inventory search without writing custom HTML/JS.",
-      "outcome": "Shipped functional multi-page Streamlit storefront demo.",
+      "outcome": "Shipped 1 multi-page Streamlit bookstore catalog and cart workflow.",
       "mediaUrl": "",
       "order": 1
     },
@@ -922,8 +903,8 @@
       "date": "2026-07",
       "phase": "Production Systems",
       "title": "Databricks Apps & Connected Truck Fleet Telemetry",
-      "ideaNote": "Transitioned from GET analytics into core software engineering—bridging high-volume Apache Spark pipelines, React/FastAPI Databricks Apps, and hardware test-rig validation for ~70k trucks.",
-      "outcome": "Replaced legacy static BI with low-latency internal apps and reliable OTA scripts.",
+      "ideaNote": "Transitioned from GET analytics into core software engineering—bridging modular Spark pipelines (~70k trucks), AI-accelerated React/FastAPI Databricks Apps (~3x faster, 50%+ cheaper than dedicated Power BI), and hardware test-rig OTA checks.",
+      "outcome": "Cut BI cost 50%+, accelerated UI 3-4x, and sped queries ~3x across ~70,000 trucks.",
       "mediaUrl": "",
       "order": 1
     },
@@ -934,8 +915,8 @@
       "date": "2025-05",
       "phase": "NGO Delivery",
       "title": "End-to-End Solo Engineering for Care Leavers",
-      "ideaNote": "Owned the full lifecycle from stakeholder discovery with Udayan Care coordinators to Android closed testing, Play Store release, and 24/7 Proxmox self-hosting.",
-      "outcome": "Live Play Store app serving 20–30 monthly active users with zero cloud billing.",
+      "ideaNote": "Owned the full lifecycle from discovery with 5-6 field coordinators to Play Store launch and 24/7 Proxmox self-hosting, using AI-assisted Flutter UI to build solo what agencies quote ₹1,00,000+ for.",
+      "outcome": "Saved ₹1L+ build cost, ₹2k-5k/mo cloud fees, and ~30% Excel time for 20-30 MAU.",
       "mediaUrl": "",
       "order": 1
     },
@@ -945,9 +926,9 @@
       "itemType": "experience",
       "date": "2025-07",
       "phase": "Onboarding & ETL",
-      "title": "Graduate Engineer Trainee Fleet Data Foundations",
-      "ideaNote": "Started learning connected-vehicle schemas and SQL reporting bottlenecks, identifying manual extract tasks that evolved into scheduled pipeline jobs.",
-      "outcome": "Standardized fleet reporting workflows and earned transition into Software Engineer.",
+      "title": "Modular ETL Optimization & Lightweight BI Models",
+      "ideaNote": "Refactored duplicated per-function ETL scripts originally capped at 50 vehicles (~10x breakdown limit) into modular Spark/SQL pipelines with slim lookup tables.",
+      "outcome": "Expanded fleet capacity from 50 to 175k+ vehicles across ~70,000 live trucks and earned full-time SE role.",
       "mediaUrl": "",
       "order": 1
     },
@@ -957,9 +938,9 @@
       "itemType": "experience",
       "date": "2025-01",
       "phase": "Hardware Verification",
-      "title": "Python Regression Scripting & SAT Solver Research",
-      "ideaNote": "Observed repetitive RTL simulation verification steps and wrote modular Python runners while studying formal SAT-based equivalence checking.",
-      "outcome": "Delivered repeatable Python verification harnesses and formal solver benchmarks.",
+      "title": "Python Regression Scripting & GPU SAT Solvers",
+      "ideaNote": "Replaced manual RTL regression checks with modular Python runners while benchmarking GPU-accelerated SAT solvers against rising constraint counts.",
+      "outcome": "Saved ~1 hour/day manually and evaluated GPU SAT heuristics at 10x problem difficulty.",
       "mediaUrl": "",
       "order": 1
     },
@@ -969,9 +950,9 @@
       "itemType": "experience",
       "date": "2024-05",
       "phase": "Workforce BI",
-      "title": "Power BI KPIs & Python Trend Forecasting",
-      "ideaNote": "Combined executive Power BI capacity views with time-series forecasting experiments in Python to surface staffing seasonality.",
-      "outcome": "Delivered interactive BI workspace and predictive trend notebooks.",
+      "title": "Power BI Report & Prophet Staffing Forecasts",
+      "ideaNote": "Combined an executive Power BI report with Facebook Prophet time-series forecasting models in Python to surface staffing trends.",
+      "outcome": "Shipped 1 executive Power BI report alongside ~70% accurate Prophet forecasts.",
       "mediaUrl": "",
       "order": 1
     },
@@ -981,9 +962,9 @@
       "itemType": "experience",
       "date": "2023-12",
       "phase": "Embedded & Voice",
-      "title": "Raspberry Pi Smart Mirror & Alexa SDK Integration",
-      "ideaNote": "Wired two-way glass display hardware to Raspberry Pi running Linux + Alexa Voice SDK skills for hands-free campus information widgets.",
-      "outcome": "Working voice-controlled smart mirror prototype demonstrated on campus.",
+      "title": "Raspberry Pi Alexa SDK Build & Cross-Compilation Debugging",
+      "ideaNote": "Focused on getting Alexa Voice SDK compiling and booting cleanly on ARM Raspberry Pi Linux hardware before returning to campus for college.",
+      "outcome": "Resolved ARM cross-compilation blockers and dependency bugs on 1 Raspberry Pi target.",
       "mediaUrl": "",
       "order": 1
     },
@@ -993,9 +974,9 @@
       "itemType": "experience",
       "date": "2023-06",
       "phase": "Civic Analytics",
-      "title": "Field Survey Pipelines & Apache Superset",
-      "ideaNote": "Unified fragmented Kobo Toolbox, Google Sheets, and Glide App survey feeds into normalized SQL schemas feeding open-source Apache Superset charts.",
-      "outcome": "Clean longitudinal survey dashboards across field impact cohorts.",
+      "title": "End-to-End Apache Superset & Field Survey Pipelines",
+      "ideaNote": "Contributed across 3 civic analytics projects unifying Kobo Toolbox, Glide Apps, Sheets, and AppSheet into SQL, owning 1 complete Apache Superset dashboard end-to-end.",
+      "outcome": "Led 1 full Apache Superset dashboard solo while supporting 3 civic analytics projects.",
       "mediaUrl": "",
       "order": 1
     }
@@ -1005,31 +986,31 @@
       {
         "stage": "Phase 01 · Bare-Metal Linux & Docker Compose",
         "title": "Debian, Kali & Alpine on Repurposed Laptops",
-        "summary": "Before discovering hypervisors, I ran bare-metal Debian, Kali Linux, and Alpine Linux across spare laptops, orchestrating all self-hosted apps by hand with Docker Engine and Docker Compose.",
+        "summary": "Before trying hypervisors, I ran bare-metal Debian, Kali Linux, and Alpine Linux across spare laptops, running self-hosted services by hand with Docker Engine and Docker Compose.",
         "learnings": [
-          "Managed Linux networking, firewalling, systemd services, and persistent volume permissions manually.",
-          "Used Alpine for lightweight production containers, Debian for host stability, and Kali for local network troubleshooting."
+          "Managed Linux networking, firewalls, systemd services, and volume permissions by hand.",
+          "Used Alpine for small production containers, Debian for stable hosts, and Kali for local network debugging."
         ],
         "stack": "Debian · Kali Linux · Alpine Linux · Docker · Docker Compose · systemd"
       },
       {
         "stage": "Phase 02 · 3-Node HA Proxmox Cluster + 4th Laptop PBS",
         "title": "Distributed Proxmox VE Quorum & Proxmox Backup Server",
-        "summary": "Uncovered Proxmox VE and rebuilt the 4-laptop stack into a 3-node High-Availability (HA) PVE cluster with a dedicated 4th laptop acting exclusively as a Proxmox Backup Server (PBS).",
+        "summary": "Switched to Proxmox VE and rebuilt the 4-laptop stack into a 3-node High-Availability (HA) PVE cluster with a dedicated 4th laptop acting as Proxmox Backup Server (PBS).",
         "learnings": [
-          "Learned Corosync quorum voting, split-brain prevention, HA failover groups, and live migration across cluster nodes.",
-          "Configured Proxmox Backup Server (PBS) for incremental deduplicated backups, retention policies, and tested disaster recovery restores.",
-          "Mastered Linux bridges (vmbr0), thin storage provisioning, and LXC vs KVM workload trade-offs."
+          "Practiced Corosync quorum voting, split-brain prevention, HA failover groups, and live VM migration across nodes.",
+          "Set up Proxmox Backup Server (PBS) for deduplicated backups, retention policies, and restore drills.",
+          "Learned Linux bridges (vmbr0), thin storage pools, and LXC vs KVM trade-offs."
         ],
         "stack": "Proxmox VE · Proxmox Backup Server (PBS) · Corosync HA · LXC · KVM"
       },
       {
         "stage": "Phase 03 · Consolidated PVE 8 Host & K3s Cluster",
         "title": "Production NGO LXCs & 6-Node K3s Virtualization Lab",
-        "summary": "Consolidated the 4-laptop cluster onto one primary 24/7 Proxmox VE 8 server for lower power draw and unified memory, running production LXC services alongside a 6-node K3s cluster.",
+        "summary": "Consolidated the 4-laptop setup onto one primary Proxmox VE 8 server for lower power draw and shared memory, hosting NGO containers alongside a 6-node K3s lab.",
         "learnings": [
-          "Hosts live Udayan Care NGO production containers (NocoDB LXC, Node.js Auth at udayan.diivvansh.com, Gotify alerts).",
-          "Operates a nested 6-node K3s cluster (3 masters + 3 workers) with MetalLB VIPs and Traefik ingress exposed safely via Cloudflare Tunnels and Tailscale."
+          "Runs live Udayan Care NGO containers (NocoDB LXC, Node.js Auth at udayan.diivvansh.com, Gotify alerts).",
+          "Runs a nested 6-node K3s cluster (3 masters + 3 workers) with MetalLB VIPs and Traefik ingress exposed via Cloudflare Tunnels and Tailscale."
         ],
         "stack": "Proxmox VE 8 · 6-Node K3s · MetalLB · Traefik · Cloudflare Tunnels · Tailscale"
       }
@@ -1126,7 +1107,6 @@
     "iconTiles": [
       {
         "label": "Linux",
-        "logoPath": "/images/logos/linux.svg",
         "brandKey": "linux",
         "category": "infra",
         "isFoss": true,
@@ -1137,11 +1117,10 @@
       },
       {
         "label": "Shellscript",
-        "logoPath": "/images/logos/shell-bash.svg",
         "brandKey": "bash",
         "category": "infra",
         "isFoss": true,
-        "summary": "POSIX & Bash automation scripts orchestrating Linux cron tasks, backups, and CI setups.",
+        "summary": "POSIX & Bash scripts automating Linux cron jobs, scheduled backups, and CI setups.",
         "websiteUrl": "https://www.gnu.org/software/bash/",
         "githubUrl": "https://github.com/bminor/bash",
         "connections": ["linux", "docker", "git", "python"]
@@ -1212,7 +1191,7 @@
         "brandKey": "casaos",
         "category": "infra",
         "isFoss": true,
-        "summary": "Clean open-source personal cloud dashboard orchestrating Docker home server apps.",
+        "summary": "Clean open-source personal cloud dashboard for managing Docker home server apps.",
         "websiteUrl": "https://casaos.zimaspace.com/",
         "githubUrl": "https://github.com/IceWhaleTech/CasaOS",
         "connections": ["docker", "linux", "raspberrypi"]
@@ -1309,7 +1288,6 @@
       },
       {
         "label": "Raspberry Pi",
-        "logoPath": "/images/logos/raspberry-pi.svg",
         "brandKey": "raspberrypi",
         "category": "infra",
         "isFoss": false,
@@ -1331,7 +1309,6 @@
       },
       {
         "label": "Python",
-        "logoPath": "/images/logos/python.svg",
         "brandKey": "python",
         "category": "languages",
         "isFoss": true,
@@ -1363,7 +1340,6 @@
       },
       {
         "label": "Java",
-        "logoPath": "/images/logos/java.webp",
         "brandKey": "java",
         "category": "languages",
         "isFoss": true,
@@ -1374,7 +1350,6 @@
       },
       {
         "label": "JavaScript",
-        "logoPath": "/images/logos/javascript.svg",
         "brandKey": "javascript",
         "category": "languages",
         "isFoss": true,
@@ -1428,7 +1403,6 @@
       },
       {
         "label": "SQL / Postgres",
-        "logoPath": "/images/logos/sql_postgresql.svg",
         "brandKey": "postgresql",
         "category": "data",
         "isFoss": true,
@@ -1439,7 +1413,6 @@
       },
       {
         "label": "Pandas",
-        "logoPath": "/images/logos/pandas.svg",
         "brandKey": "pandas",
         "category": "data",
         "isFoss": true,
@@ -1450,7 +1423,6 @@
       },
       {
         "label": "NumPy",
-        "logoPath": "/images/logos/numpy.svg",
         "brandKey": "numpy",
         "category": "data",
         "isFoss": true,
@@ -1461,7 +1433,6 @@
       },
       {
         "label": "Scikit-learn",
-        "logoPath": "/images/logos/scikit-learn.svg",
         "brandKey": "scikit",
         "category": "data",
         "isFoss": true,
@@ -1472,7 +1443,6 @@
       },
       {
         "label": "TensorFlow",
-        "logoPath": "/images/logos/tensorflow.svg",
         "brandKey": "tensorflow",
         "category": "data",
         "isFoss": true,
@@ -1483,7 +1453,6 @@
       },
       {
         "label": "PyTorch",
-        "logoPath": "/images/logos/pytorch.svg",
         "brandKey": "pytorch",
         "category": "data",
         "isFoss": true,
@@ -1504,7 +1473,6 @@
       },
       {
         "label": "Node.js",
-        "logoPath": "/images/logos/nodejs.svg",
         "brandKey": "nodejs",
         "category": "apps",
         "isFoss": true,
@@ -1515,7 +1483,6 @@
       },
       {
         "label": "React",
-        "logoPath": "/images/logos/react.svg",
         "brandKey": "react",
         "category": "apps",
         "isFoss": true,
@@ -1546,7 +1513,6 @@
       },
       {
         "label": "Power BI",
-        "logoPath": "/images/logos/powerbi.webp",
         "brandKey": "powerbi",
         "category": "apps",
         "isFoss": false,
@@ -1556,7 +1522,6 @@
       },
       {
         "label": "MS Office",
-        "logoPath": "/images/logos/ms.webp",
         "brandKey": "ms",
         "category": "apps",
         "isFoss": false,
@@ -1612,13 +1577,9 @@
     ],
     "principles": [
       "Spark & Databricks Query Tuning",
-      "OTA Script Validation on Test Rigs",
-      "End-to-End Product Delivery",
-      "Proxmox HA Quorum & PBS Recovery",
-      "AI-Assisted Rapid UI Prototyping",
-      "Bare-Metal Linux to Virtualization",
-      "Zero-Trust Self-Hosted Ingress",
-      "Iterative NGO & Stakeholder Feedback"
+      "Hardware Test-Rig Verification",
+      "Proxmox HA & PBS Recovery",
+      "Direct User Feedback Loops"
     ],
     "languages": [
       "English (Fluent)",
@@ -1638,8 +1599,7 @@
       "institution": "Manipal Institute of Technology (MIT)",
       "degree": "B.Tech in Data Science",
       "duration": "Oct 2021 - July 2025",
-      "gpa": "CGPA: 7.3 / 10.0",
-      "logo": "/images/mit.webp"
+      "gpa": "CGPA: 7.3 / 10.0"
     },
     {
       "institution": "ITL Public School (CBSE)",
@@ -1679,33 +1639,28 @@
   "socials": [
     {
       "name": "GitHub",
-      "url": "https://github.com/Divansh369",
-      "logos": "/images/socials/github.webp"
+      "url": "https://github.com/Divansh369"
     },
     {
       "name": "LinkedIn",
-      "url": "https://www.linkedin.com/in/divansh-prasad-893b05230/",
-      "logos": "/images/socials/linkedin.webp"
+      "url": "https://www.linkedin.com/in/divansh-prasad-893b05230/"
     },
     {
       "name": "Email",
-      "url": "mailto:divanshthebest@gmail.com",
-      "logos": "/images/socials/gmail.webp"
+      "url": "mailto:divanshthebest@gmail.com"
     },
     {
       "name": "Instagram",
-      "url": "https://www.instagram.com/divansh69/",
-      "logos": "/images/socials/instagram.webp"
+      "url": "https://www.instagram.com/divansh69/"
     },
     {
       "name": "Google Play",
-      "url": "https://play.google.com/store/apps/dev?id=8541457488243382905",
-      "logos": "/images/logos/flutter.svg"
+      "url": "https://play.google.com/store/apps/dev?id=8541457488243382905"
     }
   ],
   "contact": {
     "heading": "Get In Touch",
-    "message": "Open to software engineering roles, distributed data infrastructure discussions, and collaborative open-source or impact builds.",
+    "message": "Open to software engineering roles, data systems, and collaborative open-source builds.",
     "email": "divanshthebest@gmail.com",
     "phone": "+91 9873354637",
     "location": "Bengaluru, India"
@@ -1723,11 +1678,277 @@
     "homelabCvSubtitle": "Bare-Metal Linux -> Proxmox VE + PBS -> Consolidated PVE 8 & K3s",
     "homelabCvLink": "pve.diivvansh.com",
     "homelabCvBullets": [
-      "Started bare-metal on Debian, Kali, and Alpine Linux across spare laptops managed with Docker and Docker Compose.",
-      "Upgraded into a 3-node High-Availability (HA) Proxmox VE cluster with Corosync quorum plus a 4th laptop dedicated to Proxmox Backup Server (PBS) incremental snapshots.",
-      "Consolidated onto a primary Proxmox VE 8 server running production Udayan Care LXCs and a nested 6-node K3s cluster behind Tailscale and Cloudflare Tunnels."
+      "Moved 4 standalone laptops onto 1 unified Proxmox VE 8 server hosting NGO LXC APIs and 6-node K3s VMs around the clock.",
+      "Kept automated snapshot recovery across 3 HA Proxmox nodes and a 4th-laptop PBS store using Corosync quorum rules and retention pruning.",
+      "Published 2 live domains with 0 open router ports using Cloudflare Zero-Trust Tunnels, MetalLB Layer-2 VIP (192.168.1.180), and Traefik."
     ],
     "keywords": "Software Developer, Databricks, Apache Spark, Python, FastAPI, Flutter, Proxmox VE, Linux, Docker Compose, Kubernetes, K3s"
+  },
+  "factBank": {
+    "roles": [
+      {
+        "id": "data-engineering",
+        "label": "Data Engineering",
+        "shortLabel": "Data Eng",
+        "fileSlug": "Data_Engineer",
+        "resumeHeadline": "Data Engineer  |  Databricks, Apache Spark & Delta Lake Pipelines",
+        "heroKicker": [
+          "Data Engineering",
+          "Databricks · Spark · SQL",
+          "Bengaluru"
+        ],
+        "heroHeadline": "Databricks pipelines and fleet apps for ~70,000 connected trucks.",
+        "heroLead": "I work on Spark ETL pipelines scaled from 50-vehicle prototypes up to 175k+ tested vehicle capacity (~70k live trucks), replace dedicated BI servers with SQL Warehouse apps, and test OTA ingestion on hardware rigs.",
+        "heroMetrics": [
+          {
+            "value": "~70,000",
+            "label": "Live Trucks in Daily ETL",
+            "countTo": 70000,
+            "countPrefix": "~",
+            "countSuffix": ""
+          },
+          {
+            "value": "50 -> 175k+",
+            "label": "Tested ETL Vehicle Capacity"
+          },
+          {
+            "value": "~3x Faster",
+            "label": "SQL Warehouse vs Power BI"
+          },
+          {
+            "value": "50%+ Lower",
+            "label": "Dedicated BI Compute Cost"
+          }
+        ],
+        "resumeSummary": "Software and Data Engineer at Daimler Truck (DTICI) working on Databricks Apache Spark pipelines scaled from 50-vehicle baselines to 175k+ capacity across ~70,000 connected trucks. Replaced $5k-$8k/mo Power BI dedicated servers with direct SQL Warehouse + FastAPI apps (~3x faster, 50%+ lower spend), alongside PostgreSQL, Facebook Prophet (~70% accuracy), and Apache Superset.",
+        "keywords": "Data Engineer, Databricks, Apache Spark, Delta Lake, SQL Warehouse, Python, SQL, ETL Pipelines, Power BI, Apache Superset, PostgreSQL",
+        "skillCategoryOrder": [
+          "Big Data, ML & Analytics",
+          "Languages & App Development",
+          "Infrastructure, Linux & Virtualization"
+        ],
+        "experienceOverrides": {
+          "software-engineer-daimler-dtici": {
+            "priority": 1,
+            "bulletPoints": [
+              "Moved fleet analytics off $5k-$8k/mo dedicated Power BI servers onto cached Databricks SQL Warehouse queries (~3x faster loads, 50%+ lower BI compute spend).",
+              "Wrote and verified Python and C++ OTA telemetry extraction jobs on hardware test rigs before releasing updates to ~70,000 live trucks.",
+              "Built internal FastAPI and React views over Delta tables, helping ADAS developers and executives ship UI changes 3-4x faster."
+            ],
+            "skills": ["Databricks", "Apache Spark", "Delta Lake", "SQL", "Python", "FastAPI", "OTA Telemetry"]
+          },
+          "data-analyst-get-daimler-dtici": {
+            "priority": 2,
+            "bulletPoints": [
+              "Refactored duplicated Spark and SQL ETL scripts originally written for 50 vehicles so daily pipelines scale past a 10x limit to 175k+ vehicle capacity across ~70,000 live trucks.",
+              "Simplified lookup tables and lightweight Delta views to clear 10x scale Power BI refresh bottlenecks prior to moving into software engineering."
+            ],
+            "skills": ["Apache Spark", "Databricks", "SQL", "Power BI", "Python", "ETL Optimization"]
+          },
+          "data-science-intern-multiplier": {
+            "priority": 3,
+            "bulletPoints": [
+              "Trained Facebook Prophet time-series models in Python (~70% accuracy) alongside 1 executive Power BI report for staffing forecasts."
+            ],
+            "skills": ["Python", "Facebook Prophet", "Power BI", "Time Series", "SQL"]
+          },
+          "data-science-intern-goalkeep": {
+            "priority": 4,
+            "bulletPoints": [
+              "Owned 1 end-to-end Apache Superset dashboard across 3 civic analytics projects, pulling Kobo Toolbox, Glide Apps, and AppSheet into SQL."
+            ],
+            "skills": ["Apache Superset", "SQL", "Python", "Kobo Toolbox", "AppSheet"]
+          },
+          "lead-volunteer-udayan-care": {
+            "priority": 5,
+            "bulletPoints": [
+              "Replaced manual Excel tracking (~30% time saved for 5-6 field coordinators) and avoided ₹2k-5k/mo cloud fees by modeling 20-30 active Care Leaver records in self-hosted NocoDB over Postgres."
+            ],
+            "skills": ["NocoDB", "PostgreSQL", "REST APIs", "Proxmox VE", "Node.js"]
+          },
+          "digital-verification-stmicroelectronics": {
+            "priority": 6,
+            "bulletPoints": [
+              "Scripted Python regression checks (~1 hour/day saved) and benchmarked GPU SAT solvers up to 10x higher constraint difficulty."
+            ],
+            "skills": ["Python", "GPU Acceleration", "SAT Solvers", "Automation"]
+          }
+        },
+        "projectOrder": [
+          "dtici-connected-truck-databricks",
+          "fiorejoy",
+          "fit-udayan-care",
+          "sixsortalgocuda"
+        ]
+      },
+      {
+        "id": "software-development",
+        "label": "Software Development",
+        "shortLabel": "Software Dev",
+        "fileSlug": "Software_Engineer",
+        "resumeHeadline": "Software Engineer  |  FastAPI, React, Flutter & Backend Systems",
+        "heroKicker": [
+          "Software Development",
+          "FastAPI · React · Flutter · Go",
+          "Bengaluru"
+        ],
+        "heroHeadline": "Internal Databricks web apps and solo volunteer software.",
+        "heroLead": "I build FastAPI and React applications at Daimler Truck (~3x faster queries, 3-4x faster UI shipping) alongside the solo Google Play Flutter app for Udayan Care NGO.",
+        "heroMetrics": [
+          {
+            "value": "~3x Faster",
+            "label": "FastAPI + React UI vs Power BI"
+          },
+          {
+            "value": "3-4x",
+            "label": "UI Iteration Speed with AI"
+          },
+          {
+            "value": "₹1L+ Saved",
+            "label": "Solo Udayan Care App Build"
+          },
+          {
+            "value": "20-30 MAU",
+            "label": "Active on Google Play"
+          }
+        ],
+        "resumeSummary": "Software Engineer at Daimler Truck (DTICI) building internal FastAPI and React Databricks apps (~3x faster queries, 50%+ lower BI compute spend, 3-4x faster UI iterations) and C++/Python OTA software. Sole volunteer developer behind the bilingual FiT-UC Google Play app saving ₹1L+ agency fees and ~30% field Excel entry time.",
+        "keywords": "Software Engineer, FastAPI, React, TypeScript, Flutter, Dart, Python, Node.js, Go, PostgreSQL, REST APIs, WebSockets",
+        "skillCategoryOrder": [
+          "Languages & App Development",
+          "Infrastructure, Linux & Virtualization",
+          "Big Data, ML & Analytics"
+        ],
+        "experienceOverrides": {
+          "software-engineer-daimler-dtici": {
+            "priority": 1,
+            "bulletPoints": [
+              "Moved internal reporting off $5k-$8k/mo dedicated Power BI servers onto a custom FastAPI + React Databricks app, dropping load times ~3x and compute cost 50%+.",
+              "Delivered ADAS and executive frontend views 3-4x faster by pairing AI-assisted React iterations with direct cached SQL Warehouse queries.",
+              "Tested Python and C++ OTA collection software on hardware test rigs before releasing updates to ~70,000 connected trucks."
+            ],
+            "skills": ["FastAPI", "React", "Node.js", "Python", "C++", "Databricks", "Test Rigs"]
+          },
+          "lead-volunteer-udayan-care": {
+            "priority": 2,
+            "bulletPoints": [
+              "Developed and launched the FiT-UC Flutter app solo with a self-hosted Node.js auth relay, avoiding ₹1,00,000+ agency quotes and ₹2,000-5,000/mo cloud bills.",
+              "Trimmed manual Excel entry roughly 30% for 5-6 NGO field coordinators serving 20-30 monthly active users via 3 Google Play modules."
+            ],
+            "skills": ["Flutter", "Dart", "Node.js", "NocoDB", "REST APIs", "Gotify"]
+          },
+          "data-analyst-get-daimler-dtici": {
+            "priority": 3,
+            "bulletPoints": [
+              "Refactored duplicate Python and SQL ETL scripts originally written for 50 vehicles into modular pipelines tested to 175k+ vehicles across ~70,000 live trucks.",
+              "Cleaned up lookup schemas to clear 10x scale BI refresh slowdowns before transitioning full-time into software engineering."
+            ],
+            "skills": ["Python", "SQL", "Apache Spark", "Databricks", "Refactoring"]
+          },
+          "digital-verification-stmicroelectronics": {
+            "priority": 4,
+            "bulletPoints": [
+              "Scripted Python regression checks (~1 hour/day saved) and benchmarked GPU SAT solvers up to 10x higher constraint difficulty."
+            ],
+            "skills": ["Python", "Automation", "C++", "SAT Solvers", "VHDL"]
+          }
+        },
+        "projectOrder": [
+          "fit-udayan-care",
+          "dtici-connected-truck-databricks",
+          "fiorejoy",
+          "avignatattva",
+          "pokeroyale"
+        ]
+      },
+      {
+        "id": "devops-engineering",
+        "label": "DevOps Engineering",
+        "shortLabel": "DevOps / Infra",
+        "fileSlug": "DevOps_Platform_Engineer",
+        "resumeHeadline": "DevOps & Platform Engineer  |  Linux, Proxmox VE, K3s & Zero-Trust",
+        "heroKicker": [
+          "DevOps & Linux",
+          "Proxmox VE · K3s · Networking",
+          "Bengaluru"
+        ],
+        "heroHeadline": "Self-hosted Proxmox infrastructure, K3s networking, and leaner cloud compute.",
+        "heroLead": "I run NGO production containers on Proxmox VE 8 to avoid ₹2k-5k/mo cloud fees, moved enterprise BI off $5k-$8k/mo dedicated servers, and run 6-node K3s experiments at home.",
+        "heroMetrics": [
+          {
+            "value": "6-Node K3s",
+            "label": "3 Masters + 3 Workers · MetalLB"
+          },
+          {
+            "value": "50%+ Lower",
+            "label": "Serverless vs Dedicated BI Hosts"
+          },
+          {
+            "value": "₹2k-5k/mo Saved",
+            "label": "Self-Hosted Proxmox VE 8 LXC"
+          },
+          {
+            "value": "~1 hr/day Saved",
+            "label": "Automated Python Test Checks"
+          }
+        ],
+        "resumeSummary": "Engineer combining cloud compute savings (moving off $5k-$8k/mo dedicated BI servers for 50%+ lower cost) with bare-metal Linux, 3-node Proxmox VE HA, Proxmox Backup Server, and a 6-node K3s cluster behind MetalLB, Traefik, and Cloudflare Tunnels.",
+        "keywords": "DevOps Engineer, Linux, Proxmox VE, Kubernetes, K3s, Docker, MetalLB, Traefik, NGINX, Tailscale, Cloudflare Tunnels, Python Automation",
+        "includeHomelabInResume": true,
+        "maxExperiencesInResume": 3,
+        "maxProjectsInResume": 2,
+        "skillCategoryOrder": [
+          "Infrastructure, Linux & Virtualization",
+          "Languages & App Development",
+          "Big Data, ML & Analytics"
+        ],
+        "experienceOverrides": {
+          "software-engineer-daimler-dtici": {
+            "priority": 1,
+            "bulletPoints": [
+              "Moved analytics compute off $5k-$8k/mo dedicated Power BI servers onto serverless Databricks Apps, cutting BI spend 50%+ and speeding queries ~3x.",
+              "Tested daily Python and C++ OTA ingestion jobs on hardware test rigs across ~70,000 connected trucks ahead of fleet rollouts."
+            ],
+            "skills": ["Databricks Compute", "Python", "C++", "OTA Automation", "Test Rigs", "SQL Warehouse"]
+          },
+          "lead-volunteer-udayan-care": {
+            "priority": 2,
+            "bulletPoints": [
+              "Avoided ₹2,000-5,000/mo cloud bills and ₹1L+ agency fees by hosting NocoDB, Node.js, and Gotify Proxmox LXC containers behind Cloudflare Tunnels.",
+              "Protected live NGO containers (20-30 MAU, ~30% Excel time saved for 5-6 coordinators) with scheduled deduplicated Proxmox Backup Server snapshots."
+            ],
+            "skills": ["Proxmox VE 8", "LXC", "Proxmox Backup Server", "Cloudflare Tunnels", "Tailscale", "Gotify"]
+          },
+          "digital-verification-stmicroelectronics": {
+            "priority": 3,
+            "bulletPoints": [
+              "Scripted regression suites in Python to save ~1 hour/day of manual work while benchmarking GPU SAT solvers at 10x constraint difficulty."
+            ],
+            "skills": ["Python", "CI Automation", "Linux", "GPU Solvers"]
+          },
+          "data-analyst-get-daimler-dtici": {
+            "priority": 4,
+            "bulletPoints": [
+              "Expanded Spark ETL throughput from 50 test vehicles to 175k+ vehicle capacity across ~70,000 live trucks by consolidating redundant scripts."
+            ],
+            "skills": ["Apache Spark", "ETL Scaling", "SQL", "Python"]
+          },
+          "iot-intern-iit-delhi": {
+            "priority": 5,
+            "bulletPoints": [
+              "Fixed ARM Linux cross-compilation and dependency issues to run the Alexa Voice SDK on a Raspberry Pi smart mirror."
+            ],
+            "skills": ["Linux", "ARM Embedded", "Raspberry Pi", "AWS"]
+          }
+        },
+        "projectOrder": [
+          "ha-nginx-proxmox-k3s",
+          "fit-udayan-care",
+          "dtici-connected-truck-databricks",
+          "fiorejoy"
+        ]
+      }
+    ]
   },
   "seo": {
     "siteUrl": "https://diivvansh.com",

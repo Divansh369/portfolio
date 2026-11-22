@@ -48,5 +48,5 @@ Resume-PDF: https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.
 CV-PDF: https://ais-dev-7m5nduphe3qajdqo6qpu3t-647022624813.asia-southeast1.run.app/api/cv.pdf
 
 # Verified Overview
-Summary: Software Engineer at Daimler Truck Innovation Center India (DTICI) architecting Databricks Spark ETL pipelines for ~70,000 connected trucks, FastAPI + React internal web apps, and scheduled OTA collection scripts verified on test rigs. Lead volunteer developer for Udayan Care NGO shipping the bilingual FiT-UC Flutter app on Google Play backed by self-hosted Proxmox LXC and K3s infrastructure.
+Summary: Software Engineer at Daimler Truck (DTICI) scaling modular Databricks Spark ETL from 50 to 175k+ vehicle capacity across ~70,000 trucks and cutting BI costs 50%+ via a ~3x faster FastAPI + React Databricks App. Lead Udayan Care volunteer saving ₹1L+ agency spend and 30% team Excel time via a Google Play Flutter app on Proxmox LXC.
 Core-Technologies: Python, C++ & CUDA, SQL & PostgreSQL, Dart & Flutter, TypeScript & JavaScript, FastAPI & Node.js, React, Go (Systems & Games), Java, Databricks, Apache Spark, Delta Lake, OTA Fleet Data Collection, Pandas & NumPy, Scikit-learn & TensorFlow, Power BI & Apache Superset, Kobo Toolbox & Glide Apps, Proxmox VE & PBS Backups

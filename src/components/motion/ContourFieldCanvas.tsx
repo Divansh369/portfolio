@@ -236,11 +236,11 @@ export const ContourFieldCanvas: React.FC<ContourFieldCanvasProps> = ({ classNam
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
-      // 1. Deep Midnight Foundation
-      ctx.fillStyle = '#040711';
+      // 1. Deep Obsidian-Emerald Foundation
+      ctx.fillStyle = '#040b07';
       ctx.fillRect(0, 0, W, H);
 
-      // Ambient drifting deep cobalt & cyan depth pools
+      // Ambient drifting emerald & warm amber-orange depth pools
       const driftX1 = Math.sin(elapsed * 0.14) * 58;
       const driftY1 = Math.cos(elapsed * 0.11) * 42;
       const driftX2 = Math.cos(elapsed * 0.12) * 68;
@@ -254,9 +254,9 @@ export const ContourFieldCanvas: React.FC<ContourFieldCanvasProps> = ({ classNam
         H * 0.16 + driftY1,
         Math.max(W, H) * 0.62
       );
-      g1.addColorStop(0, 'rgba(37, 99, 235, 0.17)');
-      g1.addColorStop(0.45, 'rgba(29, 78, 216, 0.065)');
-      g1.addColorStop(1, 'rgba(4, 7, 17, 0)');
+      g1.addColorStop(0, 'rgba(16, 185, 129, 0.17)');
+      g1.addColorStop(0.45, 'rgba(5, 150, 105, 0.065)');
+      g1.addColorStop(1, 'rgba(4, 11, 7, 0)');
       ctx.fillStyle = g1;
       ctx.fillRect(0, 0, W, H);
 
@@ -268,17 +268,17 @@ export const ContourFieldCanvas: React.FC<ContourFieldCanvasProps> = ({ classNam
         H * 0.54 + driftY2,
         Math.max(W, H) * 0.56
       );
-      g2.addColorStop(0, 'rgba(6, 182, 212, 0.13)');
-      g2.addColorStop(0.5, 'rgba(14, 116, 144, 0.045)');
-      g2.addColorStop(1, 'rgba(4, 7, 17, 0)');
+      g2.addColorStop(0, 'rgba(249, 115, 22, 0.12)');
+      g2.addColorStop(0.5, 'rgba(217, 119, 6, 0.045)');
+      g2.addColorStop(1, 'rgba(4, 11, 7, 0)');
       ctx.fillStyle = g2;
       ctx.fillRect(0, 0, W, H);
 
       if (ptr.over > 0.01 && tier.pointerWake) {
         const gp = ctx.createRadialGradient(ptr.sx, ptr.sy, 0, ptr.sx, ptr.sy, 340);
-        gp.addColorStop(0, `rgba(34, 211, 238, ${(0.095 * ptr.over).toFixed(4)})`);
-        gp.addColorStop(0.45, `rgba(37, 99, 235, ${(0.05 * ptr.over).toFixed(4)})`);
-        gp.addColorStop(1, 'rgba(4, 7, 17, 0)');
+        gp.addColorStop(0, `rgba(250, 204, 21, ${(0.09 * ptr.over).toFixed(4)})`);
+        gp.addColorStop(0.45, `rgba(16, 185, 129, ${(0.055 * ptr.over).toFixed(4)})`);
+        gp.addColorStop(1, 'rgba(4, 11, 7, 0)');
         ctx.fillStyle = gp;
         ctx.fillRect(0, 0, W, H);
       }
@@ -324,7 +324,7 @@ export const ContourFieldCanvas: React.FC<ContourFieldCanvasProps> = ({ classNam
         const iso = isoLevels[lIdx];
         ctx.beginPath();
         ctx.strokeStyle =
-          lIdx % 2 === 0 ? 'rgba(148, 163, 184, 0.068)' : 'rgba(34, 211, 238, 0.058)';
+          lIdx % 2 === 0 ? 'rgba(167, 243, 208, 0.068)' : 'rgba(250, 204, 21, 0.055)';
 
         for (let r = 0; r < rows - 1; r++) {
           const y0 = r * cell;
@@ -373,7 +373,7 @@ export const ContourFieldCanvas: React.FC<ContourFieldCanvasProps> = ({ classNam
         if (alpha > 0.005) {
           ctx.beginPath();
           ctx.arc(rp.x, rp.y, radius, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(34, 211, 238, ${alpha.toFixed(3)})`;
+          ctx.strokeStyle = `rgba(251, 191, 36, ${alpha.toFixed(3)})`;
           ctx.lineWidth = 1.25;
           ctx.stroke();
         }
@@ -451,10 +451,13 @@ export const ContourFieldCanvas: React.FC<ContourFieldCanvasProps> = ({ classNam
               total > 0.42 && parityFilled
                 ? 2.6 + total * 3.0
                 : 1.5 + total * 2.2;
-            ctx.fillStyle = `rgba(56, 189, 248, ${(0.12 + total * 0.46).toFixed(3)})`;
+            ctx.fillStyle =
+              total > 0.42
+                ? `rgba(251, 191, 36, ${(0.14 + total * 0.44).toFixed(3)})`
+                : `rgba(52, 211, 153, ${(0.12 + total * 0.44).toFixed(3)})`;
             ctx.fillRect(x - side * 0.5, y - side * 0.5, side, side);
           } else {
-            ctx.fillStyle = 'rgba(148, 163, 184, 0.12)';
+            ctx.fillStyle = 'rgba(167, 243, 208, 0.1)';
             ctx.fillRect(x - 0.65, y - 0.65, 1.3, 1.3);
           }
         }

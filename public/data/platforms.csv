@@ -1,7 +1,7 @@
 name,logo
-Proxmox VE & PBS,/images/logos/proxmox.svg
-Debian · Kali · Alpine Linux,/images/logos/linux.svg
-Docker & Compose,docker
+Proxmox VE & PBS,proxmox
+Debian · Kali · Alpine Linux,linux
+Docker & Compose,/images/logos/docker.svg
 K3s & NGINX,k3s
 MetalLB & Traefik,
 Tailscale WireGuard,

@@ -12,7 +12,7 @@ interface CornerBracketsProps {
  * expansion on parent `.group` hover (`--bracket-spread` effect).
  */
 export const CornerBrackets: React.FC<CornerBracketsProps> = ({
-  className = 'text-white/25 group-hover:text-cyan-400/85',
+  className = 'text-white/25 group-hover:text-amber-400/85',
   size = 10,
   hideBottomRight = false,
 }) => {

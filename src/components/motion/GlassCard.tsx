@@ -59,8 +59,8 @@ export const GlassCard: React.FC<GlassCardProps> = ({
   const rotateY = useSpring(rotateYRaw, springConfig);
   const glareAngle = useSpring(glareAngleRaw, { stiffness: 180, damping: 26 });
 
-  const spotlightBg = useMotionTemplate`radial-gradient(420px circle at ${mouseX}px ${mouseY}px, rgba(56, 189, 248, 0.22), rgba(37, 99, 235, 0.08) 45%, transparent 72%)`;
-  const specularGlare = useMotionTemplate`linear-gradient(${glareAngle}deg, transparent 20%, rgba(255, 255, 255, 0.08) 48%, rgba(56, 189, 248, 0.12) 52%, transparent 80%)`;
+  const spotlightBg = useMotionTemplate`radial-gradient(420px circle at ${mouseX}px ${mouseY}px, rgba(16, 185, 129, 0.22), rgba(249, 115, 22, 0.08) 45%, transparent 72%)`;
+  const specularGlare = useMotionTemplate`linear-gradient(${glareAngle}deg, transparent 20%, rgba(255, 255, 255, 0.08) 48%, rgba(250, 204, 21, 0.12) 52%, transparent 80%)`;
 
   const canTilt = tilt && !prefersReduced;
 
@@ -137,14 +137,14 @@ export const GlassCard: React.FC<GlassCardProps> = ({
             d="M 2 0.2 H 98 Q 99.8 0.2 99.8 2 V 93 L 94 99.8 H 2 Q 0.2 99.8 0.2 98 V 2 Q 0.2 0.2 2 0.2 Z"
             fill="none"
             vectorEffect="non-scaling-stroke"
-            className="stroke-white/15 group-hover:stroke-cyan-400/45 transition-colors duration-300"
+            className="stroke-white/15 group-hover:stroke-amber-400/50 transition-colors duration-300"
             strokeWidth="1"
           />
           <path
             d="M 99.5 92 L 93.2 99.5"
             fill="none"
             vectorEffect="non-scaling-stroke"
-            className="stroke-cyan-400/50 group-hover:stroke-cyan-300 transition-colors duration-300"
+            className="stroke-amber-400/55 group-hover:stroke-yellow-300 transition-colors duration-300"
             strokeWidth="1.5"
           />
         </svg>

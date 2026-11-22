@@ -490,9 +490,9 @@ export function createMorphMaterials(
     envMapIntensity: 0.22,
   });
 
-  // Toggleable subtle sky-blue CAD wireframe overlay
+  // Toggleable subtle emerald CAD wireframe overlay
   const wireMaterial = new THREE.MeshBasicMaterial({
-    color: new THREE.Color('#38bdf8'),
+    color: new THREE.Color('#34d399'),
     wireframe: true,
     transparent: true,
     opacity: 0.16,

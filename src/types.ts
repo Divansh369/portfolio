@@ -106,6 +106,9 @@ export interface SkillIconTile {
   githubUrl?: string;
   connections?: string[];
   isFoss?: boolean;
+  proficiency?: number;
+  years?: string;
+  levelLabel?: string;
 }
 
 export interface Social {
@@ -399,6 +402,7 @@ export interface PortfolioData {
     homelabCvBullets?: string[];
     keywords?: string;
   };
+  factBank?: FactBankConfig;
   seo?: {
     siteUrl?: string;
     shortName?: string;
@@ -409,4 +413,51 @@ export interface PortfolioData {
       answer: string;
     }>;
   };
+}
+
+export interface RoleFactExperienceOverride {
+  roleLabel?: string;
+  bulletPoints: string[];
+  skills?: string[];
+  priority?: number;
+}
+
+export interface RoleFactProjectOverride {
+  description?: string;
+  details?: string[];
+  badge?: string;
+}
+
+export interface RoleProfileConfig {
+  id: string;
+  label: string;
+  shortLabel?: string;
+  fileSlug?: string;
+  resumeHeadline: string;
+  heroKicker?: string[];
+  heroHeadline?: string;
+  heroLead?: string;
+  heroMetrics?: Array<{
+    value: string;
+    label: string;
+    countTo?: number;
+    countPrefix?: string;
+    countSuffix?: string;
+  }>;
+  resumeSummary: string;
+  summary?: string;
+  keywords?: string;
+  skillCategoryOrder?: string[];
+  experienceOverrides?: Record<string, RoleFactExperienceOverride>;
+  projectOrder?: string[];
+  projectOverrides?: Record<string, RoleFactProjectOverride>;
+  includeHomelabInResume?: boolean;
+  includeHomelabInCv?: boolean;
+  maxExperiencesInResume?: number;
+  maxProjectsInResume?: number;
+}
+
+export interface FactBankConfig {
+  defaultRoleId?: string;
+  roles: RoleProfileConfig[];
 }

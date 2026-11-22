@@ -94,7 +94,7 @@ export const TiltGlassCard: React.FC<TiltGlassCardProps> = ({
           className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
           style={{
             opacity: glare.opacity,
-            background: `radial-gradient(circle 320px at ${glare.x}% ${glare.y}%, rgba(56, 189, 248, 0.35), transparent 75%)`,
+            background: `radial-gradient(circle 320px at ${glare.x}% ${glare.y}%, rgba(250, 204, 21, 0.28), transparent 75%)`,
           }}
         />
       )}

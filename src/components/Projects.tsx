@@ -24,6 +24,7 @@ import RepoImage from './common/RepoImage';
 import BrandMark from './icons/BrandMarks';
 import { ProgressMilestone, Project, ProjectStatus } from '../types';
 import { resolveItemId } from '../utils/itemId';
+import { splitQuantifiedSegments } from '../utils/atsAnalyzer';
 
 export type { Project };
 
@@ -31,6 +32,7 @@ interface ProjectsProps {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  activeRoleLabel?: string;
   projects: Project[];
   progressMilestones?: ProgressMilestone[];
   showArchivedByDefault?: boolean;
@@ -69,7 +71,7 @@ const getProjectLogoFallback = (project: Project) => {
     return <BrandMark brand={firstStack} className="w-6 h-6" />;
   }
   const ProjectIcon = getProjectIcon(project);
-  return <ProjectIcon className="w-5 h-5 text-cyan-300" aria-hidden="true" />;
+  return <ProjectIcon className="w-5 h-5 text-emerald-300" aria-hidden="true" />;
 };
 
 const isArchivedStatus = (status?: ProjectStatus): boolean =>
@@ -112,6 +114,7 @@ export const Projects: React.FC<ProjectsProps> = ({
   eyebrow = 'Selected Works',
   title,
   subtitle,
+  activeRoleLabel,
   projects,
   progressMilestones = [],
   showArchivedByDefault = true,
@@ -228,11 +231,11 @@ export const Projects: React.FC<ProjectsProps> = ({
     : visibleOrderedProjects.length - archivedCount;
 
   return (
-    <section id="projects" className="py-20 border-b border-white/[0.08]">
+    <section id="projects" className="py-24 sm:py-28 border-b border-white/[0.08]">
       {/* Section Header & Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
         <div>
-          <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
+          <span className="inline-flex flex-wrap items-center gap-2 text-xs font-mono text-emerald-400/90 mb-2">
             <FolderGit2 className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{eyebrow}</span>
             <span className="text-zinc-600" aria-hidden="true">
@@ -241,6 +244,12 @@ export const Projects: React.FC<ProjectsProps> = ({
             <span className="text-zinc-400 tabular-nums">
               {filteredProjects.length} of {activePoolCount} builds
             </span>
+            {activeRoleLabel && (
+              <>
+                <span className="text-zinc-600" aria-hidden="true">·</span>
+                <span className="text-zinc-300">Prioritized for {activeRoleLabel}</span>
+              </>
+            )}
           </span>
           <SplitText
             as="h2"
@@ -279,7 +288,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                         <motion.span
                           layoutId="project-filter-active-bg"
                           transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90 shadow-[0_4px_16px_-4px_rgba(37,99,235,0.6),inset_0_1px_0_rgba(255,255,255,0.2)]"
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600 shadow-[0_4px_16px_-4px_rgba(16,185,129,0.55),inset_0_1px_0_rgba(255,255,255,0.2)]"
                         />
                       )}
                       <Icon className="w-3.5 h-3.5 relative z-10 shrink-0" aria-hidden="true" />
@@ -299,12 +308,12 @@ export const Projects: React.FC<ProjectsProps> = ({
                 aria-pressed={showArchived}
                 className={`px-3 py-2 min-h-[42px] text-xs font-mono rounded-xl border transition-colors whitespace-nowrap shrink-0 cursor-pointer inline-flex items-center gap-1.5 ${
                   showArchived
-                    ? 'glass-panel-subtle border-cyan-400/30 text-zinc-200 hover:text-white'
+                    ? 'glass-panel-subtle border-amber-400/35 text-zinc-200 hover:text-white'
                     : 'glass-panel-subtle border-white/10 text-zinc-400 hover:text-zinc-100'
                 }`}
                 title="Toggle visibility of archived and unmaintained projects"
               >
-                <Archive className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
+                <Archive className="w-3.5 h-3.5 text-amber-400/85" aria-hidden="true" />
                 <span>
                   {showArchived
                     ? `Showing Archived (${archivedCount})`
@@ -331,7 +340,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                     searchInputRef.current?.blur();
                   }
                 }}
-                className="px-3.5 py-2 pl-9 pr-8 min-h-[42px] text-xs glass-panel-subtle rounded-xl text-zinc-100 placeholder:text-zinc-500 focus:border-cyan-400/50 w-full sm:w-52 transition-colors"
+                className="px-3.5 py-2 pl-9 pr-8 min-h-[42px] text-xs glass-panel-subtle rounded-xl text-zinc-100 placeholder:text-zinc-500 focus:border-amber-400/50 w-full sm:w-52 transition-colors"
               />
               {search && (
                 <button
@@ -349,7 +358,7 @@ export const Projects: React.FC<ProjectsProps> = ({
       </div>
 
       {/* Responsive Frosted Glass Grid with Sibling-Dimming Hover Focus */}
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project, index) => {
             const isGithub = project.url && project.url.includes('github.com');
@@ -388,7 +397,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                 >
                   {/* Visual Banner Artwork Header */}
                   {hasBanner && (
-                    <div className="relative h-40 sm:h-44 w-full overflow-hidden border-b border-white/[0.08] bg-[#060a14]">
+                    <div className="relative h-40 sm:h-44 w-full overflow-hidden border-b border-white/[0.08] bg-[#05120b]">
                       <RepoImage
                         src={project.logo}
                         alt={`${project.name} preview`}
@@ -397,27 +406,24 @@ export const Projects: React.FC<ProjectsProps> = ({
                           isDeemphasized ? 'grayscale-[30%]' : ''
                         }`}
                         fallback={
-                          <div className="w-full h-full bg-gradient-to-br from-slate-900 via-[#0a1428] to-cyan-950/50 flex items-center justify-center">
+                          <div className="w-full h-full bg-gradient-to-br from-[#071810] via-[#06140d] to-emerald-950/60 flex items-center justify-center">
                             {getProjectLogoFallback(project)}
                           </div>
                         }
                       />
                       <div
                         aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#080d1a] via-[#080d1a]/25 to-transparent"
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#05120b] via-[#05120b]/25 to-transparent"
                       />
                     </div>
                   )}
 
-                  <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
                     <div>
                       {/* Kicker + Optional Lifecycle Status Label */}
                       <div className="flex items-center justify-between gap-2 text-xs font-mono text-zinc-400 mb-3">
-                        <span className="inline-flex items-center gap-2 truncate">
-                          <span className="truncate">
-                            {project.category || (isGithub ? 'Open Source' : 'System Build')}
-                            {project.badge ? ` · ${project.badge}` : ''}
-                          </span>
+                        <span className="truncate">
+                          {project.category || (isGithub ? 'Open Source' : 'System Build')}
                         </span>
                         {statusMeta && (
                           <span
@@ -433,7 +439,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                       </div>
 
                       {/* Title Row with Emblem Logo Thumbnail on compact cards */}
-                      <div className="flex items-center gap-3 mb-2.5">
+                      <div className="flex items-center gap-3 mb-3">
                         {!hasBanner && (
                           <RepoImage
                             src={project.logo}
@@ -447,36 +453,38 @@ export const Projects: React.FC<ProjectsProps> = ({
                             fallback={getProjectLogoFallback(project)}
                           />
                         )}
-                        <h3 className="font-display text-lg sm:text-xl font-bold text-zinc-50 tracking-tight group-hover:text-cyan-50 transition-colors">
+                        <h3 className="font-display text-lg sm:text-xl font-bold text-zinc-50 tracking-tight group-hover:text-amber-50 transition-colors">
                           {project.name}
                         </h3>
                       </div>
 
-                      {/* Description */}
-                      <p className="text-sm text-zinc-300/90 leading-relaxed mb-5">
-                        {project.description}
+                      {/* Description with Quantified Outcome Highlights */}
+                      <p className="text-sm text-zinc-300/90 leading-relaxed mb-6">
+                        {splitQuantifiedSegments(project.description).map((seg, sIdx) =>
+                          seg.highlight ? (
+                            <strong key={sIdx} className="font-semibold text-zinc-50">
+                              {seg.text}
+                            </strong>
+                          ) : (
+                            <React.Fragment key={sIdx}>{seg.text}</React.Fragment>
+                          )
+                        )}
                       </p>
                     </div>
 
                     <div>
-                      {/* Stack with Clean Subtle Brand Marks */}
-                      {project.stack && (
-                        <div className="text-xs font-mono text-zinc-400 mb-5 flex flex-wrap gap-y-1.5 items-center">
-                          {project.stack.split('|').map((tech, tIdx) => (
-                            <React.Fragment key={tech}>
-                              {tIdx > 0 && (
-                                <span className="mx-1.5 text-zinc-600" aria-hidden="true">
-                                  /
-                                </span>
-                              )}
-                              <span className="inline-flex items-center gap-1">
-                                <BrandMark brand={tech} className="w-3.5 h-3.5 shrink-0 opacity-90" />
-                                <span>{tech}</span>
-                              </span>
-                            </React.Fragment>
-                          ))}
-                        </div>
-                      )}
+                      {/* Top Stack Summary as Clean Typography */}
+                      {project.stack && (() => {
+                        const allStack = project.stack.split('|').map((s) => s.trim()).filter(Boolean);
+                        const previewStack = allStack.slice(0, 4);
+                        const extraCount = allStack.length - previewStack.length;
+                        return (
+                          <div className="text-xs font-mono text-zinc-400 mb-5 truncate">
+                            {previewStack.join(' · ')}
+                            {extraCount > 0 ? ` · +${extraCount}` : ''}
+                          </div>
+                        );
+                      })()}
 
                       {/* Card Footer Actions */}
                       <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2 text-xs">
@@ -488,7 +496,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                           >
                             <span>View Details</span>
                             <ArrowRight
-                              className="w-3.5 h-3.5 text-cyan-400 group-hover/btn:translate-x-1 transition-transform"
+                              className="w-3.5 h-3.5 text-emerald-400 group-hover/btn:translate-x-1 transition-transform"
                               aria-hidden="true"
                             />
                           </button>
@@ -504,7 +512,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                                   milestones: itemMilestones,
                                 })
                               }
-                              className="font-mono text-[11px] text-cyan-300/90 hover:text-cyan-200 transition-colors inline-flex items-center gap-1.5 min-h-[40px] py-1 cursor-pointer"
+                              className="font-mono text-[11px] text-amber-300/90 hover:text-amber-200 transition-colors inline-flex items-center gap-1.5 min-h-[40px] py-1 cursor-pointer"
                               title="Open chronological build progress gallery"
                             >
                               <Images className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
@@ -518,7 +526,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1 min-h-[40px] py-1 pr-2 whitespace-nowrap shrink-0"
+                            className="font-semibold text-amber-300 hover:text-amber-200 transition-colors inline-flex items-center gap-1 min-h-[40px] py-1 pr-2 whitespace-nowrap shrink-0"
                           >
                             <span>
                               {isPlayStore ? 'Google Play' : isGithub ? 'GitHub' : 'Visit Website'}

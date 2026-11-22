@@ -49,7 +49,7 @@ const defaultEvolution: HomelabEvolutionStage[] = [
     stage: 'Phase 01 · Bare-Metal Linux & Containers',
     title: 'Single-Node Linux & Docker Compose',
     summary:
-      'Started self-hosting on bare-metal Linux hosts, orchestrating containerized services manually with Docker Engine and Docker Compose.',
+      'Started self-hosting on bare-metal Linux servers, running containerized apps directly with Docker Engine and Docker Compose.',
     learnings: [
       'Configured Linux networking, firewall rules, systemd daemons, and persistent volume permissions.',
       'Automated repeatable deployments and log rotation across local services.',
@@ -60,7 +60,7 @@ const defaultEvolution: HomelabEvolutionStage[] = [
     stage: 'Phase 02 · Virtualization & Automated Backups',
     title: 'Multi-Node Virtualization & Snapshots',
     summary:
-      'Evolved into structured virtualization with separated container and VM workloads plus automated incremental backups.',
+      'Moved to structured virtualization with separate container and VM workloads plus automated incremental backups.',
     learnings: [
       'Configured quorum voting, failover groups, and live workload migration across nodes.',
       'Verified disaster recovery restores with scheduled snapshot retention policies.',
@@ -68,13 +68,13 @@ const defaultEvolution: HomelabEvolutionStage[] = [
     stack: 'Hypervisor / HA Quorum / LXC / KVM',
   },
   {
-    stage: 'Phase 03 · Consolidated Host & Cluster Orchestration',
+    stage: 'Phase 03 · Consolidated Host & Cluster Management',
     title: 'Production Containers & Kubernetes Cluster',
     summary:
-      'Unified workloads onto a primary low-power server hosting production containers alongside a multi-node Kubernetes cluster.',
+      'Unified workloads onto one low-power primary server hosting LXC app containers alongside a multi-node Kubernetes cluster.',
     learnings: [
-      'Operates production backend APIs and databases inside isolated containers.',
-      'Runs ingress routing and load-balanced pods behind zero-trust tunnels and WireGuard meshes.',
+      'Runs production backend APIs and databases inside isolated containers.',
+      'Routes ingress traffic and load-balanced pods through zero-trust tunnels and WireGuard.',
     ],
     stack: 'Kubernetes / Reverse Proxy / Zero-Trust Ingress / WireGuard',
   },
@@ -99,7 +99,7 @@ const defaultLessons: HomelabLesson[] = [
     topic: 'Containers vs Virtual Machines',
     icon: 'boxes',
     detail:
-      'Running lightweight system containers for web services and databases while isolating orchestration nodes inside VMs.',
+      'Running lightweight system containers for web services and databases while isolating cluster control-plane nodes inside VMs.',
   },
   {
     topic: 'Bridged Networking & Zero-Trust Ingress',
@@ -181,12 +181,12 @@ export const Homelab: React.FC<HomelabProps> = ({
   const title = config?.title || 'Self-Hosted Systems & Cluster Lab';
   const subtitle =
     config?.subtitle ||
-    'Progression from bare-metal Linux container hosts to structured virtualization, automated snapshot backups, and orchestrated Kubernetes clusters.';
+    'Progression from bare-metal Linux container hosts to structured virtualization, automated snapshot backups, and multi-node Kubernetes clusters.';
   const consolidationTitle = config?.consolidationTitle || 'Key Infrastructure Takeaways';
   const consolidationUrl = config?.consolidationUrl || '';
   const workloadsTitle = config?.workloadsTitle || 'Active Containers & Cluster Workloads';
   const workloadsSubtitle =
-    config?.workloadsSubtitle || 'Production services and orchestrated cluster workloads running across nodes.';
+    config?.workloadsSubtitle || 'Production services and Kubernetes workloads running across nodes.';
   const workloadsBadge = config?.workloadsBadge || 'Linux · Virtualization · Containers';
   const hardwareTitle = config?.hardwareTitle || 'Hardware & Compute Nodes';
   const hardwareSubtitle =
@@ -196,10 +196,10 @@ export const Homelab: React.FC<HomelabProps> = ({
     network?.domains && network.domains.length > 0 ? network.domains.join(' · ') : 'Self-Hosted';
 
   return (
-    <section id="homelab" className="py-20 border-b border-white/[0.08]">
+    <section id="homelab" className="py-24 sm:py-28 border-b border-white/[0.08]">
       {/* Section Header */}
-      <div className="mb-10">
-        <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
+      <div className="mb-12">
+        <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400/90 mb-2">
           <Server className="w-3.5 h-3.5" aria-hidden="true" />
           <span>{eyebrow}</span>
         </span>
@@ -243,7 +243,7 @@ export const Homelab: React.FC<HomelabProps> = ({
                   <motion.span
                     layoutId="homelab-tab-active"
                     transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                    className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90 shadow-[0_4px_16px_-4px_rgba(37,99,235,0.6),inset_0_1px_0_rgba(255,255,255,0.2)]"
+                    className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600 shadow-[0_4px_16px_-4px_rgba(16,185,129,0.55),inset_0_1px_0_rgba(255,255,255,0.2)]"
                   />
                 )}
                 <Icon className="w-3.5 h-3.5 relative z-10 shrink-0" aria-hidden="true" />
@@ -271,10 +271,10 @@ export const Homelab: React.FC<HomelabProps> = ({
                 aria-hidden="true"
                 className="hidden lg:block absolute top-[28px] left-8 right-8 h-px bg-white/10 z-0"
               >
-                <div className="h-full w-full bg-gradient-to-r from-cyan-400/60 via-blue-500/60 to-cyan-300/60 opacity-70" />
+                <div className="h-full w-full bg-gradient-to-r from-emerald-400/60 via-amber-400/55 to-orange-400/60 opacity-70" />
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 relative z-10">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
                 {stages.map((item, idx) => {
                   const StageIcon = stageIcons[idx % stageIcons.length];
                   const dimmed = hoveredStage !== null && hoveredStage !== idx;
@@ -290,10 +290,10 @@ export const Homelab: React.FC<HomelabProps> = ({
                       dimmed={dimmed}
                       onMouseEnter={() => setHoveredStage(idx)}
                       onMouseLeave={() => setHoveredStage(null)}
-                      className="p-6"
+                      className="p-6 sm:p-7"
                     >
                       <div>
-                        <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 mb-3">
+                        <div className="flex items-center gap-2 text-xs font-mono text-amber-300 mb-3">
                           <StageIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
                           <span>{item.stage}</span>
                         </div>
@@ -305,26 +305,19 @@ export const Homelab: React.FC<HomelabProps> = ({
                         </p>
 
                         <ul className="space-y-2 text-xs text-zinc-300 leading-relaxed list-disc pl-4 border-t border-white/[0.08] pt-4">
-                          {item.learnings.map((pt, lIdx) => (
+                          {item.learnings.slice(0, 2).map((pt, lIdx) => (
                             <li key={lIdx}>{pt}</li>
                           ))}
                         </ul>
                       </div>
 
-                      <div className="mt-5 pt-4 border-t border-white/[0.08] text-xs font-mono text-zinc-400 flex flex-wrap items-center gap-x-2 gap-y-1.5 pr-2">
-                        {item.stack.split(/[·/]/).map((tech, tIdx) => (
-                          <React.Fragment key={`${tech}-${tIdx}`}>
-                            {tIdx > 0 && (
-                              <span className="text-zinc-600" aria-hidden="true">
-                                /
-                              </span>
-                            )}
-                            <span className="inline-flex items-center gap-1">
-                              <BrandMark brand={tech} className="w-3.5 h-3.5 shrink-0" />
-                              <span>{tech.trim()}</span>
-                            </span>
-                          </React.Fragment>
-                        ))}
+                      <div className="mt-5 pt-4 border-t border-white/[0.08] text-xs font-mono text-zinc-400 truncate pr-2">
+                        {item.stack
+                          .split(/[·/]/)
+                          .map((t) => t.trim())
+                          .filter(Boolean)
+                          .slice(0, 4)
+                          .join(' · ')}
                       </div>
                     </GlassCard>
                   );
@@ -332,8 +325,8 @@ export const Homelab: React.FC<HomelabProps> = ({
               </div>
             </div>
 
-            {/* Core Infrastructure Engineering Takeaways */}
-            <div className="pt-8 border-t border-white/[0.08] grid lg:grid-cols-12 gap-8 items-start">
+            {/* Core Infrastructure Engineering Takeaways — Open Hairline Grid */}
+            <div className="pt-10 border-t border-white/[0.08] grid lg:grid-cols-12 gap-10 items-start">
               <div className="lg:col-span-4 space-y-4">
                 <h3 className="font-display text-lg font-bold text-zinc-50">
                   {consolidationTitle}
@@ -347,7 +340,7 @@ export const Homelab: React.FC<HomelabProps> = ({
                     href={consolidationUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors pt-1"
+                    className="inline-flex items-center gap-1.5 text-xs font-mono text-amber-300 hover:text-amber-200 transition-colors pt-1"
                   >
                     <TextScramble
                       text={consolidationUrl.replace(/^https?:\/\//, '')}
@@ -359,21 +352,21 @@ export const Homelab: React.FC<HomelabProps> = ({
                 )}
               </div>
 
-              <div className="lg:col-span-8 grid sm:grid-cols-2 gap-4">
+              <div className="lg:col-span-8 grid sm:grid-cols-2 gap-x-8 gap-y-6">
                 {lessons.map((lesson) => {
                   const LessonIcon = getLessonIcon(lesson.icon);
                   return (
                     <div
                       key={lesson.topic}
-                      className="glass-panel-subtle glass-panel-hover rounded-2xl p-5 transition-colors"
+                      className="pt-4 border-t border-white/[0.08]"
                     >
                       <div className="flex items-center gap-2 mb-2">
-                        <LessonIcon className="w-4 h-4 text-cyan-400 shrink-0" aria-hidden="true" />
+                        <LessonIcon className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
                         <h4 className="font-display text-sm font-semibold text-zinc-100">
                           {lesson.topic}
                         </h4>
                       </div>
-                      <p className="text-xs text-zinc-400 leading-relaxed">{lesson.detail}</p>
+                      <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">{lesson.detail}</p>
                     </div>
                   );
                 })}
@@ -397,7 +390,7 @@ export const Homelab: React.FC<HomelabProps> = ({
                 <div className="pb-5 mb-6 border-b border-white/[0.08] flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
                   <div>
                     <h3 className="font-display text-lg font-bold text-zinc-50 flex items-center gap-2">
-                      <Cpu className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+                      <Cpu className="w-4 h-4 text-emerald-400" aria-hidden="true" />
                       <span>{workloadsTitle}</span>
                     </h3>
                     <p className="text-xs text-zinc-400 mt-1">{workloadsSubtitle}</p>
@@ -422,7 +415,7 @@ export const Homelab: React.FC<HomelabProps> = ({
 
             <div className="pt-6 border-t border-white/[0.08] grid md:grid-cols-2 gap-8">
               <div className="glass-panel-subtle rounded-2xl p-6">
-                <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 mb-2">
+                <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 mb-2">
                   <Network className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>Mesh &amp; Ingress Routing</span>
                 </span>
@@ -447,7 +440,7 @@ export const Homelab: React.FC<HomelabProps> = ({
                   </div>
                   <div className="py-2.5 flex justify-between gap-3">
                     <dt className="text-zinc-400 shrink-0">Domains</dt>
-                    <dd className="text-cyan-400 font-mono text-right min-w-0 break-words">
+                    <dd className="text-amber-300 font-mono text-right min-w-0 break-words">
                       {displayDomains}
                     </dd>
                   </div>
@@ -458,13 +451,13 @@ export const Homelab: React.FC<HomelabProps> = ({
                 <div className="glass-panel-subtle rounded-2xl p-6 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2">
-                      <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400">
+                      <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400">
                         <Globe className="w-3.5 h-3.5" aria-hidden="true" />
                         <span>Core Infrastructure Stack</span>
                       </span>
                       <a
                         href="#skills"
-                        className="inline-flex items-center gap-1 text-[11px] font-mono text-cyan-300/90 hover:text-cyan-200 transition-colors"
+                        className="inline-flex items-center gap-1 text-[11px] font-mono text-amber-300/90 hover:text-amber-200 transition-colors"
                       >
                         <span>Inspect Graph</span>
                         <ArrowUpRight className="w-3 h-3" aria-hidden="true" />
@@ -508,18 +501,18 @@ export const Homelab: React.FC<HomelabProps> = ({
 
       {/* Hardware & Compute Inventory */}
       {devices.length > 0 && (
-        <div className="mt-12 pt-10 border-t border-white/[0.08]">
-          <div className="mb-5 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div className="mt-14 pt-12 border-t border-white/[0.08]">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
             <div>
               <h3 className="font-display text-lg font-bold text-zinc-50 flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-cyan-400" aria-hidden="true" />
+                <Cpu className="w-4 h-4 text-emerald-400" aria-hidden="true" />
                 <span>{hardwareTitle}</span>
               </h3>
               <p className="text-xs text-zinc-400 mt-1">{hardwareSubtitle}</p>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-3 gap-6">
             {devices.map((node) => {
               const vendorBrand = getNodeVendorBrand(node.hostname, node.type);
               const cpuBrand = getCpuBrand(node.cpu);
@@ -532,7 +525,7 @@ export const Homelab: React.FC<HomelabProps> = ({
                 <GlassCard key={node.hostname} tilt={true} spotlight={true} className="p-6">
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400">
+                      <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400">
                         <RepoImage
                           src={node.logo}
                           alt={node.hostname}
@@ -596,7 +589,7 @@ export const Homelab: React.FC<HomelabProps> = ({
                         href={node.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cyan-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1"
+                        className="text-amber-300 hover:text-amber-200 transition-colors inline-flex items-center gap-1"
                       >
                         <TextScramble
                           text={node.url.replace(/^https?:\/\//, '')}

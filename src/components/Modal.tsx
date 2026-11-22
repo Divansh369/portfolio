@@ -8,6 +8,7 @@ import RepoImage from './common/RepoImage';
 import BrandMark from './icons/BrandMarks';
 import { LoadBalancerDemoConfig, ProgressMilestone, Project } from '../types';
 import { resolveItemId } from '../utils/itemId';
+import { splitQuantifiedSegments } from '../utils/atsAnalyzer';
 
 interface ModalProps {
   project: Project;
@@ -97,7 +98,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <motion.div
-      className="fixed inset-0 bg-[#02040a]/75 z-[90] flex justify-center items-center p-3 sm:p-4 backdrop-blur-md"
+      className="fixed inset-0 bg-[#040b07]/78 z-[90] flex justify-center items-center p-3 sm:p-4 backdrop-blur-md"
       onClick={onClose}
       aria-modal="true"
       role="dialog"
@@ -137,7 +138,7 @@ export const Modal: React.FC<ModalProps> = ({
             />
           )}
           <div className="min-w-0">
-            <div className="text-xs font-mono text-cyan-400/90 mb-1 flex flex-wrap items-center gap-2">
+            <div className="text-xs font-mono text-emerald-400/90 mb-1 flex flex-wrap items-center gap-2">
               <span>
                 {project.category || 'Project Architecture'}
                 {project.badge ? ` · ${project.badge}` : ''}
@@ -160,12 +161,22 @@ export const Modal: React.FC<ModalProps> = ({
           {project.details && (
             <div className="pt-4 border-t border-white/[0.08]">
               <h3 className="font-mono text-xs font-semibold text-zinc-300 mb-3 inline-flex items-center gap-2">
-                <Layers className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+                <Layers className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                 <span>Implementation &amp; Scope</span>
               </h3>
               <ul className="space-y-2.5 text-sm text-zinc-300 leading-relaxed list-disc pl-5">
                 {project.details.split('|').map((point, index) => (
-                  <li key={index}>{point.trim()}</li>
+                  <li key={index}>
+                    {splitQuantifiedSegments(point.trim()).map((seg, sIdx) =>
+                      seg.highlight ? (
+                        <strong key={sIdx} className="font-semibold text-zinc-50">
+                          {seg.text}
+                        </strong>
+                      ) : (
+                        <React.Fragment key={sIdx}>{seg.text}</React.Fragment>
+                      )
+                    )}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -174,7 +185,7 @@ export const Modal: React.FC<ModalProps> = ({
           {project.stack && (
             <div className="pt-4 border-t border-white/[0.08]">
               <h3 className="font-mono text-xs font-semibold text-zinc-400 mb-2 inline-flex items-center gap-2">
-                <Code2 className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+                <Code2 className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" />
                 <span>Technologies Used</span>
               </h3>
               <div className="text-xs font-mono text-zinc-200 flex flex-wrap gap-y-1.5 items-center">
@@ -217,7 +228,7 @@ export const Modal: React.FC<ModalProps> = ({
                 variant="glass"
                 className="text-xs py-2.5 px-4 min-h-[40px]"
               >
-                <Images className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
+                <Images className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
                 <span className="tabular-nums">Progress Gallery ({itemMilestones.length})</span>
               </FloodButton>
             )}

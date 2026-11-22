@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="ucGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B35" />
+      <stop offset="50%" stop-color="#F7C815" />
+      <stop offset="100%" stop-color="#2EC4B6" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="url(#ucGrad)" />
+  <circle cx="50" cy="50" r="38" fill="#0d1117" />
+  <!-- Heart and caring hand hands holding youth icon -->
+  <path d="M50 32 C45 24 35 25 35 34 C35 44 50 56 50 56 C50 56 65 44 65 34 C65 25 55 24 50 32 Z" fill="#FF6B35" />
+  <path d="M28 58 C34 52 42 56 50 62 C58 56 66 52 72 58 C68 68 56 74 50 74 C44 74 32 68 28 58 Z" fill="#F7C815" />
+  <circle cx="50" cy="27" r="4" fill="#2EC4B6" />
+</svg>

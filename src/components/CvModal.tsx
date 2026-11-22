@@ -17,13 +17,39 @@ import {
 } from 'lucide-react';
 import FloodButton from './motion/FloodButton';
 import { Project } from '../types';
-import { analyzeAtsReadiness, DocumentMode } from '../utils/atsAnalyzer';
+import {
+  analyzeAtsReadiness,
+  DocumentMode,
+  splitQuantifiedSegments,
+} from '../utils/atsAnalyzer';
+import {
+  DEFAULT_ROLE_ID,
+  listRoleTracks,
+  resolvePortfolioForRole,
+} from '../utils/factBank';
 
 interface CvModalProps {
   isOpen: boolean;
   onClose: () => void;
   portfolioData?: any;
+  activeRoleId?: string;
+  onSelectRole?: (roleId: string) => void;
 }
+
+const renderQuantifiedText = (text: string, isPaper: boolean) =>
+  splitQuantifiedSegments(text).map((seg, idx) =>
+    seg.highlight ? (
+      <strong
+        key={idx}
+        className="font-semibold"
+        style={{ color: isPaper ? '#064e3b' : '#ffffff' }}
+      >
+        {seg.text}
+      </strong>
+    ) : (
+      <React.Fragment key={idx}>{seg.text}</React.Fragment>
+    )
+  );
 
 const getDocumentFileName = (profile: any, mode: DocumentMode): string => {
   if (mode === 'resume') {
@@ -49,13 +75,29 @@ const getDocumentFileName = (profile: any, mode: DocumentMode): string => {
   return cleanName ? `${cleanName}_CV.pdf` : 'Candidate_CV.pdf';
 };
 
-export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData }) => {
+export const CvModal: React.FC<CvModalProps> = ({
+  isOpen,
+  onClose,
+  portfolioData,
+  activeRoleId,
+  onSelectRole,
+}) => {
   const prefersReduced = useReducedMotion();
   const [docMode, setDocMode] = useState<DocumentMode>('resume');
+  const [internalRoleId, setInternalRoleId] = useState<string>(activeRoleId || DEFAULT_ROLE_ID);
   const [copiedLink, setCopiedLink] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [viewTheme, setViewTheme] = useState<'paper' | 'dark'>('paper');
   const [showAuditPanel, setShowAuditPanel] = useState(false);
+
+  const effectiveRoleId = onSelectRole ? activeRoleId || DEFAULT_ROLE_ID : internalRoleId;
+  const handleRoleSelect = (roleId: string) => {
+    if (onSelectRole) {
+      onSelectRole(roleId);
+    } else {
+      setInternalRoleId(roleId);
+    }
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -66,15 +108,21 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, onClose]);
 
-  const profile = portfolioData?.profile || {};
-  const cvConfig = portfolioData?.cv || {};
-  const allExperiences: any[] = portfolioData?.experience || [];
-  const allEducation: any[] = portfolioData?.education || [];
-  const skillCategories = portfolioData?.skills?.categories || [];
-  const spokenLanguages = portfolioData?.skills?.languages || ['English (Fluent)'];
-  const interests = portfolioData?.skills?.interests || [];
-  const certificates = portfolioData?.certificates || [];
-  const evolution = portfolioData?.homelab?.evolution || [];
+  const roleTracks = useMemo(() => listRoleTracks(portfolioData), [portfolioData]);
+  const resolvedData = useMemo(
+    () => resolvePortfolioForRole(portfolioData, effectiveRoleId),
+    [portfolioData, effectiveRoleId]
+  );
+
+  const profile = resolvedData?.profile || {};
+  const cvConfig = resolvedData?.cv || {};
+  const allExperiences: any[] = resolvedData?.experience || [];
+  const allEducation: any[] = resolvedData?.education || [];
+  const skillCategories = resolvedData?.skills?.categories || [];
+  const spokenLanguages = resolvedData?.skills?.languages || ['English (Fluent)'];
+  const interests = resolvedData?.skills?.interests || [];
+  const certificates = resolvedData?.certificates || [];
+  const evolution = resolvedData?.homelab?.evolution || [];
   const domains: string[] = Array.isArray(profile.domains) ? profile.domains : [];
   const primaryDomain = domains[0] || '';
 
@@ -94,7 +142,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
   }, [allEducation, isResume]);
 
   const projects: Project[] = useMemo(() => {
-    const rawList: Project[] = portfolioData?.realWorldProjects || [];
+    const rawList: Project[] = resolvedData?.realWorldProjects || [];
     const maxCount = isResume
       ? typeof cvConfig.maxProjectsInResume === 'number'
         ? cvConfig.maxProjectsInResume
@@ -117,33 +165,39 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
       })
       .map((item) => item.p)
       .slice(0, maxCount);
-  }, [portfolioData, cvConfig.maxProjectsInCv, cvConfig.maxProjectsInResume, isResume]);
+  }, [resolvedData, cvConfig.maxProjectsInCv, cvConfig.maxProjectsInResume, isResume]);
 
   const summaryText = useMemo(() => {
     if (isResume) {
       return profile.resumeSummary || profile.summary || '';
     }
     if (profile.summary && typeof profile.summary === 'string') return profile.summary;
-    if (Array.isArray(portfolioData?.about) && portfolioData.about.length > 0) {
-      return portfolioData.about.join(' ');
+    if (Array.isArray(resolvedData?.about) && resolvedData.about.length > 0) {
+      return resolvedData.about.join(' ');
     }
     return '';
-  }, [isResume, profile.resumeSummary, profile.summary, portfolioData?.about]);
+  }, [isResume, profile.resumeSummary, profile.summary, resolvedData?.about]);
 
   const auditReport = useMemo(
-    () => analyzeAtsReadiness(portfolioData, docMode),
-    [portfolioData, docMode]
+    () => analyzeAtsReadiness(resolvedData, docMode),
+    [resolvedData, docMode]
   );
 
   const activeFileName = getDocumentFileName(profile, docMode);
-  const apiEndpoint = isResume ? '/api/resume.pdf' : '/api/cv.pdf';
+  const baseApiEndpoint = isResume ? '/api/resume.pdf' : '/api/cv.pdf';
+  const roleQuery =
+    effectiveRoleId && effectiveRoleId !== DEFAULT_ROLE_ID
+      ? `?role=${encodeURIComponent(effectiveRoleId)}`
+      : '';
+  const apiEndpoint = `${baseApiEndpoint}${roleQuery}`;
   const linkedinUrl = profile.linkedinUrl || '';
   const linkedinLabel = linkedinUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
   const githubUrl = profile.githubUrl || '';
   const githubLabel = githubUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 
   const baseUrl = import.meta.env.BASE_URL || '/';
-  const staticPdfUrl = `${baseUrl.replace(/\/$/, '')}/${activeFileName}`;
+  const staticFallbackFileName = getDocumentFileName(portfolioData?.profile || profile, docMode);
+  const staticPdfUrl = `${baseUrl.replace(/\/$/, '')}/${staticFallbackFileName}`;
 
   const includeHomelab = isResume
     ? cvConfig.includeHomelabInResume === true && evolution.length > 0
@@ -207,9 +261,10 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
   };
 
   const handleOpenInNewTab = () => {
+    const viewSep = apiEndpoint.includes('?') ? '&' : '?';
     const targetUrl = window.location.hostname.includes('github.io')
       ? staticPdfUrl
-      : `${apiEndpoint}?view=inline`;
+      : `${apiEndpoint}${viewSep}view=inline`;
     window.open(targetUrl, '_blank');
   };
 
@@ -228,16 +283,19 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
   };
 
   const isPaper = viewTheme === 'paper';
+  const failedSixSecondCount =
+    auditReport.sixSecondAudit.totalCount - auditReport.sixSecondAudit.passedCount;
   const totalIssues =
     auditReport.repeatedWords.length +
     auditReport.unquantifiedBullets.length +
-    auditReport.contactChecks.filter((c) => !c.present).length;
+    auditReport.contactChecks.filter((c) => !c.present).length +
+    failedSixSecondCount;
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 bg-[#02040a]/85 z-[100] flex justify-center items-center p-2 sm:p-4 backdrop-blur-md overflow-y-auto"
+          className="fixed inset-0 bg-[#040b07]/85 z-[100] flex justify-center items-center p-2 sm:p-4 backdrop-blur-md overflow-y-auto"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
@@ -271,10 +329,10 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
             }
           >
             {/* Top Control Bar */}
-            <div className="flex flex-col gap-3 p-4 sm:px-6 bg-[#060914]/80 border-b border-white/[0.08] print-hide">
+            <div className="flex flex-col gap-3 p-4 sm:px-6 bg-[#06130b]/85 border-b border-white/[0.08] print-hide">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-mono text-cyan-400 mb-0.5">
+                  <div className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-mono text-emerald-400 mb-0.5">
                     <FileText className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                     <span className="truncate">
                       ATS Linear Single-Column PDF ·{' '}
@@ -319,7 +377,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                         <motion.span
                           layoutId="doc-mode-pill"
                           transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600"
                         />
                       )}
                       <span className="relative z-10">Resume (1-Page)</span>
@@ -337,7 +395,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                         <motion.span
                           layoutId="doc-mode-pill"
                           transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600"
                         />
                       )}
                       <span className="relative z-10">Full CV</span>
@@ -360,7 +418,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                         <motion.span
                           layoutId="cv-theme-pill"
                           transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600"
                         />
                       )}
                       <Sun className="w-3.5 h-3.5 relative z-10" aria-hidden="true" />
@@ -378,7 +436,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                         <motion.span
                           layoutId="cv-theme-pill"
                           transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600"
                         />
                       )}
                       <Moon className="w-3.5 h-3.5 relative z-10" aria-hidden="true" />
@@ -408,7 +466,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                 <button
                   type="button"
                   onClick={handleOpenInNewTab}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-200 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-amber-400/45 text-zinc-200 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap"
                   title="Open PDF in new tab"
                 >
                   <span className="hidden sm:inline">Open PDF</span>
@@ -420,7 +478,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-200 font-mono text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-amber-400/45 text-zinc-200 font-mono text-xs transition-colors cursor-pointer"
                   title="Print document"
                 >
                   <Printer className="w-3.5 h-3.5" aria-hidden="true" />
@@ -431,50 +489,90 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                 <button
                   type="button"
                   onClick={handleCopyPdfLink}
-                  className="inline-flex items-center gap-1 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap"
+                  className="inline-flex items-center gap-1 px-3 py-2 min-h-[40px] rounded-xl glass-panel-subtle hover:border-amber-400/45 text-zinc-300 font-mono text-xs transition-colors cursor-pointer whitespace-nowrap"
                 >
-                  {copiedLink ? <Check className="w-3.5 h-3.5 text-cyan-400" /> : null}
-                  <span className={copiedLink ? 'text-cyan-300' : ''}>
+                  {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : null}
+                  <span className={copiedLink ? 'text-emerald-300' : ''}>
                     {copiedLink ? 'Copied' : 'Copy Link'}
                   </span>
                 </button>
               </div>
 
-              {/* Compact ATS Health Check Toggle Bar */}
+              {/* Role Fact Bank Switcher (displayed when roles configured in portfolio.json) */}
+              {roleTracks.length > 1 && (
+                <div className="flex flex-wrap items-center gap-2 pt-1">
+                  <span className="text-[11px] font-mono text-zinc-400">Role Fact Bank:</span>
+                  <div
+                    role="tablist"
+                    aria-label="Tailor resume and CV content for specific role"
+                    className="flex flex-wrap items-center gap-1 p-0.5 rounded-xl glass-panel-subtle text-xs font-mono"
+                  >
+                    {roleTracks.map((track) => {
+                      const selected = effectiveRoleId === track.id;
+                      return (
+                        <button
+                          key={track.id}
+                          type="button"
+                          role="tab"
+                          aria-selected={selected}
+                          onClick={() => handleRoleSelect(track.id)}
+                          className={`px-2.5 py-1 min-h-[32px] rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                            selected
+                              ? 'bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600 text-white font-medium'
+                              : 'text-zinc-400 hover:text-zinc-100'
+                          }`}
+                        >
+                          {track.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Compact 6-Second & ATS Health Check Toggle Bar */}
               <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/[0.06] text-xs font-mono">
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-zinc-300">
-                  <span className="inline-flex items-center gap-1.5 text-cyan-300">
+                <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-zinc-300">
+                  <span className="inline-flex items-center gap-1.5 text-emerald-300">
                     <ShieldCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                    <span>ATS Parse Checks:</span>
+                    <span>6-Sec &amp; ATS Audit:</span>
                   </span>
+                  <span
+                    className={`tabular-nums font-semibold ${
+                      auditReport.sixSecondAudit.passedCount === auditReport.sixSecondAudit.totalCount
+                        ? 'text-emerald-400'
+                        : 'text-amber-300'
+                    }`}
+                  >
+                    {auditReport.sixSecondAudit.passedCount}/{auditReport.sixSecondAudit.totalCount} Scan Checks
+                  </span>
+                  <span className="text-zinc-600" aria-hidden="true">·</span>
                   <span className="tabular-nums">
-                    {auditReport.quantifiedBullets}/{auditReport.totalBullets} bullets quantified
+                    {auditReport.sixSecondAudit.xyzCompliancePct}% XYZ ({auditReport.quantifiedBullets}/{auditReport.totalBullets})
+                  </span>
+                  <span className="text-zinc-600" aria-hidden="true">·</span>
+                  <span className="tabular-nums">
+                    {auditReport.sixSecondAudit.avgBulletWords}w avg bullet
                   </span>
                   <span className="text-zinc-600" aria-hidden="true">·</span>
                   <span>
                     {auditReport.repeatedWords.length === 0
-                      ? '0 repeated action verbs'
+                      ? '0 repeated verbs'
                       : `${auditReport.repeatedWords.length} repeated verb warning(s)`}
-                  </span>
-                  <span className="text-zinc-600" aria-hidden="true">·</span>
-                  <span>
-                    {auditReport.contactChecks.every((c) => c.present)
-                      ? 'All contact links verified (incl. LinkedIn)'
-                      : 'Missing optional contact channel'}
                   </span>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setShowAuditPanel((prev) => !prev)}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg glass-panel-subtle border border-white/10 hover:border-cyan-400/40 text-cyan-300 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg glass-panel-subtle border border-white/10 hover:border-amber-400/45 text-amber-300 transition-colors cursor-pointer"
                 >
                   <span>
                     {showAuditPanel
-                      ? 'Hide ATS Audit'
+                      ? 'Hide Scan Audit'
                       : totalIssues > 0
-                      ? `Inspect ATS Audit (${totalIssues} notes)`
-                      : 'Inspect ATS Audit'}
+                      ? `Inspect Audit (${totalIssues} notes)`
+                      : 'Inspect 6-Sec & ATS Audit'}
                   </span>
                   {showAuditPanel ? (
                     <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" />
@@ -485,7 +583,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
               </div>
             </div>
 
-            {/* Expandable ATS Audit Panel */}
+            {/* Expandable 6-Second Recruiter Scan & ATS Audit Panel */}
             <AnimatePresence>
               {showAuditPanel && (
                 <motion.div
@@ -493,113 +591,163 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="overflow-hidden border-b border-white/[0.08] bg-[#040813] print-hide"
+                  className="overflow-hidden border-b border-white/[0.08] bg-[#05110a] print-hide max-h-[42dvh] overflow-y-auto"
                 >
-                  <div className="p-4 sm:px-6 grid md:grid-cols-3 gap-4 text-xs">
-                    {/* Column 1: Essential Sections & Contacts */}
-                    <div className="glass-panel-subtle rounded-xl p-3.5 space-y-2">
-                      <div className="font-mono font-semibold text-zinc-100">
-                        Contact &amp; Structure Check
+                  <div className="p-4 sm:px-6 space-y-4 text-xs">
+                    {/* 6-Second Recruiter Scan Audit Grid */}
+                    <div className="glass-panel-subtle rounded-xl p-3.5 space-y-2.5">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="font-mono font-semibold text-zinc-100">
+                          6-Second Recruiter Scan Audit ({auditReport.sixSecondAudit.passedCount}/
+                          {auditReport.sixSecondAudit.totalCount} checks passed)
+                        </div>
+                        <div className="text-[11px] font-mono text-zinc-400 tabular-nums">
+                          {auditReport.sixSecondAudit.xyzCompliancePct}% XYZ ·{' '}
+                          {auditReport.sixSecondAudit.summaryWordCount}w summary ·{' '}
+                          {auditReport.sixSecondAudit.avgBulletWords}w avg bullet
+                        </div>
                       </div>
-                      <div className="space-y-1">
-                        {auditReport.contactChecks.map((check) => (
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                        {auditReport.sixSecondAudit.checks.map((chk) => (
                           <div
-                            key={check.label}
-                            className="flex items-center justify-between gap-2 text-[11px]"
+                            key={chk.id}
+                            className="rounded-lg border border-white/[0.08] bg-white/[0.02] p-2.5 space-y-1"
                           >
-                            <span className="text-zinc-400">{check.label}</span>
-                            <span
-                              className={`inline-flex items-center gap-1 font-mono ${
-                                check.present ? 'text-emerald-400' : 'text-amber-300'
-                              }`}
-                            >
-                              {check.present ? (
-                                <>
-                                  <CheckCircle2 className="w-3 h-3" aria-hidden="true" />
-                                  <span>Linked</span>
-                                </>
-                              ) : (
-                                <>
-                                  <AlertTriangle className="w-3 h-3" aria-hidden="true" />
-                                  <span>Missing</span>
-                                </>
-                              )}
-                            </span>
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-medium text-zinc-100 inline-flex items-center gap-1.5">
+                                {chk.passed ? (
+                                  <CheckCircle2
+                                    className="w-3.5 h-3.5 text-emerald-400 shrink-0"
+                                    aria-hidden="true"
+                                  />
+                                ) : (
+                                  <AlertTriangle
+                                    className="w-3.5 h-3.5 text-amber-300 shrink-0"
+                                    aria-hidden="true"
+                                  />
+                                )}
+                                <span className="truncate">{chk.label}</span>
+                              </span>
+                              <span
+                                className={`font-mono text-[10px] shrink-0 tabular-nums ${
+                                  chk.passed ? 'text-emerald-400' : 'text-amber-300'
+                                }`}
+                              >
+                                {chk.metricValue}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-zinc-400 leading-snug">{chk.guidance}</p>
                           </div>
                         ))}
                       </div>
-                      {isResume && (
-                        <div className="pt-2 border-t border-white/[0.06] text-[11px] font-mono text-zinc-400 tabular-nums">
-                          Word budget: {auditReport.wordCount} words ·{' '}
-                          <span
-                            className={
-                              auditReport.estimatedSinglePageFit
-                                ? 'text-emerald-400'
-                                : 'text-amber-300'
-                            }
-                          >
-                            {auditReport.estimatedSinglePageFit
-                              ? 'Fits 1-page Letter'
-                              : 'Review density for 1-page fit'}
-                          </span>
-                        </div>
-                      )}
                     </div>
 
-                    {/* Column 2: Verb Repetition Check */}
-                    <div className="glass-panel-subtle rounded-xl p-3.5 space-y-2">
-                      <div className="font-mono font-semibold text-zinc-100">
-                        Action Verb Repetition Check
-                      </div>
-                      {auditReport.repeatedWords.length === 0 ? (
-                        <p className="text-[11px] text-emerald-400 flex items-center gap-1.5">
-                          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                          <span>No over-repeated action verbs detected (3+ uses).</span>
-                        </p>
-                      ) : (
-                        <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
-                          {auditReport.repeatedWords.map((rw) => (
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {/* Column 1: Essential Sections & Contacts */}
+                      <div className="glass-panel-subtle rounded-xl p-3.5 space-y-2">
+                        <div className="font-mono font-semibold text-zinc-100">
+                          Contact &amp; Structure Check
+                        </div>
+                        <div className="space-y-1">
+                          {auditReport.contactChecks.map((check) => (
                             <div
-                              key={rw.word}
-                              className="text-[11px] text-amber-200/90 border-b border-white/[0.06] pb-1"
+                              key={check.label}
+                              className="flex items-center justify-between gap-2 text-[11px]"
                             >
-                              <span className="font-mono font-semibold text-amber-300">
-                                "{rw.word}" ×{rw.count}
-                              </span>{' '}
-                              <span className="text-zinc-400">
-                                → try: {rw.suggestions.slice(0, 3).join(', ')}
+                              <span className="text-zinc-400">{check.label}</span>
+                              <span
+                                className={`inline-flex items-center gap-1 font-mono ${
+                                  check.present ? 'text-emerald-400' : 'text-amber-300'
+                                }`}
+                              >
+                                {check.present ? (
+                                  <>
+                                    <CheckCircle2 className="w-3 h-3" aria-hidden="true" />
+                                    <span>Linked</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <AlertTriangle className="w-3 h-3" aria-hidden="true" />
+                                    <span>Missing</span>
+                                  </>
+                                )}
                               </span>
                             </div>
                           ))}
                         </div>
-                      )}
-                    </div>
-
-                    {/* Column 3: Quantified Impact Prompts */}
-                    <div className="glass-panel-subtle rounded-xl p-3.5 space-y-2">
-                      <div className="font-mono font-semibold text-zinc-100">
-                        Quantifiable Impact Review
-                      </div>
-                      {auditReport.unquantifiedBullets.length === 0 ? (
-                        <p className="text-[11px] text-emerald-400 flex items-center gap-1.5">
-                          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                          <span>Every bullet includes measurable scale or metrics.</span>
-                        </p>
-                      ) : (
-                        <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
-                          {auditReport.unquantifiedBullets.map((item, idx) => (
-                            <div
-                              key={idx}
-                              className="text-[11px] border-b border-white/[0.06] pb-1"
+                        {isResume && (
+                          <div className="pt-2 border-t border-white/[0.06] text-[11px] font-mono text-zinc-400 tabular-nums">
+                            Word budget: {auditReport.wordCount} words ·{' '}
+                            <span
+                              className={
+                                auditReport.estimatedSinglePageFit
+                                  ? 'text-emerald-400'
+                                  : 'text-amber-300'
+                              }
                             >
-                              <div className="font-mono text-amber-300 truncate">
-                                Add metric: {item.title}
-                              </div>
-                              <div className="text-zinc-400 line-clamp-1">{item.bullet}</div>
-                            </div>
-                          ))}
+                              {auditReport.estimatedSinglePageFit
+                                ? 'Fits 1-page Letter'
+                                : 'Review density for 1-page fit'}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Column 2: Verb Repetition Check */}
+                      <div className="glass-panel-subtle rounded-xl p-3.5 space-y-2">
+                        <div className="font-mono font-semibold text-zinc-100">
+                          Action Verb Repetition Check
                         </div>
-                      )}
+                        {auditReport.repeatedWords.length === 0 ? (
+                          <p className="text-[11px] text-emerald-400 flex items-center gap-1.5">
+                            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                            <span>No over-repeated action verbs detected (3+ uses).</span>
+                          </p>
+                        ) : (
+                          <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
+                            {auditReport.repeatedWords.map((rw) => (
+                              <div
+                                key={rw.word}
+                                className="text-[11px] text-amber-200/90 border-b border-white/[0.06] pb-1"
+                              >
+                                <span className="font-mono font-semibold text-amber-300">
+                                  "{rw.word}" ×{rw.count}
+                                </span>{' '}
+                                <span className="text-zinc-400">
+                                  → try: {rw.suggestions.slice(0, 3).join(', ')}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Column 3: Quantified Impact Prompts */}
+                      <div className="glass-panel-subtle rounded-xl p-3.5 space-y-2">
+                        <div className="font-mono font-semibold text-zinc-100">
+                          Quantifiable Impact Review
+                        </div>
+                        {auditReport.unquantifiedBullets.length === 0 ? (
+                          <p className="text-[11px] text-emerald-400 flex items-center gap-1.5">
+                            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                            <span>Every bullet includes measurable scale or metrics.</span>
+                          </p>
+                        ) : (
+                          <div className="space-y-1.5 max-h-28 overflow-y-auto pr-1">
+                            {auditReport.unquantifiedBullets.map((item, idx) => (
+                              <div
+                                key={idx}
+                                className="text-[11px] border-b border-white/[0.06] pb-1"
+                              >
+                                <div className="font-mono text-amber-300 truncate">
+                                  Add metric: {item.title}
+                                </div>
+                                <div className="text-zinc-400 line-clamp-1">{item.bullet}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -608,16 +756,16 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
 
             {/* Document Viewport */}
             <div
-              className={`flex-1 overflow-y-auto p-2.5 sm:p-8 flex justify-center ${
-                isPaper ? 'bg-[#090d18]' : 'bg-[#040711]'
+              className={`flex-1 min-h-0 overflow-y-auto p-2.5 sm:p-8 ${
+                isPaper ? 'bg-[#051009]' : 'bg-[#040b07]'
               }`}
             >
               <div
                 id="ats-resume-document"
-                className={`w-full max-w-3xl rounded-sm p-4 sm:p-10 font-sans text-xs leading-normal space-y-3.5 print:p-0 print:shadow-none print:max-w-full ${
+                className={`mx-auto w-full max-w-3xl h-fit shrink-0 rounded-sm p-4 sm:p-10 font-sans text-xs leading-normal space-y-3.5 print:p-0 print:shadow-none print:max-w-full ${
                   isPaper
                     ? 'bg-white shadow-2xl border border-gray-200'
-                    : 'bg-[#0d1322] border border-white/10 shadow-2xl'
+                    : 'bg-[#09180f] border border-emerald-400/15 shadow-2xl'
                 }`}
                 style={{
                   fontFamily:
@@ -636,13 +784,13 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                 >
                   <h1
                     className="text-xl sm:text-2xl font-bold tracking-tight uppercase"
-                    style={{ color: isPaper ? '#020617' : '#ffffff' }}
+                    style={{ color: isPaper ? '#064e3b' : '#ffffff' }}
                   >
                     {profile.name || 'Developer'}
                   </h1>
                   <p
                     className="text-[11px] sm:text-xs font-semibold mt-0.5 tracking-wide uppercase"
-                    style={{ color: isPaper ? '#1e3a8a' : '#38bdf8' }}
+                    style={{ color: isPaper ? '#065f46' : '#34d399' }}
                   >
                     {profile.resumeHeadline || profile.title || 'Software Engineer'}
                   </p>
@@ -657,7 +805,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                         {profile.location && <span>|</span>}
                         <a
                           href={`mailto:${profile.email}`}
-                          style={{ color: isPaper ? '#1d4ed8' : '#38bdf8' }}
+                          style={{ color: isPaper ? '#047857' : '#fcd34d' }}
                           className="hover:underline"
                         >
                           {profile.email}
@@ -683,7 +831,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                           href={linkedinUrl}
                           target="_blank"
                           rel="noreferrer"
-                          style={{ color: isPaper ? '#1d4ed8' : '#38bdf8' }}
+                          style={{ color: isPaper ? '#047857' : '#fcd34d' }}
                           className="hover:underline"
                         >
                           {linkedinLabel}
@@ -699,7 +847,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                             href={githubUrl}
                             target="_blank"
                             rel="noreferrer"
-                            style={{ color: isPaper ? '#1d4ed8' : '#38bdf8' }}
+                            style={{ color: isPaper ? '#047857' : '#fcd34d' }}
                             className="hover:underline"
                           >
                             {githubLabel}
@@ -720,7 +868,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                             }
                             target="_blank"
                             rel="noreferrer"
-                            style={{ color: isPaper ? '#1d4ed8' : '#38bdf8' }}
+                            style={{ color: isPaper ? '#047857' : '#fcd34d' }}
                             className="hover:underline"
                           >
                             {primaryDomain}
@@ -737,7 +885,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                     <h2
                       className="text-xs font-bold uppercase tracking-wider pb-0.5 mb-1.5"
                       style={{
-                        color: isPaper ? '#1e3a8a' : '#38bdf8',
+                        color: isPaper ? '#065f46' : '#34d399',
                         borderBottom: isPaper
                           ? '1px solid #cbd5e1'
                           : '1px solid rgba(255, 255, 255, 0.1)',
@@ -760,7 +908,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                     <h2
                       className="text-xs font-bold uppercase tracking-wider pb-0.5 mb-1.5"
                       style={{
-                        color: isPaper ? '#1e3a8a' : '#38bdf8',
+                        color: isPaper ? '#065f46' : '#34d399',
                         borderBottom: isPaper
                           ? '1px solid #cbd5e1'
                           : '1px solid rgba(255, 255, 255, 0.1)',
@@ -805,7 +953,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                     <h2
                       className="text-xs font-bold uppercase tracking-wider pb-0.5 mb-2"
                       style={{
-                        color: isPaper ? '#1e3a8a' : '#38bdf8',
+                        color: isPaper ? '#065f46' : '#34d399',
                         borderBottom: isPaper
                           ? '1px solid #cbd5e1'
                           : '1px solid rgba(255, 255, 255, 0.1)',
@@ -835,7 +983,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                                 {exp.milestone && (
                                   <span
                                     className="text-[10px] font-semibold ml-1.5"
-                                    style={{ color: isPaper ? '#1d4ed8' : '#38bdf8' }}
+                                    style={{ color: isPaper ? '#047857' : '#fcd34d' }}
                                   >
                                     ({exp.milestone.replace('★ ', '')})
                                   </span>
@@ -860,7 +1008,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                                   className="w-full break-words"
                                   style={{ color: isPaper ? '#1e293b' : '#d4d4d8' }}
                                 >
-                                  {point}
+                                  {renderQuantifiedText(point, isPaper)}
                                 </li>
                               ))}
                             </ul>
@@ -886,7 +1034,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                     <h2
                       className="text-xs font-bold uppercase tracking-wider pb-0.5 mb-2"
                       style={{
-                        color: isPaper ? '#1e3a8a' : '#38bdf8',
+                        color: isPaper ? '#065f46' : '#34d399',
                         borderBottom: isPaper
                           ? '1px solid #cbd5e1'
                           : '1px solid rgba(255, 255, 255, 0.1)',
@@ -925,7 +1073,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                                 {proj.badge && (
                                   <span
                                     className="text-[10px] font-semibold ml-1.5"
-                                    style={{ color: isPaper ? '#1d4ed8' : '#38bdf8' }}
+                                    style={{ color: isPaper ? '#047857' : '#fcd34d' }}
                                   >
                                     ({proj.badge})
                                   </span>
@@ -944,7 +1092,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                                       target="_blank"
                       rel="noreferrer"
                                       className="hover:underline"
-                                      style={{ color: isPaper ? '#1d4ed8' : '#38bdf8' }}
+                                      style={{ color: isPaper ? '#047857' : '#fcd34d' }}
                                     >
                                       {proj.url.replace(/^https?:\/\//, '')}
                                     </a>
@@ -960,7 +1108,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                                   className="w-full break-words"
                                   style={{ color: isPaper ? '#1e293b' : '#d4d4d8' }}
                                 >
-                                  {pt}
+                                  {renderQuantifiedText(pt, isPaper)}
                                 </li>
                               ))}
                             </ul>
@@ -999,7 +1147,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                                     target="_blank"
                                     rel="noreferrer"
                                     className="hover:underline"
-                                    style={{ color: isPaper ? '#1d4ed8' : '#38bdf8' }}
+                                    style={{ color: isPaper ? '#047857' : '#fcd34d' }}
                                   >
                                     {homelabCvLink}
                                   </a>
@@ -1013,7 +1161,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                           >
                             {(isResume ? homelabCvBullets.slice(0, 2) : homelabCvBullets).map(
                               (bullet: string, bIdx: number) => (
-                                <li key={bIdx}>{bullet}</li>
+                                <li key={bIdx}>{renderQuantifiedText(bullet, isPaper)}</li>
                               )
                             )}
                           </ul>
@@ -1029,7 +1177,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                     <h2
                       className="text-xs font-bold uppercase tracking-wider pb-0.5 mb-1.5"
                       style={{
-                        color: isPaper ? '#1e3a8a' : '#38bdf8',
+                        color: isPaper ? '#065f46' : '#34d399',
                         borderBottom: isPaper
                           ? '1px solid #cbd5e1'
                           : '1px solid rgba(255, 255, 255, 0.1)',
@@ -1068,7 +1216,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                     <h2
                       className="text-xs font-bold uppercase tracking-wider pb-0.5 mb-1.5"
                       style={{
-                        color: isPaper ? '#1e3a8a' : '#38bdf8',
+                        color: isPaper ? '#065f46' : '#34d399',
                         borderBottom: isPaper
                           ? '1px solid #cbd5e1'
                           : '1px solid rgba(255, 255, 255, 0.1)',
@@ -1110,7 +1258,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
             </div>
 
             {/* Footer Bar */}
-            <div className="px-4 sm:px-6 py-2.5 bg-[#060914]/80 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-400 print-hide">
+            <div className="px-4 sm:px-6 py-2.5 bg-[#06130b]/85 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-zinc-400 print-hide">
               <div className="flex items-center gap-3">
                 <span>Endpoint: {apiEndpoint}</span>
                 <span className="hidden sm:inline" aria-hidden="true">·</span>
@@ -1119,7 +1267,7 @@ export const CvModal: React.FC<CvModalProps> = ({ isOpen, onClose, portfolioData
                 <button
                   type="button"
                   onClick={handleDownloadPdf}
-                  className="hidden sm:inline text-cyan-400 hover:text-cyan-300 font-medium cursor-pointer"
+                  className="hidden sm:inline text-amber-300 hover:text-amber-200 font-medium cursor-pointer"
                 >
                   Download .pdf
                 </button>

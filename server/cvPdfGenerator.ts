@@ -1,18 +1,22 @@
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
+import { resolvePortfolioForRole } from '../src/utils/factBank.ts';
+import { splitQuantifiedSegments } from '../src/utils/atsAnalyzer.ts';
 
 export type DocumentMode = 'resume' | 'cv';
 
 export interface GeneratePdfOptions {
   outputPath?: string;
   mode?: DocumentMode;
+  roleId?: string;
 }
 
 /**
  * Resolves a safe PDF filename for CV mode from profile.cvFileName or profile.name.
  */
-export function resolveCvFileName(portfolioData: any): string {
-  const profile = portfolioData?.profile || {};
+export function resolveCvFileName(portfolioData: any, roleId?: string): string {
+  const scoped = resolvePortfolioForRole(portfolioData, roleId);
+  const profile = scoped?.profile || {};
   if (profile.cvFileName && typeof profile.cvFileName === 'string') {
     return profile.cvFileName.endsWith('.pdf')
       ? profile.cvFileName
@@ -28,8 +32,9 @@ export function resolveCvFileName(portfolioData: any): string {
 /**
  * Resolves a safe PDF filename for 1-page Resume mode from profile.resumeFileName or profile.name.
  */
-export function resolveResumeFileName(portfolioData: any): string {
-  const profile = portfolioData?.profile || {};
+export function resolveResumeFileName(portfolioData: any, roleId?: string): string {
+  const scoped = resolvePortfolioForRole(portfolioData, roleId);
+  const profile = scoped?.profile || {};
   if (profile.resumeFileName && typeof profile.resumeFileName === 'string') {
     return profile.resumeFileName.endsWith('.pdf')
       ? profile.resumeFileName
@@ -42,29 +47,35 @@ export function resolveResumeFileName(portfolioData: any): string {
   return cleanName ? `${cleanName}_Resume.pdf` : 'Candidate_Resume.pdf';
 }
 
-export function resolveDocumentFileName(portfolioData: any, mode: DocumentMode): string {
+export function resolveDocumentFileName(
+  portfolioData: any,
+  mode: DocumentMode,
+  roleId?: string
+): string {
   return mode === 'resume'
-    ? resolveResumeFileName(portfolioData)
-    : resolveCvFileName(portfolioData);
+    ? resolveResumeFileName(portfolioData, roleId)
+    : resolveCvFileName(portfolioData, roleId);
 }
 
 /**
  * Builds an ATS-compliant, single-column linear vector PDF from portfolio.json.
  * Supports two distinct modes:
- * - 'resume': Tight, high-impact 1-page US Letter executive resume tuned for automated ATS extraction.
+ * - 'resume': Tight, high-impact 1-page US Letter executive resume tuned for automated ATS extraction & 6-second scanning.
  * - 'cv': Comprehensive multi-page academic & technical curriculum vitae including full history, infrastructure lab, and credentials.
  *
  * ATS Formatting Guarantees:
  * - Strictly sequential left-to-right text stream (zero overlapping right-aligned columns sharing Y baselines).
- * - Unified bullet strings (`•  ...`) emitted in single text calls so parsers never drop bullet associations.
+ * - Unified bullet strings (`•  ...`) emitted in single text calls with optional bold metric spans so parsers preserve continuous text.
  * - Explicit labeled contact rows with clickable mailto/https annotations for LinkedIn, GitHub, and portfolio links.
  */
 export function buildDocumentPdf(
   portfolioData: any,
-  mode: DocumentMode = 'cv'
+  mode: DocumentMode = 'cv',
+  roleId?: string
 ): PDFKit.PDFDocument {
-  const profile = portfolioData?.profile || {};
-  const cvConfig = portfolioData?.cv || {};
+  const resolvedData = resolvePortfolioForRole(portfolioData, roleId);
+  const profile = resolvedData?.profile || {};
+  const cvConfig = resolvedData?.cv || {};
   const authorName = profile.name || 'Candidate';
   const isResume = mode === 'resume';
 
@@ -99,8 +110,8 @@ export function buildDocumentPdf(
   const bottomLimit = pageHeight - marginY;
 
   const primaryColor = '#111827';
-  const headerBlue = '#0f3a68';
-  const linkBlue = '#1d4ed8';
+  const headerBlue = '#065f46';
+  const linkBlue = '#047857';
   const subtextColor = '#374151';
   const mutedColor = '#4b5563';
   const dividerColor = '#cbd5e1';
@@ -207,7 +218,7 @@ export function buildDocumentPdf(
     doc.y += isResume ? 1.2 : 2;
   };
 
-  // Helper: Unified single-stream bullet point
+  // Helper: Unified single-stream bullet point with bold quantified metrics for 6-second scanning
   const renderBullet = (text: string) => {
     const bulletStr = `•  ${text}`;
     const bulletHeight = doc.heightOfString(bulletStr, {
@@ -216,14 +227,33 @@ export function buildDocumentPdf(
     });
     ensureSpace(bulletHeight + 3);
 
+    const segments = splitQuantifiedSegments(text);
+    const startX = marginX + 6;
+    const startY = doc.y;
+    const width = contentWidth - 8;
+
     doc
       .font('Helvetica')
       .fontSize(bodySize)
       .fillColor('#1f2937')
-      .text(bulletStr, marginX + 6, doc.y, {
-        width: contentWidth - 8,
+      .text('•  ', startX, startY, {
+        width,
         lineGap: bulletLineGap,
+        continued: segments.length > 0,
       });
+
+    segments.forEach((seg, idx) => {
+      const isLast = idx === segments.length - 1;
+      doc
+        .font(seg.highlight ? 'Helvetica-Bold' : 'Helvetica')
+        .fontSize(bodySize)
+        .fillColor(seg.highlight ? primaryColor : '#1f2937')
+        .text(seg.text, {
+          width,
+          lineGap: bulletLineGap,
+          continued: !isLast,
+        });
+    });
 
     doc.y += isResume ? 0.6 : 1.4;
   };
@@ -359,7 +389,7 @@ export function buildDocumentPdf(
   // ==================== 2. SUMMARY ====================
   const rawSummary: string = isResume
     ? profile.resumeSummary || profile.summary || ''
-    : profile.summary || (Array.isArray(portfolioData.about) ? portfolioData.about.join(' ') : '');
+    : profile.summary || (Array.isArray(resolvedData.about) ? resolvedData.about.join(' ') : '');
 
   if (rawSummary) {
     renderSectionHeader('Summary');
@@ -375,7 +405,7 @@ export function buildDocumentPdf(
 
   // ==================== 3. TECHNICAL SKILLS ====================
   const skillCats: Array<{ name: string; items: string[] }> =
-    portfolioData.skills?.categories || [];
+    resolvedData.skills?.categories || [];
 
   if (skillCats.length > 0) {
     renderSectionHeader('Skills');
@@ -400,7 +430,7 @@ export function buildDocumentPdf(
       doc.y += isResume ? 0.6 : 1.4;
     });
 
-    if (!isResume && portfolioData.skills?.languages && portfolioData.skills.languages.length > 0) {
+    if (!isResume && resolvedData.skills?.languages && resolvedData.skills.languages.length > 0) {
       const langY = doc.y;
       doc
         .font('Helvetica-Bold')
@@ -411,13 +441,13 @@ export function buildDocumentPdf(
         .font('Helvetica')
         .fontSize(bodySize)
         .fillColor(subtextColor)
-        .text(portfolioData.skills.languages.join(', '), { width: contentWidth });
+        .text(resolvedData.skills.languages.join(', '), { width: contentWidth });
       doc.y += 1.4;
     }
   }
 
   // ==================== 4. PROFESSIONAL EXPERIENCE ====================
-  const allExperiences: any[] = portfolioData.experience || [];
+  const allExperiences: any[] = resolvedData.experience || [];
   const maxExperiences = isResume
     ? typeof cvConfig.maxExperiencesInResume === 'number'
       ? cvConfig.maxExperiencesInResume
@@ -461,7 +491,7 @@ export function buildDocumentPdf(
   }
 
   // ==================== 5. SELECTED PROJECTS & INFRASTRUCTURE ====================
-  const rawProjects: any[] = portfolioData.realWorldProjects || [];
+  const rawProjects: any[] = resolvedData.realWorldProjects || [];
   const maxProjects = isResume
     ? typeof cvConfig.maxProjectsInResume === 'number'
       ? cvConfig.maxProjectsInResume
@@ -487,7 +517,7 @@ export function buildDocumentPdf(
     .map((entry) => entry.p)
     .slice(0, maxProjects);
 
-  const evolutionStages = portfolioData.homelab?.evolution || [];
+  const evolutionStages = resolvedData.homelab?.evolution || [];
   const includeHomelab = isResume
     ? cvConfig.includeHomelabInResume === true && evolutionStages.length > 0
     : cvConfig.includeHomelabInCv !== false && evolutionStages.length > 0;
@@ -571,7 +601,7 @@ export function buildDocumentPdf(
   }
 
   // ==================== 6. EDUCATION ====================
-  const allEducation: any[] = portfolioData.education || [];
+  const allEducation: any[] = resolvedData.education || [];
   const shownEducation = isResume ? allEducation.slice(0, 1) : allEducation;
   if (shownEducation.length > 0) {
     renderSectionHeader('Education');
@@ -587,8 +617,8 @@ export function buildDocumentPdf(
   }
 
   // ==================== 7. CERTIFICATIONS & INTERESTS ====================
-  const certs = portfolioData.certificates || [];
-  const interests = portfolioData.skills?.interests || [];
+  const certs = resolvedData.certificates || [];
+  const interests = resolvedData.skills?.interests || [];
   const showCerts = isResume ? cvConfig.includeCertsInResume !== false && certs.length > 0 : certs.length > 0;
   const showInterests = isResume ? cvConfig.includeInterestsInResume === true && interests.length > 0 : interests.length > 0;
 

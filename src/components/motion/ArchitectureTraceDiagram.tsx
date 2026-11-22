@@ -62,7 +62,7 @@ const DEFAULT_TRACE_MODES: ArchitectureTraceModeConfig[] = [
   {
     id: 'primary',
     label: 'Cluster & Edge Ingress',
-    headline: 'End-to-End Request Flow: Client to Orchestrated Cluster',
+    headline: 'End-to-End Request Flow: Client to Managed Cluster',
     nodes: [
       {
         id: 'client',
@@ -311,7 +311,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
       {/* Top Controls Bar */}
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
-          <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 mb-1">
+          <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1">
             <Network className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Interactive System Signal Trace</span>
           </span>
@@ -348,7 +348,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
                         <motion.span
                           layoutId="trace-mode-active"
                           transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600/90"
+                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600"
                         />
                       )}
                       <span className="relative z-10">{cfg.label}</span>
@@ -362,7 +362,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
           <button
             type="button"
             onClick={() => setRunCounter((c) => c + 1)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] text-xs font-mono text-zinc-300 hover:text-cyan-300 glass-panel-subtle rounded-xl hover:border-cyan-400/40 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] text-xs font-mono text-zinc-300 hover:text-amber-300 glass-panel-subtle rounded-xl hover:border-amber-400/45 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             title="Replay signal trace animation"
           >
             <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
@@ -380,7 +380,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
             aria-hidden="true"
           >
             <defs>
-              <filter id="trace-cyan-glow" x="-20%" y="-40%" width="140%" height="180%">
+              <filter id="trace-emerald-glow" x="-20%" y="-40%" width="140%" height="180%">
                 <feGaussianBlur stdDeviation="4.5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
@@ -389,8 +389,8 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
               </filter>
               <radialGradient id="head-filament" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                <stop offset="35%" stopColor="#22d3ee" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
+                <stop offset="35%" stopColor="#facc15" stopOpacity="0.92" />
+                <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
               </radialGradient>
             </defs>
 
@@ -398,7 +398,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
               ref={pathRef}
               d={TRACE_PATH_D}
               fill="none"
-              stroke="rgba(148, 163, 184, 0.22)"
+              stroke="rgba(167, 243, 208, 0.2)"
               strokeWidth="2"
               strokeDasharray="6 6"
             />
@@ -407,10 +407,10 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
               ref={traceGlowRef}
               d={TRACE_PATH_D}
               fill="none"
-              stroke={traceCooling ? 'rgba(56, 189, 248, 0.35)' : 'rgba(34, 211, 238, 0.72)'}
+              stroke={traceCooling ? 'rgba(52, 211, 153, 0.42)' : 'rgba(250, 204, 21, 0.78)'}
               strokeWidth={traceCooling ? '2.5' : '4'}
               strokeLinecap="round"
-              filter="url(#trace-cyan-glow)"
+              filter="url(#trace-emerald-glow)"
               className="transition-[stroke,stroke-width] duration-700"
             />
 
@@ -418,7 +418,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
               ref={traceCoreRef}
               d={TRACE_PATH_D}
               fill="none"
-              stroke={traceCooling ? 'rgba(186, 230, 253, 0.45)' : 'rgba(224, 242, 254, 0.92)'}
+              stroke={traceCooling ? 'rgba(167, 243, 208, 0.5)' : 'rgba(254, 243, 199, 0.92)'}
               strokeWidth="1.5"
               strokeLinecap="round"
             />
@@ -437,23 +437,23 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
                     <circle
                       r="20"
                       fill="none"
-                      stroke="rgba(34, 211, 238, 0.75)"
+                      stroke="rgba(250, 204, 21, 0.78)"
                       strokeWidth="1.5"
                     />
                   )}
                   <circle
                     r={isSelected ? '12' : '9'}
-                    fill="#070c18"
+                    fill="#05120b"
                     stroke={
                       isSelected || isFlaring
-                        ? '#22d3ee'
-                        : 'rgba(148, 163, 184, 0.45)'
+                        ? '#facc15'
+                        : 'rgba(167, 243, 208, 0.4)'
                     }
                     strokeWidth={isSelected ? '2' : '1.5'}
                   />
                   <circle
                     r={isSelected ? '4.5' : '3'}
-                    fill={isSelected || isFlaring ? '#38bdf8' : '#94a3b8'}
+                    fill={isSelected || isFlaring ? '#34d399' : '#94a3b8'}
                   />
                 </g>
               );
@@ -472,21 +472,21 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`text-left p-3 rounded-xl border transition-all duration-200 cursor-pointer ${
                     isSelected
-                      ? 'bg-cyan-500/[0.09] border-cyan-400/50 shadow-[0_0_24px_-8px_rgba(34,211,238,0.45)]'
+                      ? 'bg-emerald-500/[0.1] border-amber-400/50 shadow-[0_0_24px_-8px_rgba(250,204,21,0.38)]'
                       : 'bg-white/[0.02] border-white/[0.08] hover:border-white/25'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <span
                       className={`text-[11px] font-mono ${
-                        isSelected ? 'text-cyan-400' : 'text-zinc-500'
+                        isSelected ? 'text-emerald-400' : 'text-zinc-500'
                       }`}
                     >
                       {node.step}
                     </span>
                     <Icon
                       className={`w-3.5 h-3.5 ${
-                        isSelected ? 'text-cyan-300' : 'text-zinc-400'
+                        isSelected ? 'text-amber-300' : 'text-zinc-400'
                       }`}
                       aria-hidden="true"
                     />
@@ -512,7 +512,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
               onClick={() => setSelectedIndex(idx)}
               className={`px-3 py-2 min-h-[42px] rounded-xl text-xs font-mono border transition-colors cursor-pointer ${
                 isSelected
-                  ? 'bg-cyan-500/15 border-cyan-400/50 text-cyan-200'
+                  ? 'bg-emerald-500/15 border-amber-400/50 text-amber-200'
                   : 'glass-panel-subtle text-zinc-400'
               }`}
             >
@@ -527,7 +527,7 @@ export const ArchitectureTraceDiagram: React.FC<ArchitectureTraceDiagramProps> =
         <div className="relative z-10 mt-5 pt-5 border-t border-white/[0.08] flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1 max-w-2xl">
             <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-              <span className="text-cyan-400 font-semibold">
+              <span className="text-emerald-400 font-semibold">
                 Hop {activeNode.step} · {activeNode.label}
               </span>
               <span className="text-zinc-600" aria-hidden="true">

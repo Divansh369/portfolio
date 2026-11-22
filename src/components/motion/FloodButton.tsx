@@ -66,19 +66,19 @@ export const FloodButton: React.FC<FloodButtonProps> = ({
 
   const variantClasses = chamfer
     ? variant === 'primary'
-      ? 'bg-gradient-to-r from-blue-600/95 to-blue-500/95 text-white shadow-[0_10px_28px_-6px_rgba(37,99,235,0.6),inset_0_1px_0_rgba(255,255,255,0.28)]'
-      : 'bg-[#0a101f]/80 backdrop-blur-xl text-cyan-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] hover:text-[#040711]'
+      ? 'bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600 text-white shadow-[0_10px_28px_-6px_rgba(16,185,129,0.55),inset_0_1px_0_rgba(255,255,255,0.28)]'
+      : 'bg-[#07150d]/85 backdrop-blur-xl text-amber-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] hover:text-[#040b07]'
     : variant === 'primary'
-      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white border border-cyan-300/30 shadow-[0_8px_24px_-6px_rgba(37,99,235,0.55),inset_0_1px_0_rgba(255,255,255,0.25)]'
+      ? 'bg-gradient-to-r from-emerald-700 via-emerald-600 to-green-600 text-white border border-amber-300/35 shadow-[0_8px_24px_-6px_rgba(16,185,129,0.5),inset_0_1px_0_rgba(255,255,255,0.25)]'
       : variant === 'glass'
-        ? 'bg-slate-900/55 backdrop-blur-xl text-zinc-100 border border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] hover:border-cyan-400/40'
+        ? 'bg-[#07150d]/60 backdrop-blur-xl text-zinc-100 border border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] hover:border-amber-400/45'
         : 'bg-transparent backdrop-blur-md text-zinc-300 border border-white/10 hover:text-white hover:border-white/25';
 
   const floodColor =
     variant === 'primary'
-      ? 'bg-gradient-to-r from-cyan-500 to-blue-500'
+      ? 'bg-gradient-to-r from-amber-600 via-orange-600 to-amber-500'
       : chamfer
-        ? 'bg-cyan-400'
+        ? 'bg-amber-400'
         : 'bg-white/[0.08]';
 
   const clipStyle = chamfer
@@ -106,8 +106,8 @@ export const FloodButton: React.FC<FloodButtonProps> = ({
             vectorEffect="non-scaling-stroke"
             className={
               isHovered
-                ? 'stroke-cyan-300/90 transition-colors duration-200'
-                : 'stroke-cyan-400/40 transition-colors duration-200'
+                ? 'stroke-yellow-300/90 transition-colors duration-200'
+                : 'stroke-amber-400/45 transition-colors duration-200'
             }
             strokeWidth="1"
           />

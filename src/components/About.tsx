@@ -63,11 +63,11 @@ export const About: React.FC<AboutProps> = ({
   const prefersReduced = useReducedMotion();
 
   return (
-    <section id="about" className="py-20 border-b border-white/[0.08]">
-      <div className="grid lg:grid-cols-12 gap-12 items-start">
+    <section id="about" className="py-24 sm:py-28 border-b border-white/[0.08]">
+      <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
         {/* Left Column: Summary & Frosted Fact Sheet */}
         <div className="lg:col-span-5">
-          <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
+          <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400/90 mb-2">
             <User className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{eyebrow}</span>
           </span>
@@ -89,7 +89,7 @@ export const About: React.FC<AboutProps> = ({
                   return (
                     <div key={fact.label} className="py-2.5 flex justify-between items-center gap-4">
                       <dt className="text-zinc-400 shrink-0 inline-flex items-center gap-2">
-                        <FactIcon className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
+                        <FactIcon className="w-3.5 h-3.5 text-emerald-400/80" aria-hidden="true" />
                         <span>{fact.label}</span>
                       </dt>
                       <dd className="text-zinc-100 font-semibold text-right">{fact.value}</dd>
@@ -103,7 +103,7 @@ export const About: React.FC<AboutProps> = ({
           {interests && interests.length > 0 && (
             <div className="mt-6 pt-5 border-t border-white/[0.08] text-xs font-mono text-zinc-400">
               <span className="inline-flex items-center gap-2 text-zinc-400 mb-2">
-                <Compass className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
+                <Compass className="w-3.5 h-3.5 text-amber-400/80" aria-hidden="true" />
                 <span>Outside Engineering</span>
               </span>
               <div className="flex flex-wrap items-center gap-y-1">
@@ -122,21 +122,16 @@ export const About: React.FC<AboutProps> = ({
           )}
         </div>
 
-        {/* Right Column: Clean Readable Narrative inside Frosted Panes */}
+        {/* Right Column: Clean Open Editorial Prose */}
         <motion.div
-          className="lg:col-span-7 space-y-5 text-sm sm:text-base text-zinc-300 leading-relaxed max-w-2xl"
+          className="lg:col-span-7 space-y-6 text-sm sm:text-base text-zinc-300 leading-relaxed max-w-xl"
           initial={prefersReduced ? false : { opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.3 }}
         >
           {bio.map((paragraph, index) => (
-            <div
-              key={index}
-              className="glass-panel-subtle rounded-2xl p-5 sm:p-6 transition-colors hover:border-white/20"
-            >
-              <p>{paragraph}</p>
-            </div>
+            <p key={index}>{paragraph}</p>
           ))}
         </motion.div>
       </div>

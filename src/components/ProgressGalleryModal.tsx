@@ -53,31 +53,31 @@ const BlueprintPlaceholder: React.FC<{
   const suggestedLocalPath = `/images/gallery/${itemId}/${stepNum}.webp`;
 
   return (
-    <div className="relative w-full h-full min-h-[210px] sm:min-h-[360px] rounded-xl overflow-hidden bg-[#050a16] border border-cyan-400/20 flex flex-col justify-between p-4 sm:p-8 select-none">
+    <div className="relative w-full h-full min-h-[210px] sm:min-h-[360px] rounded-xl overflow-hidden bg-[#040d08] border border-emerald-400/20 flex flex-col justify-between p-4 sm:p-8 select-none">
       {/* Blueprint Architectural Micro-Grid */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-35"
         style={{
           backgroundImage:
-            'linear-gradient(to right, rgba(34,211,238,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(34,211,238,0.12) 1px, transparent 1px)',
+            'linear-gradient(to right, rgba(16,185,129,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(16,185,129,0.12) 1px, transparent 1px)',
           backgroundSize: '28px 28px',
         }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(14,165,233,0.14),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(249,115,22,0.12),transparent_70%)]"
       />
 
       {/* Corner Calibration Marks */}
-      <span aria-hidden="true" className="absolute top-3 left-3 w-3 h-3 border-t border-l border-cyan-400/50" />
-      <span aria-hidden="true" className="absolute top-3 right-3 w-3 h-3 border-t border-r border-cyan-400/50" />
-      <span aria-hidden="true" className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-cyan-400/50" />
-      <span aria-hidden="true" className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-cyan-400/50" />
+      <span aria-hidden="true" className="absolute top-3 left-3 w-3 h-3 border-t border-l border-amber-400/50" />
+      <span aria-hidden="true" className="absolute top-3 right-3 w-3 h-3 border-t border-r border-amber-400/50" />
+      <span aria-hidden="true" className="absolute bottom-3 left-3 w-3 h-3 border-b border-l border-amber-400/50" />
+      <span aria-hidden="true" className="absolute bottom-3 right-3 w-3 h-3 border-b border-r border-amber-400/50" />
 
       {/* Top Wireframe Metadata */}
       <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-        <span className="inline-flex items-center gap-2 text-cyan-300">
+        <span className="inline-flex items-center gap-2 text-emerald-300">
           <Compass className="w-3.5 h-3.5" aria-hidden="true" />
           <span>Blueprint Schematic · Step {stepNum}</span>
         </span>
@@ -88,8 +88,8 @@ const BlueprintPlaceholder: React.FC<{
 
       {/* Central Wireframe Graphic & Idea Preview */}
       <div className="relative z-10 my-auto py-6 flex flex-col items-center text-center max-w-md mx-auto">
-        <div className="w-14 h-14 rounded-2xl border border-dashed border-cyan-400/45 bg-cyan-500/[0.08] flex items-center justify-center mb-4">
-          <ImagePlus className="w-6 h-6 text-cyan-300" aria-hidden="true" />
+        <div className="w-14 h-14 rounded-2xl border border-dashed border-amber-400/45 bg-amber-500/[0.08] flex items-center justify-center mb-4">
+          <ImagePlus className="w-6 h-6 text-amber-300" aria-hidden="true" />
         </div>
         <div className="font-display text-lg sm:text-xl font-bold text-zinc-100 tracking-tight mb-2">
           {milestone.title}
@@ -102,9 +102,9 @@ const BlueprintPlaceholder: React.FC<{
       {/* Drop-In Asset Path / URL Guide */}
       <div className="relative z-10 pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-zinc-400">
         <span className="inline-flex items-center gap-1.5 text-zinc-300">
-          <FolderOpen className="w-3.5 h-3.5 text-cyan-400 shrink-0" aria-hidden="true" />
+          <FolderOpen className="w-3.5 h-3.5 text-emerald-400 shrink-0" aria-hidden="true" />
           <span>Add photo or URL for itemId:</span>
-          <code className="text-cyan-300">{itemId}</code>
+          <code className="text-amber-300">{itemId}</code>
         </span>
         <code className="text-zinc-400 truncate max-w-full sm:max-w-[260px]" title={suggestedLocalPath}>
           mediaUrl: "{suggestedLocalPath}"
@@ -193,7 +193,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
     <AnimatePresence>
       {isOpen && current && (
         <motion.div
-          className="fixed inset-0 bg-[#02040a]/88 z-[110] flex justify-center items-center p-2.5 sm:p-6 backdrop-blur-lg overflow-y-auto"
+          className="fixed inset-0 bg-[#040b07]/88 z-[110] flex justify-center items-center p-2.5 sm:p-6 backdrop-blur-lg overflow-y-auto"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
@@ -226,9 +226,9 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
             <CornerBrackets />
 
             {/* Header */}
-            <div className="flex items-start justify-between gap-4 p-4 sm:px-6 border-b border-white/[0.08] bg-[#050914]/75">
+            <div className="flex items-start justify-between gap-4 p-4 sm:px-6 border-b border-white/[0.08] bg-[#040e08]/80">
               <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-cyan-400/90 mb-1">
+                <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-emerald-400/90 mb-1">
                   <Layers className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                   <span>Evolution &amp; Build Log</span>
                   <span className="text-zinc-600" aria-hidden="true">·</span>
@@ -253,7 +253,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                         goToIndex((activeIndex - 1 + orderedMilestones.length) % orderedMilestones.length)
                       }
                       aria-label="Previous milestone"
-                      className="p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
+                      className="p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle hover:border-amber-400/45 text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
@@ -261,7 +261,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                       type="button"
                       onClick={() => goToIndex((activeIndex + 1) % orderedMilestones.length)}
                       aria-label="Next milestone"
-                      className="p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle hover:border-cyan-400/40 text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
+                      className="p-2 min-w-[44px] min-h-[44px] rounded-xl glass-panel-subtle hover:border-amber-400/45 text-zinc-300 hover:text-white transition-colors cursor-pointer flex items-center justify-center"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
@@ -299,7 +299,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                   {/* Visual Canvas / Blueprint Placeholder */}
                   <div className="lg:col-span-7 flex flex-col">
                     {hasWorkingImage ? (
-                      <div className="relative w-full h-full min-h-[210px] sm:min-h-[360px] rounded-xl overflow-hidden border border-white/[0.1] bg-[#040711] flex items-center justify-center">
+                      <div className="relative w-full h-full min-h-[210px] sm:min-h-[360px] rounded-xl overflow-hidden border border-white/[0.1] bg-[#040b07] flex items-center justify-center">
                         <img
                           src={resolvedMedia}
                           alt={`${itemTitle} - ${current.title}`}
@@ -334,7 +334,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                     <div className="space-y-4">
                       {/* Clean Unboxed Date & Phase Metadata */}
                       <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-zinc-400">
-                        <span className="inline-flex items-center gap-1.5 text-cyan-300 tabular-nums">
+                        <span className="inline-flex items-center gap-1.5 text-amber-300 tabular-nums">
                           <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
                           <span>{current.date}</span>
                         </span>
@@ -347,7 +347,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                       </h3>
 
                       <div className="pt-3 border-t border-white/[0.08] space-y-2">
-                        <div className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400">
+                        <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400">
                           <Lightbulb className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                           <span>Idea &amp; Iteration Context</span>
                         </div>
@@ -376,7 +376,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                           href={current.mediaUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1"
+                          className="text-amber-300 hover:text-amber-200 inline-flex items-center gap-1"
                         >
                           <span>Open Media Link</span>
                           <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -389,7 +389,7 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
             </div>
 
             {/* Chronological Interactive Scrub Timeline Rail */}
-            <div className="p-4 sm:px-6 border-t border-white/[0.08] bg-[#050914]/85 overflow-x-auto">
+            <div className="p-4 sm:px-6 border-t border-white/[0.08] bg-[#040e08]/88 overflow-x-auto">
               <div className="flex items-stretch gap-2.5 min-w-max">
                 {orderedMilestones.map((m, idx) => {
                   const selected = idx === activeIndex;
@@ -400,12 +400,12 @@ export const ProgressGalleryModal: React.FC<ProgressGalleryModalProps> = ({
                       onClick={() => goToIndex(idx)}
                       className={`group text-left px-3.5 py-2.5 min-h-[44px] rounded-xl border transition-all cursor-pointer flex flex-col justify-center min-w-[165px] max-w-[230px] ${
                         selected
-                          ? 'bg-gradient-to-r from-blue-600/25 to-cyan-500/20 border-cyan-400/55 text-white'
+                          ? 'bg-gradient-to-r from-emerald-700/35 to-amber-500/20 border-amber-400/55 text-white'
                           : 'bg-white/[0.03] border-white/[0.08] hover:border-white/25 text-zinc-400 hover:text-zinc-100'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2 text-[11px] font-mono tabular-nums mb-0.5">
-                        <span className={selected ? 'text-cyan-300' : 'text-zinc-500'}>
+                        <span className={selected ? 'text-amber-300' : 'text-zinc-500'}>
                           {String(idx + 1).padStart(2, '0')} · {m.date}
                         </span>
                         <span className="truncate text-[10px] opacity-80">{m.phase}</span>

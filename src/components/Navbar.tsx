@@ -121,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         className={`fixed top-0 left-0 right-0 z-50 pt-safe transition-all duration-300 print-hide ${
           scrolled
             ? 'glass-nav'
-            : 'bg-[#040711]/35 backdrop-blur-md border-b border-white/[0.06]'
+            : 'bg-[#040b07]/40 backdrop-blur-md border-b border-white/[0.06]'
         }`}
       >
         <div className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 sm:gap-5 lg:gap-8">
@@ -134,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               setActiveId('');
               window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
             }}
-            className="font-display text-base sm:text-lg font-bold tracking-tight text-zinc-50 hover:text-cyan-300 transition-colors whitespace-nowrap truncate max-w-[155px] sm:max-w-none shrink-0"
+            className="font-display text-base sm:text-lg font-bold tracking-tight text-zinc-50 hover:text-amber-300 transition-colors whitespace-nowrap truncate max-w-[155px] sm:max-w-none shrink-0"
           >
             {brandName}
           </a>
@@ -160,7 +160,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <motion.span
                       layoutId="navbar-active-indicator"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                      className="absolute left-0 right-0 bottom-0 h-[2px] rounded-full bg-gradient-to-r from-blue-400 to-cyan-400"
+                      className="absolute left-0 right-0 bottom-0 h-[2px] rounded-full bg-gradient-to-r from-emerald-400 via-yellow-400 to-orange-400"
                     />
                   )}
                 </a>
@@ -204,7 +204,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[60] md:hidden bg-[#040711]/94 backdrop-blur-2xl flex flex-col justify-between gap-6 p-6 pt-safe pb-safe overflow-y-auto print-hide"
+            className="fixed inset-0 z-[60] md:hidden bg-[#040b07]/94 backdrop-blur-2xl flex flex-col justify-between gap-6 p-6 pt-safe pb-safe overflow-y-auto print-hide"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile Navigation Menu"
@@ -250,9 +250,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         damping: 24,
                         delay: prefersReduced ? 0 : 0.05 + idx * 0.045,
                       }}
-                      className="flex items-center gap-3.5 min-h-[48px] px-4 py-3 rounded-xl glass-panel-subtle text-zinc-100 hover:border-cyan-400/40 font-display text-xl font-semibold transition-colors"
+                      className="flex items-center gap-3.5 min-h-[48px] px-4 py-3 rounded-xl glass-panel-subtle text-zinc-100 hover:border-amber-400/45 font-display text-xl font-semibold transition-colors"
                     >
-                      <Icon className="w-5 h-5 text-cyan-400 shrink-0" aria-hidden="true" />
+                      <Icon className="w-5 h-5 text-emerald-400 shrink-0" aria-hidden="true" />
                       <span>{link.name}</span>
                     </motion.a>
                   );

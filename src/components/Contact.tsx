@@ -5,8 +5,6 @@ import GlassCard from './motion/GlassCard';
 import SplitText from './motion/SplitText';
 import FloodButton from './motion/FloodButton';
 import TextScramble from './motion/TextScramble';
-import RepoImage from './common/RepoImage';
-import BrandMark from './icons/BrandMarks';
 import { Social } from '../types';
 
 interface ContactProps {
@@ -28,7 +26,6 @@ export const Contact: React.FC<ContactProps> = ({
   phone,
   location,
   domains = [],
-  socials = [],
 }) => {
   const [copied, setCopied] = useState(false);
   const prefersReduced = useReducedMotion();
@@ -41,7 +38,7 @@ export const Contact: React.FC<ContactProps> = ({
   };
 
   return (
-    <section id="contact" className="py-16 sm:py-24">
+    <section id="contact" className="py-24 sm:py-28">
       <motion.div
         initial={prefersReduced ? false : { opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -49,7 +46,7 @@ export const Contact: React.FC<ContactProps> = ({
         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         className="max-w-3xl mx-auto text-center"
       >
-        <span className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400/90 mb-2">
+        <span className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400/90 mb-2">
           <Mail className="w-3.5 h-3.5" aria-hidden="true" />
           <span>{eyebrow}</span>
         </span>
@@ -85,8 +82,8 @@ export const Contact: React.FC<ContactProps> = ({
                 >
                   {copied ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
-                      <span className="text-cyan-300">Copied Email</span>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
+                      <span className="text-emerald-300">Copied Email</span>
                     </>
                   ) : (
                     <>
@@ -98,40 +95,14 @@ export const Contact: React.FC<ContactProps> = ({
               </div>
             )}
 
-            {socials.length > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                {socials.map((social) => {
-                  const isMail = social.url.startsWith('mailto:');
-                  return (
-                    <a
-                      key={social.name}
-                      href={social.url}
-                      target={isMail ? undefined : '_blank'}
-                      rel={isMail ? undefined : 'noopener noreferrer'}
-                      className="inline-flex items-center gap-2 px-3.5 py-2 min-h-[42px] rounded-xl glass-panel-subtle glass-panel-hover text-xs font-mono text-zinc-200 hover:text-cyan-200 transition-all"
-                    >
-                      <RepoImage
-                        src={social.logos}
-                        alt={social.name}
-                        className="w-4 h-4 rounded-[3px] shrink-0"
-                        imgClassName="w-full h-full object-contain rounded-[3px]"
-                        fallback={<BrandMark brand={social.name} className="w-4 h-4" />}
-                      />
-                      <span>{social.name}</span>
-                    </a>
-                  );
-                })}
-              </div>
-            )}
-
             {(phone || location || domains.length > 0) && (
               <div className="pt-6 border-t border-white/[0.08] text-xs font-mono text-zinc-400 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
                 {phone && (
                   <a
                     href={`tel:${phone.replace(/\s/g, '')}`}
-                    className="inline-flex items-center gap-1.5 hover:text-cyan-300 transition-colors tabular-nums"
+                    className="inline-flex items-center gap-1.5 hover:text-amber-300 transition-colors tabular-nums"
                   >
-                    <Phone className="w-3.5 h-3.5 text-cyan-400/80" aria-hidden="true" />
+                    <Phone className="w-3.5 h-3.5 text-emerald-400/80" aria-hidden="true" />
                     <TextScramble text={phone} trigger="hover" durationMs={340} />
                   </a>
                 )}

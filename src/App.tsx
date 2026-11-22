@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
@@ -20,7 +20,17 @@ import SectionDock from './components/motion/SectionDock';
 import { MediaRegistryProvider } from './context/MediaRegistryContext';
 import { OfflineIndicator } from './components/common/PWAInstallButton';
 import { syncSeoMetadata } from './utils/seoManager';
-import fetchData, { getCachedPortfolioData, getRawPortfolioJson } from './constants';
+import {
+  DEFAULT_ROLE_ID,
+  findRoleProfile,
+  listRoleTracks,
+  resolvePortfolioForRole,
+} from './utils/factBank';
+import fetchData, {
+  getCachedPortfolioData,
+  getRawPortfolioJson,
+  transformJsonToData,
+} from './constants';
 import { Data, ProgressMilestone, SectionsConfig } from './types';
 
 const SpatialMorphViewport = lazy(() => import('./components/three/SpatialMorphViewport'));
@@ -34,6 +44,13 @@ export const App: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDataConfigOpen, setIsDataConfigOpen] = useState<boolean>(false);
   const [isCvModalOpen, setIsCvModalOpen] = useState<boolean>(false);
+  const [activeRoleId, setActiveRoleId] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const paramRole = new URLSearchParams(window.location.search).get('role');
+      if (paramRole) return paramRole;
+    }
+    return DEFAULT_ROLE_ID;
+  });
   const [galleryTarget, setGalleryTarget] = useState<{
     itemId: string;
     title: string;
@@ -86,21 +103,44 @@ export const App: React.FC = () => {
   const handleViewProject = (project: Project) => setSelectedProject(project);
   const handleCloseModal = () => setSelectedProject(null);
 
+  const roleTracks = useMemo(() => listRoleTracks(rawJson), [rawJson]);
+  const validRoleId = useMemo(() => {
+    if (!rawJson) return activeRoleId;
+    return findRoleProfile(rawJson, activeRoleId)?.id || DEFAULT_ROLE_ID;
+  }, [rawJson, activeRoleId]);
+
+  const roleScopedJson = useMemo(
+    () => (rawJson ? resolvePortfolioForRole(rawJson, validRoleId) : null),
+    [rawJson, validRoleId]
+  );
+
+  const roleScopedData = useMemo(() => {
+    if (!roleScopedJson || validRoleId === DEFAULT_ROLE_ID) return data;
+    return transformJsonToData(roleScopedJson, import.meta.env.BASE_URL || './');
+  }, [roleScopedJson, validRoleId, data]);
+
+  const activeRoleLabel = useMemo(() => {
+    if (validRoleId === DEFAULT_ROLE_ID) return undefined;
+    return findRoleProfile(rawJson, validRoleId)?.label;
+  }, [rawJson, validRoleId]);
+
   if (loading && !data) {
     return <Loader />;
   }
 
   if (error && !data) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-sm font-mono text-rose-400 bg-[#040711] p-4">
+      <div className="min-h-screen flex items-center justify-center text-sm font-mono text-rose-400 bg-[#040b07] p-4">
         {error}
       </div>
     );
   }
 
-  if (!data) {
+  const effectiveData = roleScopedData || data;
+
+  if (!effectiveData) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-sm font-mono text-zinc-400 bg-[#040711]">
+      <div className="min-h-screen flex items-center justify-center text-sm font-mono text-zinc-400 bg-[#040b07]">
         Initializing portfolio...
       </div>
     );
@@ -119,14 +159,15 @@ export const App: React.FC = () => {
     homelab,
     vms,
     platforms,
-  } = data;
+  } = effectiveData;
 
   const techSkills = skills.filter((s) => s['Skill Category'] === 'Technology');
   const softSkills = skills.filter((s) => s['Skill Category'] === 'Soft Skill');
   const allProjects = [...(realWorldProjects || []), ...(projects || [])];
 
-  const sections: SectionsConfig = rawJson?.sections || {};
-  const profile = rawJson?.profile || {};
+  const activeRawJson = roleScopedJson || rawJson;
+  const sections: SectionsConfig = activeRawJson?.sections || {};
+  const profile = activeRawJson?.profile || {};
   const displayName = profile.name || processedConfig.name || 'Developer Portfolio';
   const displayTitle = profile.title || processedConfig.title || 'Software Engineer';
   const displayLocation =
@@ -145,8 +186,8 @@ export const App: React.FC = () => {
       Boolean(rawJson?.homelab?.evolution?.length));
   const homelabLabel = sections.homelab?.navLabel || 'Infrastructure';
 
-  const resolvedIconOverrides = data.iconOverrides || rawJson?.media?.icons;
-  const resolvedMilestones = data.progressGallery || [];
+  const resolvedIconOverrides = effectiveData.iconOverrides || activeRawJson?.media?.icons;
+  const resolvedMilestones = effectiveData.progressGallery || [];
 
   const cvPortfolioPayload =
     rawJson ||
@@ -202,7 +243,7 @@ export const App: React.FC = () => {
   return (
     <MotionConfig reducedMotion="user">
       <MediaRegistryProvider iconOverrides={resolvedIconOverrides}>
-        <div className="relative min-h-screen bg-[#040711] text-zinc-200">
+        <div className="relative min-h-screen bg-[#040b07] text-zinc-200">
           {/* Living Topographic Contour & Gaussian Halftone Depth Canvas behind the Glass */}
           <ContourFieldCanvas />
 
@@ -229,16 +270,19 @@ export const App: React.FC = () => {
               name={displayName}
               title={displayTitle}
               location={displayLocation}
-              avatarUrl={processedConfig.avatar_url || './images/profile.jpg'}
+              avatarUrl={processedConfig.avatar_url || ''}
               socials={socials || []}
-              kicker={rawJson?.hero?.kicker}
-              headline={rawJson?.hero?.headline}
-              lead={rawJson?.hero?.lead}
-              secondaryAction={rawJson?.hero?.secondaryAction}
-              dossierSubtitle={rawJson?.hero?.dossier?.subtitle}
-              dossierRows={rawJson?.hero?.dossier?.rows}
-              dossierLinks={rawJson?.hero?.dossier?.links}
-              metrics={rawJson?.hero?.metrics}
+              kicker={activeRawJson?.hero?.kicker}
+              headline={activeRawJson?.hero?.headline}
+              lead={activeRawJson?.hero?.lead}
+              secondaryAction={activeRawJson?.hero?.secondaryAction}
+              dossierSubtitle={activeRawJson?.hero?.dossier?.subtitle}
+              dossierRows={activeRawJson?.hero?.dossier?.rows}
+              dossierLinks={activeRawJson?.hero?.dossier?.links}
+              metrics={activeRawJson?.hero?.metrics}
+              roleTracks={roleTracks}
+              activeRoleId={validRoleId}
+              onSelectRole={setActiveRoleId}
               onOpenCvModal={() => setIsCvModalOpen(true)}
             />
 
@@ -247,7 +291,7 @@ export const App: React.FC = () => {
               <Suspense
                 fallback={
                   <section id="systems-3d" className="py-20 border-b border-white/[0.08]">
-                    <div className="h-[440px] sm:h-[510px] lg:h-[550px] w-full rounded-2xl border border-white/[0.14] bg-[#040711] flex items-center justify-center">
+                    <div className="h-[440px] sm:h-[510px] lg:h-[550px] w-full rounded-2xl border border-white/[0.14] bg-[#040b07] flex items-center justify-center">
                       <span className="text-xs font-mono text-zinc-400">
                         Loading 3D architecture viewport...
                       </span>
@@ -267,6 +311,7 @@ export const App: React.FC = () => {
                 sections.projects?.subtitle ||
                 'Production software, open-source engineering builds, and technical experiments.'
               }
+              activeRoleLabel={activeRoleLabel}
               showArchivedByDefault={sections.projects?.showArchivedByDefault ?? true}
               projects={allProjects}
               progressMilestones={resolvedMilestones}
@@ -278,12 +323,12 @@ export const App: React.FC = () => {
             {showHomelab && (
               <Homelab
                 config={sections.homelab}
-                evolution={rawJson?.homelab?.evolution}
+                evolution={activeRawJson?.homelab?.evolution}
                 devices={homelab || []}
                 vms={vms || []}
                 platforms={platforms || []}
-                consolidationNote={rawJson?.homelab?.consolidationNote}
-                network={rawJson?.homelab?.network}
+                consolidationNote={activeRawJson?.homelab?.consolidationNote}
+                network={activeRawJson?.homelab?.network}
               />
             )}
 
@@ -292,6 +337,7 @@ export const App: React.FC = () => {
               eyebrow={sections.experience?.eyebrow}
               title={sections.experience?.title}
               subtitle={sections.experience?.subtitle}
+              activeRoleLabel={activeRoleLabel}
               experience={experience || []}
               progressMilestones={resolvedMilestones}
               onOpenGallery={setGalleryTarget}
@@ -305,8 +351,8 @@ export const App: React.FC = () => {
               skills={techSkills}
               softSkills={softSkills}
               iconTiles={(() => {
-                const baseTiles = Array.isArray(rawJson?.skills?.iconTiles)
-                  ? [...rawJson.skills.iconTiles]
+                const baseTiles = Array.isArray(activeRawJson?.skills?.iconTiles)
+                  ? [...activeRawJson.skills.iconTiles]
                   : [];
                 const seen = new Set(
                   baseTiles.map((t: any) =>
@@ -330,8 +376,8 @@ export const App: React.FC = () => {
                 });
                 return baseTiles;
               })()}
-              categories={rawJson?.skills?.categories}
-              languages={rawJson?.skills?.languages}
+              categories={activeRawJson?.skills?.categories}
+              languages={activeRawJson?.skills?.languages}
             />
 
             {/* Background Narrative */}
@@ -414,6 +460,8 @@ export const App: React.FC = () => {
             isOpen={isCvModalOpen}
             onClose={() => setIsCvModalOpen(false)}
             portfolioData={cvPortfolioPayload}
+            activeRoleId={validRoleId}
+            onSelectRole={setActiveRoleId}
           />
           </div>
         </div>
